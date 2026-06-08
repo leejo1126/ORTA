@@ -1,0 +1,111 @@
+# EP-ORCA IF pipeline DAG.
+#
+# Drives both environments: the `segment` rule calls the cellpose-gpu python,
+# every other rule calls the analysis-venv python. We use run: blocks with
+# subprocess(list args) instead of shell: to avoid Windows quoting issues with
+# the space in the repo path.
+#
+# Run:
+#   snakemake -s workflow/Snakefile -j 8 --resources gpu=3
+#   snakemake -s workflow/Snakefile --config cfg=config/config.yaml -j 8 --resources gpu=3
+
+import subprocess
+from eporca.config import Config
+
+CONFIG = config.get("cfg", "config/config.yaml")
+CFG = Config.load(CONFIG)
+CFG.ensure_dirs()
+
+ANALYSIS_PY = CFG.interpreters.analysis
+CELLPOSE_PY = CFG.interpreters.cellpose
+FOVS = ["%03d" % f for f in CFG.assigned_fovs()]
+MARKERS = CFG.markers
+
+D = str(CFG.data_dir)
+ZARR = D + "/zarr/fov_{fov}.zarr"
+MASK = D + "/masks/fov_{fov}_nuclei.zarr"
+METRICS = D + "/masks/fov_{fov}_nuclei_metrics.csv"
+SPOTS = [D + "/foci/fov_{fov}_c%d_%s_per_spot.csv" % (CFG.index_of(m), m) for m in MARKERS]
+NUC_PARQUET = D + "/features/fov_{fov}_nuclei.parquet"
+FOCI_PARQUET = D + "/features/fov_{fov}_foci.parquet"
+NUC_H5AD = CFG.anndata_path("nuclei")
+FOCI_H5AD = CFG.anndata_path("foci")
+ANALYSIS_DONE = str(CFG.figures_dir() / "_analysis.done")
+
+
+def run_step(interp, *cli_args):
+    subprocess.run([interp, "-m", "eporca.cli", *map(str, cli_args)], check=True)
+
+
+wildcard_constraints:
+    fov=r"\d+",
+
+
+rule all:
+    input:
+        NUC_H5AD, FOCI_H5AD, ANALYSIS_DONE,
+
+
+rule to_zarr:
+    input:
+        dax=lambda wc: CFG.dax_path(int(wc.fov)),
+    output:
+        directory(ZARR),
+    run:
+        run_step(ANALYSIS_PY, "to-zarr", "--config", CONFIG, "--fov", wildcards.fov)
+
+
+rule segment:
+    input:
+        zarr=ZARR,
+    output:
+        mask=directory(MASK),
+        metrics=METRICS,
+    resources:
+        gpu=1,
+    run:
+        run_step(CELLPOSE_PY, "segment", "--config", CONFIG, "--fov", wildcards.fov)
+
+
+rule foci:
+    input:
+        zarr=ZARR,
+        mask=MASK,
+        metrics=METRICS,
+    output:
+        SPOTS,
+    run:
+        run_step(ANALYSIS_PY, "foci", "--config", CONFIG, "--fov", wildcards.fov)
+
+
+rule features:
+    input:
+        spots=SPOTS,
+        metrics=METRICS,
+        mask=MASK,
+        zarr=ZARR,
+    output:
+        nuclei=NUC_PARQUET,
+        foci=FOCI_PARQUET,
+    run:
+        run_step(ANALYSIS_PY, "features", "--config", CONFIG, "--fov", wildcards.fov)
+
+
+rule anndata:
+    input:
+        nuclei=expand(NUC_PARQUET, fov=FOVS),
+        foci=expand(FOCI_PARQUET, fov=FOVS),
+    output:
+        nuclei=NUC_H5AD,
+        foci=FOCI_H5AD,
+    run:
+        run_step(ANALYSIS_PY, "anndata", "--config", CONFIG)
+
+
+rule analyze:
+    input:
+        nuclei=NUC_H5AD,
+    output:
+        sentinel=touch(ANALYSIS_DONE),
+    run:
+        run_step(ANALYSIS_PY, "analyze", "--config", CONFIG)

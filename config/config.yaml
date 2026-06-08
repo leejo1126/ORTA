@@ -1,0 +1,100 @@
+# =============================================================================
+# EP-ORCA IF pipeline configuration.
+# This is the single place to revise values and re-run; Snakemake will redo
+# only the steps whose inputs/outputs changed.
+# =============================================================================
+
+# --- Paths (absolute; Windows paths use forward slashes) -----------------------
+paths:
+  dax_dir: "Z:/EPORCA/2026-04-16_IF"          # source .dax + .inf files
+  data_dir: "S:/cluade code/ep-orca-if/data"  # all outputs go here
+  # subfolders created under data_dir: zarr/ masks/ foci/ features/ anndata/ figures/
+
+# --- Python interpreters per step (used by the Snakemake workflow) ------------
+interpreters:
+  analysis: "S:/cluade code/EP-ORCA/.venv/Scripts/python.exe"          # all steps except segment
+  cellpose: "C:/ProgramData/Anaconda3/envs/cellpose-gpu/python.exe"    # step 1 (segment) only
+
+# --- Acquisition / assay ------------------------------------------------------
+acquisition:
+  fov_pattern: "zscan_647_561_488_405_{fov:03d}.dax"
+  n_fovs: 198                # FOVs 000..197
+  pixel_size_um: 0.108       # xy microns / pixel
+  z_um: 0.25                 # z step (microns)
+  trim_z: 1                  # drop this many dead z-planes from each end
+  # channel order in the interleaved .dax (index -> wavelength/marker)
+  channels:
+    - {index: 0, wavelength: "647", marker: "Brd4"}
+    - {index: 1, wavelength: "561", marker: "Pol2"}
+    - {index: 2, wavelength: "488", marker: "Sc35"}
+    - {index: 3, wavelength: "405", marker: "DAPI"}
+
+# --- OME-Zarr (step 0) --------------------------------------------------------
+zarr:
+  chunk_zyx: [8, 512, 512]   # chunk size per (z,y,x); channel chunked to 1
+  compressor: "zstd"         # blosc codec
+  clevel: 5
+
+# --- Segmentation (step 1, cellpose-gpu env) ----------------------------------
+segmentation:
+  channel_marker: "DAPI"     # which channel to segment nuclei on
+  diam_um: 15.0              # expected nuclear diameter
+  cellpose_diam_px: 30       # size Cellpose is trained for
+  flow_threshold: 0.4
+  cellprob_threshold: 0.0
+  blur_factor: 1.0           # gaussian sigma (xy) after rescale; 0 disables
+  batch_size: 8
+  use_bf16: false            # torch 1.13 has no bf16 interpolate kernel
+  gpu_index: 1               # RTX 3080 Ti (bf16-capable); set CUDA_VISIBLE_DEVICES
+  exclude_edge: true
+  # mitotic / debris filters (None = disabled). Tuned loosely; refine later.
+  min_volume_um3: 300.0
+  max_volume_um3: null
+  min_circularity: 0.80
+  max_circularity: null
+
+# --- Foci / condensate detection (step 2) -------------------------------------
+# Shared detector: per-slice top-hat -> optional xy gaussian on the DETECTION
+# image only -> h-maxima seeds -> 3D watershed -> min-size filter. Features
+# (COM, intensities) are always measured on the RAW data.
+# Per-channel parameter blocks keyed by marker. Brd4 is tuned; the others start
+# from presets and should be refined with the scan helper (see notebooks/).
+foci:
+  # nucleus-level parallelism within a FOV. Set to 1 when running the Snakemake
+  # batch (which already parallelizes across FOVs); raise for fast single-FOV runs.
+  workers: 1
+  defaults:
+    tophat_radius: 5
+    noise_k: 3.0
+    seed_h_k: 0.5
+    min_size: 10
+    blur_sigma: 0.3
+  per_marker:
+    Brd4:   {tophat_radius: 5,  noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
+    Pol2:   {tophat_radius: 5,  noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
+    Sc35:   {tophat_radius: 8,  noise_k: 3.0, seed_h_k: 1.0, min_size: 30, blur_sigma: 0.5}
+    DAPI:   {tophat_radius: 10, noise_k: 4.0, seed_h_k: 1.5, min_size: 50, blur_sigma: 0.5}  # chromocenters
+
+# --- Chromatic correction (applied only before cross-channel comparison) ------
+# Per-marker (z,y,x) voxel offsets relative to a reference channel. Fill from
+# bead/fiducial calibration when available; zeros = no correction.
+chromatic:
+  reference_marker: "DAPI"
+  offsets_vox:
+    Brd4: [0.0, 0.0, 0.0]
+    Pol2: [0.0, 0.0, 0.0]
+    Sc35: [0.0, 0.0, 0.0]
+    DAPI: [0.0, 0.0, 0.0]
+
+# --- Analysis (step 4) --------------------------------------------------------
+analysis:
+  control_condition: "control"
+  colocalization:
+    pairs: [["Brd4", "Pol2"], ["Pol2", "Sc35"], ["Brd4", "Sc35"]]
+    coloc_radius_um: 0.4     # COM within this distance = colocalized
+    n_random: 50             # randomized nulls for NN-distance baseline
+  clustering:
+    n_pcs: 20
+    n_neighbors: 15
+    leiden_resolution: 1.0
+  random_seed: 0

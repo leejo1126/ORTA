@@ -1,0 +1,30 @@
+# Analysis environment (everything except cellpose segmentation).
+# We already created this as a venv at S:/cluade code/EP-ORCA/.venv with numpy 2,
+# scipy, scikit-image 0.26, pandas, scikit-learn, tifffile, matplotlib. The extra
+# packages below (zarr, ome-zarr, anndata, snakemake, umap-learn, leidenalg,
+# igraph, pydantic, pyyaml) are installed on top, plus `pip install -e .`.
+#
+# This file documents the intended environment for reproducibility / rebuild.
+name: eporca-analysis
+channels: [conda-forge]
+dependencies:
+  - python=3.13
+  - pip
+  - pip:
+      - numpy
+      - scipy
+      - scikit-image
+      - tifffile
+      - pandas
+      - scikit-learn
+      - matplotlib
+      - zarr
+      - ome-zarr
+      - anndata
+      - umap-learn
+      - leidenalg
+      - igraph
+      - pydantic>=2
+      - pyyaml
+      - snakemake
+      - -e .

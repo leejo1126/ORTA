@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eporca"
+version = "0.1.0"
+description = "EP-ORCA immunofluorescence pipeline: OME-Zarr, 3D nuclei segmentation, per-channel foci/condensate features, and cross-condition analysis."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "scikit-image",
+    "tifffile",
+    "pyyaml",
+    "pydantic>=2",
+    "zarr<3",
+    "numcodecs",
+]
+
+# The heavy analysis-only deps (anndata, snakemake, umap-learn, leidenalg,
+# zarr, ome-zarr) live in environment-analysis.yml. The cellpose-gpu env only
+# needs the base deps above plus zarr (installed separately) for segmentation.
+[project.optional-dependencies]
+analysis = [
+    "anndata",
+    "pandas",
+    "pyarrow",
+    "scikit-learn",
+    "umap-learn",
+    "leidenalg",
+    "igraph",
+    "matplotlib",
+    "snakemake",
+]
+
+[project.scripts]
+eporca = "eporca.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+eporca = ["py.typed"]

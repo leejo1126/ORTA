@@ -1,0 +1,29 @@
+# Data & outputs (large, regenerable)
+data/
+*.zarr/
+*.h5ad
+*.tif
+*.tiff
+*.png
+*.npz
+*.npy
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Snakemake
+.snakemake/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
