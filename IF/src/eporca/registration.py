@@ -2,22 +2,18 @@
 Registration via the 561 fiducial channel (beads).
 
 The 561 channel is acquired in every round/modality and carries fluorescent beads
-added after fixation, so beads sit in the BACKGROUND, never overlapping nuclei.
-We align each acquisition's 561 to a reference 561 (the 561-only, post-bleach
-acquisition is the master frame). For IF there are two rounds — 561-only and the
-interleaved 4-channel — with per-FOV stage drift, so each FOV gets its own
-rigid (translation + rotation) transform fitted from the beads.
+(added after fixation). Beads are the BRIGHTEST features in 561, so we simply take
+the ~100 brightest non-saturated point sources as bead candidates. They are
+localized in 3D (3D Gaussian fit on the z-stack, not the max-projection) for
+sub-pixel xy precision. Across two acquisitions of the same FOV the beads are the
+stable correspondences; biology differs between rounds, so a RANSAC Euclidean
+(rigid: translation + rotation) fit locks onto the beads and rejects the rest.
 
-Bead detection is MASK-FREE (future modalities won't have a DAPI mask): beads are
-bright, small, point-like spots sitting in DARK BACKGROUND (cell-free) — so we keep
-non-saturated point sources whose local surround (annulus) is near background,
-which excludes in-nucleus biology without any mask. Each is localized by a 2D
-Gaussian fit; keep the top ~20 brightest. Matching is coarse-aligned by phase
-correlation then RANSAC-fit with a EuclideanTransform (rigid), which rejects beads
-that moved or were lost.
+Reference frame = the 561-only (clean) acquisition. For IF there are two rounds
+(561-only and interleaved) with per-FOV stage drift, so each FOV gets its own
+transform. No DAPI mask is used (future modalities won't have one).
 
-CLI: `eporca register --fov N`. Standalone for now; applying the transform to put
-Pol2 foci and DAPI nuclei in the shared 561-only frame is a later integration.
+CLI: `eporca register --fov N`.
 """
 
 from __future__ import annotations
@@ -25,7 +21,6 @@ from __future__ import annotations
 import json
 
 import numpy as np
-import scipy.ndimage as ndi
 from scipy.optimize import curve_fit
 from scipy.spatial import cKDTree
 from skimage.feature import peak_local_max
@@ -38,76 +33,64 @@ from .dax_reader import read_dax_multichannel
 from .io_zarr import read_channel
 
 
-def _fit_gaussian_2d(patch):
-    """Fit A*exp(-r^2/2s^2)+b to a small patch; return (y0, x0, amp, sigma, ok)."""
-    ny, nx = patch.shape
-    yy, xx = np.mgrid[0:ny, 0:nx]
-    p = patch.astype(float)
-    p0 = (p.max() - p.min(), ny / 2.0, nx / 2.0, 1.5, p.min())
+def _fit_gaussian_3d(subvol):
+    """Fit an anisotropic 3D Gaussian; return (z0, y0, x0, amp, sxy, ok) in local coords."""
+    nz, ny, nx = subvol.shape
+    zz, yy, xx = np.mgrid[0:nz, 0:ny, 0:nx]
+    p = subvol.astype(float)
+    p0 = (p.max() - p.min(), nz / 2.0, ny / 2.0, nx / 2.0, 1.5, 2.0, p.min())
 
-    def g(c, A, y0, x0, s, b):
-        y, x = c
-        return (A * np.exp(-((y - y0) ** 2 + (x - x0) ** 2) / (2 * s * s)) + b).ravel()
+    def g(c, A, z0, y0, x0, sxy, sz, b):
+        z, y, x = c
+        return (A * np.exp(-((y - y0) ** 2 + (x - x0) ** 2) / (2 * sxy * sxy)
+                           - (z - z0) ** 2 / (2 * sz * sz)) + b).ravel()
 
     try:
-        popt, _ = curve_fit(g, (yy, xx), p.ravel(), p0=p0, maxfev=2000)
-        A, y0, x0, s, b = popt
-        ok = (0 <= y0 < ny) and (0 <= x0 < nx) and (0.6 < abs(s) < 3.5) and A > 0
-        return y0, x0, A, abs(s), ok
+        popt, _ = curve_fit(g, (zz, yy, xx), p.ravel(), p0=p0, maxfev=4000)
+        A, z0, y0, x0, sxy, sz, b = popt
+        ok = (0 <= y0 < ny) and (0 <= x0 < nx) and (0 <= z0 < nz) and (0.6 < abs(sxy) < 3.5) and A > 0
+        return z0, y0, x0, A, abs(sxy), ok
     except Exception:
-        return ny / 2.0, nx / 2.0, 0.0, 0.0, False
+        return nz / 2.0, ny / 2.0, nx / 2.0, 0.0, 0.0, False
 
 
-def _annulus_median(mip, y, x, r_in=4, r_out=9):
-    """Median intensity in a ring around (y, x) — the local background level."""
-    H, W = mip.shape
-    y0, y1 = max(0, y - r_out), min(H, y + r_out + 1)
-    x0, x1 = max(0, x - r_out), min(W, x + r_out + 1)
-    yy, xx = np.mgrid[y0:y1, x0:x1]
-    r = np.sqrt((yy - y) ** 2 + (xx - x) ** 2)
-    ring = (r > r_in) & (r <= r_out)
-    return float(np.median(mip[y0:y1, x0:x1][ring])) if ring.any() else float(mip[y, x])
-
-
-def detect_beads(mip, n=100, min_distance=7, thresh_pct=99.0, saturation=64000,
-                 win=5, bg_factor=1.5, exclude_mask=None):
-    """Top-`n` bright, point-like, non-saturated beads in DARK BACKGROUND (no mask
-    needed), localized by 2D Gaussian fit. A candidate is kept only if its local
-    surround (annulus) is near the global background, which rejects in-nucleus
-    biology. `exclude_mask` is optional and used only if provided. Returns (n,2)
-    sub-pixel (y, x)."""
+def detect_beads(vol, n=100, min_distance=7, thresh_pct=99.0, saturation=64000,
+                 win=5, zwin=3):
+    """The ~`n` brightest non-saturated point sources (beads), localized in 3D.
+    Returns (n, 2) sub-pixel (y, x)."""
+    mip = vol.max(axis=0)
     thr = np.percentile(mip, thresh_pct)
-    bg_level = np.percentile(mip, 20)                  # typical background
-    cand = peak_local_max(mip, min_distance=min_distance, threshold_abs=thr, num_peaks=800)
+    cand = peak_local_max(mip, min_distance=min_distance, threshold_abs=thr, num_peaks=500)
+    cand = sorted(cand, key=lambda p: -mip[p[0], p[1]])     # brightest first
+    Z, H, W = vol.shape
     beads = []
-    H, W = mip.shape
     for y, x in cand:
         if mip[y, x] >= saturation:
-            continue                                   # saturated -> poor fit
-        if exclude_mask is not None and exclude_mask[y, x]:
-            continue
-        if _annulus_median(mip, y, x) > bg_factor * bg_level + 1:
-            continue                                   # bright surround -> inside a cell, not a bead
+            continue                                        # saturated -> poor fit
+        z = int(np.argmax(vol[:, y, x]))
+        z0, z1 = max(0, z - zwin), min(Z, z + zwin + 1)
         y0, y1 = max(0, y - win), min(H, y + win + 1)
         x0, x1 = max(0, x - win), min(W, x + win + 1)
-        fy, fx, amp, sig, ok = _fit_gaussian_2d(mip[y0:y1, x0:x1])
+        fz, fy, fx, amp, sxy, ok = _fit_gaussian_3d(vol[z0:z1, y0:y1, x0:x1])
         if not ok:
             continue
         beads.append((y0 + fy, x0 + fx, amp))
-    beads.sort(key=lambda b: -b[2])                    # brightest first
-    return np.array([[b[0], b[1]] for b in beads[:n]], dtype=float) if beads else np.empty((0, 2))
+        if len(beads) >= n:
+            break                                           # candidates are brightest-first
+    return np.array([[b[0], b[1]] for b in beads], dtype=float) if beads else np.empty((0, 2))
 
 
-def register_549(ref_mip, mov_mip, ref_excl=None, mov_excl=None,
-                 n_beads=100, match_radius=10.0, residual_threshold=1.5, min_inliers=4):
-    """Fit moving-561 -> reference-561 rigid transform from beads. Returns
-    (model_or_None, stats); transform maps moving (x, y) into the reference frame."""
-    ref_pts = detect_beads(ref_mip, n=n_beads, exclude_mask=ref_excl)
-    mov_pts = detect_beads(mov_mip, n=n_beads, exclude_mask=mov_excl)
+def register_549(ref_vol, mov_vol, n_beads=100, match_radius=10.0,
+                 residual_threshold=1.0, min_inliers=4):
+    """Fit moving-561 -> reference-561 rigid transform from 3D-localized beads.
+    Returns (model_or_None, stats); transform maps moving (x, y) -> reference frame."""
+    ref_mip, mov_mip = ref_vol.max(axis=0), mov_vol.max(axis=0)
+    ref_pts = detect_beads(ref_vol, n=n_beads)
+    mov_pts = detect_beads(mov_vol, n=n_beads)
     stats = {"n_ref_beads": int(len(ref_pts)), "n_mov_beads": int(len(mov_pts)), "status": "ok"}
     if len(ref_pts) < min_inliers or len(mov_pts) < min_inliers:
         stats["status"] = "too_few_beads"
-        return None, stats
+        return None, stats, ref_mip, ref_pts, mov_pts
 
     shift, _, _ = phase_cross_correlation(ref_mip, mov_mip, upsample_factor=10)
     stats["coarse_shift_yx"] = [float(shift[0]), float(shift[1])]
@@ -116,34 +99,35 @@ def register_549(ref_mip, mov_mip, ref_excl=None, mov_excl=None,
     stats["n_matches"] = int(keep.sum())
     if keep.sum() < min_inliers:
         stats["status"] = "too_few_matches"
-        return None, stats
+        return None, stats, ref_mip, ref_pts, mov_pts
 
-    src = mov_pts[keep][:, ::-1]                        # (x, y)
+    src = mov_pts[keep][:, ::-1]
     dst = ref_pts[idx[keep]][:, ::-1]
     model, inliers = ransac((src, dst), EuclideanTransform, min_samples=2,
-                            residual_threshold=residual_threshold, max_trials=2000)
-    stats["n_inliers"] = int(inliers.sum())
-    stats["rotation_deg"] = float(np.degrees(model.rotation))
-    stats["translation_px"] = [float(t) for t in model.translation]
-    stats["residual_px"] = float(
-        np.sqrt(((model(src[inliers]) - dst[inliers]) ** 2).sum(1).mean())) if inliers.sum() else None
-    stats["transform_matrix"] = model.params.tolist()
+                            residual_threshold=residual_threshold, max_trials=3000)
+    res = np.sqrt(((model(src[inliers]) - dst[inliers]) ** 2).sum(1)) if inliers.sum() else np.array([])
+    stats.update({
+        "n_inliers": int(inliers.sum()),
+        "rotation_deg": float(np.degrees(model.rotation)),
+        "translation_px": [float(t) for t in model.translation],
+        "residual_px": float(res.mean()) if res.size else None,
+        "residual_p90_px": float(np.percentile(res, 90)) if res.size else None,
+        "transform_matrix": model.params.tolist(),
+    })
     if inliers.sum() < min_inliers:
         stats["status"] = "ransac_failed"
-    return model, stats
+    return model, stats, ref_mip, ref_pts, mov_pts
 
 
 def register_fov(cfg: Config, fov: int) -> dict:
-    """Align the interleaved-561 (moving) to the clean 561-only (reference) for one
-    FOV; save transform + QC overlay. Reference frame = the 561-only acquisition.
-    Bead detection is mask-free (dark-background criterion)."""
-    ref_mip = np.asarray(read_channel(cfg, fov, "Pol2", trim=False)).max(axis=0)  # 561-only
-    vol, _ = read_dax_multichannel(cfg.interleaved_path(fov),
-                                   cfg.acquisition.n_interleaved_channels)
-    mov_mip = np.asarray(vol[:, 1]).max(axis=0)                                   # interleaved 561
-    model, stats = register_549(ref_mip, mov_mip)
+    """Align interleaved-561 (moving) to the clean 561-only (reference) for one FOV
+    using 3D-localized beads; save transform + QC overlay."""
+    ref_vol = np.asarray(read_channel(cfg, fov, "Pol2", trim=False)).astype(np.float32)  # 561-only
+    vol, _ = read_dax_multichannel(cfg.interleaved_path(fov), cfg.acquisition.n_interleaved_channels)
+    mov_vol = np.asarray(vol[:, 1]).astype(np.float32)                                    # interleaved 561
+    model, stats, ref_mip, ref_pts, mov_pts = register_549(ref_vol, mov_vol)
     stats["fov"] = fov
-    _save(cfg, fov, model, stats, ref_mip, detect_beads(ref_mip), detect_beads(mov_mip))
+    _save(cfg, fov, model, stats, ref_mip, ref_pts, mov_pts)
     return stats
 
 
@@ -159,10 +143,10 @@ def _save(cfg, fov, model, stats, ref_mip=None, ref_pts=None, mov_pts=None):
         g = (np.clip((ref_mip - lo) / max(hi - lo, 1), 0, 1) * 255).astype(np.uint8)
         img = Image.fromarray(np.stack([g] * 3, -1)); d = ImageDraw.Draw(img)
         for y, x in ref_pts:
-            d.ellipse([x - 5, y - 5, x + 5, y + 5], outline=(255, 0, 0))      # reference beads
+            d.ellipse([x - 5, y - 5, x + 5, y + 5], outline=(255, 0, 0))       # reference beads
         for y, x in mov_pts:
             tx, ty = model([[x, y]])[0]
-            d.ellipse([tx - 3, ty - 3, tx + 3, ty + 3], outline=(0, 255, 0))   # transformed moving
+            d.ellipse([tx - 3, ty - 3, tx + 3, ty + 3], outline=(0, 255, 0))    # transformed moving
         img.save(outdir / f"fov_{fov:03d}_qc.png")
     except Exception:
         pass
