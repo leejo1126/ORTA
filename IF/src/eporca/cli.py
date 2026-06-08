@@ -47,6 +47,11 @@ def cmd_features(args):
     print(features_fov(_cfg(args), args.fov))
 
 
+def cmd_register(args):
+    from .registration import register_fov
+    print(register_fov(_cfg(args), args.fov))
+
+
 def cmd_anndata(args):
     from .anndata_build import build_all
     print(build_all(_cfg(args), embed=not args.no_embed))
@@ -84,6 +89,7 @@ def main(argv=None):
     sp.set_defaults(func=cmd_foci)
 
     add_fov(sub.add_parser("features")).set_defaults(func=cmd_features)
+    add_fov(sub.add_parser("register")).set_defaults(func=cmd_register)
 
     sp = sub.add_parser("anndata"); sp.add_argument("--config", required=True)
     sp.add_argument("--no-embed", action="store_true"); sp.set_defaults(func=cmd_anndata)
