@@ -27,3 +27,6 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+
+# agent lab notebook reports (keep dir, ignore bulk)
+agents/lab_notebook/*.json
