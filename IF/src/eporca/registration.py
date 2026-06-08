@@ -69,7 +69,7 @@ def _annulus_median(mip, y, x, r_in=4, r_out=9):
     return float(np.median(mip[y0:y1, x0:x1][ring])) if ring.any() else float(mip[y, x])
 
 
-def detect_beads(mip, n=20, min_distance=7, thresh_pct=99.5, saturation=64000,
+def detect_beads(mip, n=100, min_distance=7, thresh_pct=99.0, saturation=64000,
                  win=5, bg_factor=1.5, exclude_mask=None):
     """Top-`n` bright, point-like, non-saturated beads in DARK BACKGROUND (no mask
     needed), localized by 2D Gaussian fit. A candidate is kept only if its local
@@ -99,7 +99,7 @@ def detect_beads(mip, n=20, min_distance=7, thresh_pct=99.5, saturation=64000,
 
 
 def register_549(ref_mip, mov_mip, ref_excl=None, mov_excl=None,
-                 n_beads=20, match_radius=10.0, residual_threshold=1.5, min_inliers=4):
+                 n_beads=100, match_radius=10.0, residual_threshold=1.5, min_inliers=4):
     """Fit moving-561 -> reference-561 rigid transform from beads. Returns
     (model_or_None, stats); transform maps moving (x, y) into the reference frame."""
     ref_pts = detect_beads(ref_mip, n=n_beads, exclude_mask=ref_excl)
