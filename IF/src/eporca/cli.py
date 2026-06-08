@@ -52,6 +52,12 @@ def cmd_register(args):
     print(register_fov(_cfg(args), args.fov))
 
 
+def cmd_chromatic_calibrate(args):
+    import json
+    from .chromatic import calibrate
+    print(json.dumps(calibrate(_cfg(args)), indent=2))
+
+
 def cmd_anndata(args):
     from .anndata_build import build_all
     print(build_all(_cfg(args), embed=not args.no_embed))
@@ -83,13 +89,18 @@ def main(argv=None):
 
     sp = sub.add_parser("foci"); add_fov(sp)
     sp.add_argument("--markers", default=None, help="comma-separated markers (default: all)")
-    sp.add_argument("--save-labels", action="store_true")
+    sp.add_argument("--save-labels", dest="save_labels", action="store_const",
+                    const=True, default=None)
+    sp.add_argument("--no-save-labels", dest="save_labels", action="store_const", const=False)
     sp.add_argument("--workers", type=int, default=None,
                     help="nucleus-level parallelism for testing (default: config foci.workers)")
     sp.set_defaults(func=cmd_foci)
 
     add_fov(sub.add_parser("features")).set_defaults(func=cmd_features)
     add_fov(sub.add_parser("register")).set_defaults(func=cmd_register)
+
+    sp = sub.add_parser("chromatic-calibrate"); sp.add_argument("--config", required=True)
+    sp.set_defaults(func=cmd_chromatic_calibrate)
 
     sp = sub.add_parser("anndata"); sp.add_argument("--config", required=True)
     sp.add_argument("--no-embed", action="store_true"); sp.set_defaults(func=cmd_anndata)

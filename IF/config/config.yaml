@@ -86,10 +86,23 @@ foci:
     Sc35:   {mode: "mean_fold", threshold: 2.0, min_size: 25,  max_size: 10000, blur_sigma: 1.0, watershed: true,  marker_h: 2.0}
     DAPI:   {mode: "mean_fold", threshold: 1.3, min_size: 100, max_size: 30000, blur_sigma: 1.0, watershed: false, marker_h: 2.0}
 
-# --- Chromatic correction (applied only before cross-channel comparison) ------
-# Per-marker (z,y,x) voxel offsets relative to a reference channel. Fill from
-# bead/fiducial calibration when available; zeros = no correction.
+# --- Chromatic correction -----------------------------------------------------
+# All-to-all 3D degree-3 polynomial transforms between channels, estimated from a
+# multi-channel bead image. Built/run via `eporca chromatic-calibrate`; applied
+# only when mode == "polynomial". 405 is taken from a separate 405-only bead image
+# (tetraspecks image poorly at 405).
 chromatic:
+  mode: "none"                 # none | polynomial
+  degree: 3
+  calibration_path: "S:/cluade code/ep-orca-if/IF/data/chromatic/calibration.npz"
+  beads:
+    dir: "Z:/EPORCA/calibration/beads"
+    fovs: [3, 4]
+    interleaved_pattern: "beads_{i:04d}.dax"    # 647=idx0, 561=idx1, 488=idx2
+    dapi_pattern: "405_only_{i:04d}.dax"         # 405 re-imaged separately (idx0)
+    n_channels_interleaved: 4
+    wavelengths: ["647", "561", "488", "405"]
+  # constant-offset fallback used by features when mode != polynomial; zeros = none
   reference_marker: "DAPI"
   offsets_vox:
     Brd4: [0.0, 0.0, 0.0]

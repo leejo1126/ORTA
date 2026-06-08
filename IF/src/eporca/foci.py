@@ -204,19 +204,20 @@ def _spots_from_labels(lab, subraw, voxel_um3, z_um, px, marker, fov, cond,
 
 
 def _process_nucleus(payload):
-    """Pool worker: detect foci in one nucleus crop and return its per-spot table.
-
-    Receives only the small crop (not the whole FOV), so inter-process transfer
-    is cheap. Returns the spot table with local spot labels (renumbered globally
-    by the parent)."""
+    """Pool worker: detect foci in one nucleus crop. Returns the per-spot table
+    (local labels), plus the label crop + origin so the parent can paint the full
+    label volume with IDs that match spot_label. Receives only the small crop, so
+    inter-process transfer is cheap."""
     lab = detect_foci(payload["subraw"], payload["subnuc"], payload["params"])
     if int(lab.max()) == 0:
         return None
-    return _spots_from_labels(
+    spots = _spots_from_labels(
         lab, payload["subraw"], payload["voxel_um3"], payload["z_um"], payload["px"],
         payload["marker"], payload["fov"], payload["cond"], payload["nucleus"],
         payload["origin"], 0,
     )
+    return {"spots": spots, "lab": lab.astype(np.uint32) if payload["return_labels"] else None,
+            "origin": payload["origin"]}
 
 
 def _concat(tables):
@@ -249,28 +250,43 @@ def _save_label_zarr(path, labels):
                         compressor=numcodecs.Blosc("zstd", clevel=5), overwrite=True)
 
 
-def _renumber_and_concat(results):
-    """Concatenate per-nucleus spot tables, renumbering spot_label globally."""
+def _assemble(results, shape, save_labels):
+    """Renumber per-nucleus spot tables globally and (optionally) paint the full
+    label volume with the SAME ids, so label values join the per_spot table by
+    spot_label. Returns (table, full_lab_or_None)."""
     tables, base = [], 0
+    full_lab = np.zeros(shape, np.uint32) if save_labels else None
     for r in results:
-        if r is None or len(r["spot_label"]) == 0:
+        if r is None:
             continue
-        r = dict(r)
-        r["spot_label"] = r["spot_label"] + base
-        base += len(r["spot_label"])
-        tables.append(r)
-    return _concat(tables)
+        t = dict(r["spots"])
+        k = len(t["spot_label"])
+        if k == 0:
+            continue
+        t["spot_label"] = t["spot_label"] + base
+        tables.append(t)
+        if save_labels and r["lab"] is not None:
+            lab, o = r["lab"], r["origin"]
+            sl = (slice(o[0], o[0] + lab.shape[0]), slice(o[1], o[1] + lab.shape[1]),
+                  slice(o[2], o[2] + lab.shape[2]))
+            m = lab > 0
+            full_lab[sl][m] = lab[m] + base
+        base += k
+    return _concat(tables), full_lab
 
 
-def foci_fov(cfg: Config, fov: int, markers=None, save_labels: bool = False,
+def foci_fov(cfg: Config, fov: int, markers=None, save_labels: bool | None = None,
              workers: int | None = None) -> dict:
-    """Detect foci per nucleus for the requested markers in one FOV; write CSVs.
+    """Detect foci per nucleus for the requested markers in one FOV. Writes a
+    per-spot CSV and (if save_labels) a compressed label volume per channel whose
+    voxel IDs join the CSV by spot_label -- the per-focus geometry used for
+    cross-focus / DNA-locus analysis.
 
-    ``workers`` (default config ``foci.workers``) sets nucleus-level parallelism
-    within this FOV -- useful for fast single-FOV testing. For the full batch,
-    keep workers=1 and parallelize across FOVs with Snakemake (-j).
+    ``workers`` (default config foci.workers) sets nucleus-level parallelism within
+    the FOV (for testing); the batch keeps workers=1 and parallelizes across FOVs.
     """
     workers = cfg.foci.workers if workers is None else workers
+    save_labels = cfg.foci.save_labels if save_labels is None else save_labels
     markers = markers or cfg.markers
     ref = read_channel(cfg, fov, markers[0], trim=True)
     nuc_labels = load_nuclear_labels_3d(cfg, fov, ref.shape)
@@ -288,46 +304,29 @@ def foci_fov(cfg: Config, fov: int, markers=None, save_labels: bool = False,
         raw_full = subtract_background(raw_full, cfg.foci.background)
         params = cfg.foci_params(marker)
 
-        # save_labels (QC) keeps the serial path so it can paint the label volume.
-        if save_labels or workers <= 1:
-            results, base = [], 0
-            full_lab = np.zeros(raw_full.shape, np.uint32) if save_labels else None
-            for L in present:
-                sl = _expand_slices(slices[L - 1], raw_full.shape, (1, 8, 8))
-                subnuc = nuc_labels[sl] == L
-                if not subnuc.any():
-                    continue
-                subraw = np.ascontiguousarray(raw_full[sl])
-                lab = detect_foci(subraw, subnuc, params)
-                if int(lab.max()) == 0:
-                    continue
-                origin = (sl[0].start, sl[1].start, sl[2].start)
-                results.append(_spots_from_labels(lab, subraw, voxel_um3, z_um, px,
-                                                  marker, fov, cond, L, origin, 0))
-                if save_labels:
-                    m = lab > 0
-                    full_lab[sl][m] = lab[m].astype(np.uint32) + base
-                    base += int(lab.max())
-            if save_labels:
-                _save_label_zarr(cfg.foci_label_path(fov, marker), full_lab)
-        else:
-            payloads = []
-            for L in present:
-                sl = _expand_slices(slices[L - 1], raw_full.shape, (1, 8, 8))
-                subnuc = nuc_labels[sl] == L
-                if not subnuc.any():
-                    continue
-                payloads.append({
-                    "subraw": np.ascontiguousarray(raw_full[sl]),
-                    "subnuc": subnuc, "params": params, "marker": marker, "fov": fov,
-                    "cond": cond, "nucleus": L,
-                    "origin": (sl[0].start, sl[1].start, sl[2].start),
-                    "voxel_um3": voxel_um3, "z_um": z_um, "px": px,
-                })
+        payloads = []
+        for L in present:
+            sl = _expand_slices(slices[L - 1], raw_full.shape, (1, 8, 8))
+            subnuc = nuc_labels[sl] == L
+            if not subnuc.any():
+                continue
+            payloads.append({
+                "subraw": np.ascontiguousarray(raw_full[sl]),
+                "subnuc": subnuc, "params": params, "marker": marker, "fov": fov,
+                "cond": cond, "nucleus": L,
+                "origin": (sl[0].start, sl[1].start, sl[2].start),
+                "voxel_um3": voxel_um3, "z_um": z_um, "px": px,
+                "return_labels": save_labels,
+            })
+        if workers and workers > 1:
             with ProcessPoolExecutor(max_workers=workers) as ex:
                 results = list(ex.map(_process_nucleus, payloads, chunksize=2))
+        else:
+            results = [_process_nucleus(p) for p in payloads]
 
-        table = _renumber_and_concat(results)
+        table, full_lab = _assemble(results, raw_full.shape, save_labels)
         _save_spot_csv(cfg.foci_spot_csv(fov, marker), table)
+        if save_labels:
+            _save_label_zarr(cfg.foci_label_path(fov, marker), full_lab)
         summary[marker] = int(len(table["spot_label"]))
     return {"fov": fov, "n_foci": summary}

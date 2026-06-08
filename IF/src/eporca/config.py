@@ -108,12 +108,27 @@ class FociCfg(BaseModel):
     background: BackgroundCfg = BackgroundCfg()
     defaults: FociParams
     per_marker: dict[str, FociParams] = {}
-    workers: int = 1   # nucleus-level parallelism within a FOV (1 = serial)
+    workers: int = 1            # nucleus-level parallelism within a FOV (1 = serial)
+    save_labels: bool = True    # save per-focus geometry (label volume; IDs join per_spot)
+
+
+class ChromaticBeadsCfg(BaseModel):
+    dir: str                              # folder with the bead calibration .dax
+    fovs: list[int]                       # bead acquisition indices to pool
+    interleaved_pattern: str             # 647/561/488 source (idx 0/1/2)
+    dapi_pattern: str                    # separate 405-only source (idx 0)
+    n_channels_interleaved: int = 4
+    wavelengths: list[str] = ["647", "561", "488", "405"]
 
 
 class ChromaticCfg(BaseModel):
-    reference_marker: str
-    offsets_vox: dict[str, list[float]]
+    mode: str = "none"                    # "none" | "polynomial" (apply during analysis)
+    degree: int = 3                       # 3D polynomial degree
+    calibration_path: str = ""           # saved all-to-all transforms (.npz)
+    beads: Optional[ChromaticBeadsCfg] = None
+    # simple per-marker constant offset fallback (used by features when no polynomial)
+    reference_marker: str = "DAPI"
+    offsets_vox: dict[str, list[float]] = {}
 
 
 class ColocCfg(BaseModel):
