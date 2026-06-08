@@ -17,17 +17,21 @@ interpreters:
 
 # --- Acquisition / assay ------------------------------------------------------
 acquisition:
-  fov_pattern: "zscan_647_561_488_405_{fov:03d}.dax"
-  n_fovs: 198                # FOVs 000..197
-  pixel_size_um: 0.108       # xy microns / pixel
-  z_um: 0.25                 # z step (microns)
-  trim_z: 1                  # drop this many dead z-planes from each end
-  # channel order in the interleaved .dax (index -> wavelength/marker)
+  interleaved_pattern: "zscan_647_561_488_405_{fov:03d}.dax"
+  n_interleaved_channels: 4   # physical channels in the interleaved .dax (647,561,488,405)
+  n_fovs: 198                 # FOVs 000..197
+  pixel_size_um: 0.108        # xy microns / pixel
+  z_um: 0.25                  # z step (microns)
+  trim_z: 1                   # drop this many dead z-planes from each end
+  # Analysis markers in OME-Zarr channel order. NOTE: Pol2 uses the separate
+  # post-bleach 561 acquisition (zscan_561_*) because the interleaved 561 channel
+  # suffers 647/Brd4 bleed-through. Aligning that acquisition to the interleaved
+  # frame via beads is a separate registration step (workflow TBD).
   channels:
-    - {index: 0, wavelength: "647", marker: "Brd4"}
-    - {index: 1, wavelength: "561", marker: "Pol2"}
-    - {index: 2, wavelength: "488", marker: "Sc35"}
-    - {index: 3, wavelength: "405", marker: "DAPI"}
+    - {marker: "Brd4", wavelength: "647", source: {kind: "interleaved", index: 0}}
+    - {marker: "Sc35", wavelength: "488", source: {kind: "interleaved", index: 2}}
+    - {marker: "DAPI", wavelength: "405", source: {kind: "interleaved", index: 3}}
+    - {marker: "Pol2", wavelength: "561", source: {kind: "file", pattern: "zscan_561_{fov:03d}.dax", index: 0}}
 
 # --- OME-Zarr (step 0) --------------------------------------------------------
 zarr:
@@ -69,11 +73,16 @@ foci:
     seed_h_k: 0.5
     min_size: 10
     blur_sigma: 0.3
+  # Initial presets toward biological targets (refine with scripts/qc_foci_overlay.py):
+  #   Brd4  : dense puncta, tuned.
+  #   Pol2  : ~10 foci/cell (a couple bright histone-locus bodies + weaker) -> strict.
+  #   Sc35  : a few tens of irregular speckles, small nuclear fraction -> large/strict.
+  #   DAPI  : up to a few tens of bright chromocenters -> large/strict.
   per_marker:
-    Brd4:   {tophat_radius: 5,  noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
-    Pol2:   {tophat_radius: 5,  noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
-    Sc35:   {tophat_radius: 8,  noise_k: 3.0, seed_h_k: 1.0, min_size: 30, blur_sigma: 0.5}
-    DAPI:   {tophat_radius: 10, noise_k: 4.0, seed_h_k: 1.5, min_size: 50, blur_sigma: 0.5}  # chromocenters
+    Brd4:   {tophat_radius: 5,  noise_k: 3.0, seed_h_k: 0.5, min_size: 10,  blur_sigma: 0.3}
+    Pol2:   {tophat_radius: 6,  noise_k: 6.0, seed_h_k: 3.0, min_size: 40,  blur_sigma: 1.0}
+    Sc35:   {tophat_radius: 12, noise_k: 3.0, seed_h_k: 3.0, min_size: 200, blur_sigma: 1.0}
+    DAPI:   {tophat_radius: 15, noise_k: 5.0, seed_h_k: 3.0, min_size: 150, blur_sigma: 1.0}  # chromocenters
 
 # --- Chromatic correction (applied only before cross-channel comparison) ------
 # Per-marker (z,y,x) voxel offsets relative to a reference channel. Fill from

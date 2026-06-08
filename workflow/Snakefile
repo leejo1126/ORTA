@@ -48,7 +48,7 @@ rule all:
 
 rule to_zarr:
     input:
-        dax=lambda wc: CFG.dax_path(int(wc.fov)),
+        dax=lambda wc: CFG.source_files(int(wc.fov)),
     output:
         directory(ZARR),
     run:

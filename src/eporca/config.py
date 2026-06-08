@@ -18,10 +18,19 @@ from pydantic import BaseModel
 
 
 # --- section models -----------------------------------------------------------
+class SourceCfg(BaseModel):
+    # where a marker's image comes from:
+    #   kind="interleaved": de-interleave the multi-channel .dax, take `index`
+    #   kind="file":        read a separate single-channel .dax (`pattern`)
+    kind: str = "interleaved"
+    index: int = 0
+    pattern: Optional[str] = None
+
+
 class ChannelCfg(BaseModel):
-    index: int
-    wavelength: str
     marker: str
+    wavelength: str
+    source: SourceCfg = SourceCfg()
 
 
 class PathsCfg(BaseModel):
@@ -35,12 +44,13 @@ class InterpretersCfg(BaseModel):
 
 
 class AcquisitionCfg(BaseModel):
-    fov_pattern: str
+    interleaved_pattern: str          # the multi-channel .dax filename pattern
+    n_interleaved_channels: int       # physical channels in the interleaved .dax
     n_fovs: int
     pixel_size_um: float
     z_um: float
     trim_z: int
-    channels: list[ChannelCfg]
+    channels: list[ChannelCfg]        # analysis markers, in OME-Zarr channel order
 
 
 class ZarrCfg(BaseModel):
@@ -143,16 +153,17 @@ class Config(BaseModel):
         return len(self.acquisition.channels)
 
     def index_of(self, marker: str) -> int:
-        for c in self.acquisition.channels:
+        """OME-Zarr channel index = position of the marker in the channels list."""
+        for i, c in enumerate(self.acquisition.channels):
             if c.marker == marker:
-                return c.index
+                return i
         raise KeyError(f"no channel with marker {marker!r}")
 
     def marker_of(self, index: int) -> str:
-        for c in self.acquisition.channels:
-            if c.index == index:
-                return c.marker
-        raise KeyError(f"no channel with index {index}")
+        return self.acquisition.channels[index].marker
+
+    def channel_of(self, marker: str) -> "ChannelCfg":
+        return self.acquisition.channels[self.index_of(marker)]
 
     # ---------------------------------------------------------------- fov helpers
     @property
@@ -178,8 +189,24 @@ class Config(BaseModel):
     def data_dir(self) -> Path:
         return Path(self.paths.data_dir)
 
-    def dax_path(self, fov: int) -> str:
-        return str(Path(self.paths.dax_dir) / self.acquisition.fov_pattern.format(fov=fov))
+    def interleaved_path(self, fov: int) -> str:
+        return str(Path(self.paths.dax_dir)
+                   / self.acquisition.interleaved_pattern.format(fov=fov))
+
+    def source_path(self, fov: int, channel: "ChannelCfg") -> str:
+        """The .dax file backing a channel for this FOV (interleaved or separate)."""
+        if channel.source.kind == "file":
+            return str(Path(self.paths.dax_dir) / channel.source.pattern.format(fov=fov))
+        return self.interleaved_path(fov)
+
+    def source_files(self, fov: int) -> list[str]:
+        """Unique source .dax files needed to build this FOV's OME-Zarr."""
+        seen = []
+        for c in self.acquisition.channels:
+            p = self.source_path(fov, c)
+            if p not in seen:
+                seen.append(p)
+        return seen
 
     def zarr_path(self, fov: int) -> str:
         return str(self.data_dir / "zarr" / f"fov_{fov:03d}.zarr")

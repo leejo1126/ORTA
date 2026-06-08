@@ -16,7 +16,7 @@ import numpy as np
 import zarr
 import numcodecs
 
-from .dax_reader import read_dax_multichannel
+from .dax_reader import read_dax, read_dax_multichannel
 from .config import Config
 
 
@@ -27,11 +27,27 @@ def _compressor(cfg: Config):
     )
 
 
+def _read_source_channel(cfg: Config, fov: int, channel, interleaved_cache: dict):
+    """Read one marker's (z, y, x) volume from its configured source."""
+    src = channel.source
+    if src.kind == "file":
+        a, _ = read_dax(cfg.source_path(fov, channel))     # single-channel (z, y, x)
+        return np.asarray(a)
+    # interleaved: de-interleave once, cache, then pick the physical channel index
+    if "vol" not in interleaved_cache:
+        vol, _ = read_dax_multichannel(
+            cfg.interleaved_path(fov), cfg.acquisition.n_interleaved_channels)
+        interleaved_cache["vol"] = vol                     # (z, C, y, x)
+    return np.asarray(interleaved_cache["vol"][:, src.index])
+
+
 def to_zarr(cfg: Config, fov: int, overwrite: bool = True) -> str:
-    """Convert one FOV's .dax to a single-scale OME-Zarr; return the store path."""
-    dax = cfg.dax_path(fov)
-    vol, info = read_dax_multichannel(dax, cfg.n_channels)      # (z, c, y, x), memmap
-    arr = np.ascontiguousarray(np.transpose(np.asarray(vol), (1, 0, 2, 3)))  # (c,z,y,x)
+    """Assemble one FOV's analysis channels (from their sources) into a single-scale
+    OME-Zarr; return the store path. Channel order follows config.acquisition.channels."""
+    cache: dict = {}
+    planes = [_read_source_channel(cfg, fov, ch, cache) for ch in cfg.acquisition.channels]
+    nz = min(p.shape[0] for p in planes)                   # guard differing frame counts
+    arr = np.ascontiguousarray(np.stack([p[:nz] for p in planes], axis=0))  # (c, z, y, x)
 
     out = cfg.zarr_path(fov)
     root = zarr.open_group(out, mode="w" if overwrite else "a")
