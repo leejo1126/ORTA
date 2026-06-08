@@ -77,14 +77,35 @@ class SegmentationCfg(BaseModel):
 
 
 class FociParams(BaseModel):
-    tophat_radius: int
-    noise_k: float
-    seed_h_k: float
-    min_size: int
-    blur_sigma: float
+    # detection mode: "mad" = top-hat + h-maxima + watershed (good for dense,
+    # space-filling markers like Brd4); "mean_fold" = threshold at k x in-nucleus
+    # mean + size gating + optional intensity-watershed (ports the MATLAB
+    # findDensities recipe; good for sparse markers like Pol2/Sc35/DAPI).
+    mode: str = "mad"
+    # shared
+    min_size: int = 10
+    max_size: Optional[int] = None      # drop regions larger than this (voxels)
+    blur_sigma: float = 0.0             # xy gaussian sigma applied before detection
+    # --- mad mode ---
+    tophat_radius: int = 5
+    noise_k: float = 3.0
+    seed_h_k: float = 0.5
+    # --- mean_fold mode ---
+    threshold: float = 2.0             # foreground = signal > threshold * mean(in-nucleus MIP)
+    abs_floor: float = 0.0             # plus an absolute floor (post background subtraction)
+    watershed: bool = True             # split touching bodies (intensity watershed)
+    marker_h: float = 2.0             # h-maxima prominence for watershed seeds
+
+
+class BackgroundCfg(BaseModel):
+    # background subtracted from each channel before foci detection
+    mode: str = "percentile"           # "percentile" | "constant" | "none"
+    value: float = 109.0               # for "constant"
+    percentile: float = 5.0            # for "percentile" (per FOV, per channel)
 
 
 class FociCfg(BaseModel):
+    background: BackgroundCfg = BackgroundCfg()
     defaults: FociParams
     per_marker: dict[str, FociParams] = {}
     workers: int = 1   # nucleus-level parallelism within a FOV (1 = serial)

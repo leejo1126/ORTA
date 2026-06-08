@@ -19,7 +19,8 @@ from PIL import Image, ImageDraw
 
 from eporca.config import Config
 from eporca.io_zarr import read_channel
-from eporca.foci import load_nuclear_labels_3d, detect_foci_3d, _expand_slices
+from eporca.foci import (load_nuclear_labels_3d, detect_foci, subtract_background,
+                         _expand_slices)
 
 
 def stretch(img, lo=1.0, hi=99.8):
@@ -64,7 +65,10 @@ def main():
         cells = [int(c) for c in np.argsort(counts)[::-1][: args.n]]
 
     rng = np.random.default_rng(0)
-    raws = {m: read_channel(cfg, args.fov, m, trim=True).astype(np.float32) for m in markers}
+    raws = {m: subtract_background(
+                read_channel(cfg, args.fov, m, trim=True).astype(np.float32),
+                cfg.foci.background)
+            for m in markers}
 
     rows = []
     for L in cells:
@@ -75,7 +79,7 @@ def main():
         panels = []
         for m in markers:
             subraw = np.ascontiguousarray(raws[m][sl])
-            lab = detect_foci_3d(subraw, subnuc, cfg.foci_params(m))
+            lab = detect_foci(subraw, subnuc, cfg.foci_params(m))
             ov = colorize(stretch(subraw[zmid]), lab[zmid], rng)
             img = Image.fromarray(ov).resize(
                 (ov.shape[1] * args.mag, ov.shape[0] * args.mag), Image.NEAREST)

@@ -64,7 +64,7 @@ def _seed_and_watershed(th, nuc, mad, noise_k, seed_h_k, min_size):
 
 
 def detect_foci_3d(raw, nuc, params) -> np.ndarray:
-    """3D foci labels within ``nuc`` using marker ``params`` (FociParams)."""
+    """MAD mode: top-hat + h-maxima + watershed (dense/space-filling markers)."""
     th = np.empty_like(raw, dtype=np.float32)
     se = disk(params.tophat_radius)
     for z in range(raw.shape[0]):
@@ -74,6 +74,67 @@ def detect_foci_3d(raw, nuc, params) -> np.ndarray:
     mad = _robust_noise(th, nuc)
     return _seed_and_watershed(th, nuc, mad, params.noise_k, params.seed_h_k,
                                params.min_size)
+
+
+def _size_filter(labels, min_size, max_size):
+    """Drop labels with voxel count < min_size or > max_size; relabel 1..N."""
+    counts = np.bincount(labels.ravel())
+    bad = np.zeros(counts.shape[0], dtype=bool)
+    if min_size:
+        bad |= counts < min_size
+    if max_size:
+        bad |= counts > max_size
+    bad[0] = False
+    drop = np.flatnonzero(bad)
+    if drop.size:
+        labels[np.isin(labels, drop)] = 0
+    labels, _, _ = relabel_sequential(labels)
+    return labels
+
+
+def detect_foci_meanfold(raw, nuc, params) -> np.ndarray:
+    """mean_fold mode (MATLAB findDensities port): foreground = signal above
+    threshold x mean(in-nucleus MIP) and an absolute floor; optional intensity
+    watershed to split touching bodies; size-gated. ``raw`` is background-subtracted
+    by the caller. Good for sparse markers (Pol2/Sc35/DAPI)."""
+    img = raw
+    if params.blur_sigma > 0:
+        img = ndi.gaussian_filter(img, (0, params.blur_sigma, params.blur_sigma))
+    mip = img.max(axis=0)
+    nuc2d = nuc.any(axis=0)
+    vals = mip[nuc2d & (mip > 0)]
+    if vals.size == 0:
+        return np.zeros(raw.shape, dtype=np.int32)
+    thr = params.threshold * float(vals.mean())
+    binary = (img > thr) & (img > params.abs_floor) & nuc
+    if not binary.any():
+        return np.zeros(raw.shape, dtype=np.int32)
+
+    if params.watershed:
+        seeds = h_maxima(np.where(binary, img, 0.0), max(params.marker_h, 1e-6)) > 0
+        markers = sklabel(seeds)
+        labels = (watershed(-img, markers, mask=binary) if markers.max() > 0
+                  else sklabel(binary, connectivity=1))
+    else:
+        labels = sklabel(binary, connectivity=1)
+    return _size_filter(labels.astype(np.int32), params.min_size, params.max_size)
+
+
+def detect_foci(raw, nuc, params) -> np.ndarray:
+    """Dispatch to the detector for this marker's mode."""
+    if params.mode == "mean_fold":
+        return detect_foci_meanfold(raw, nuc, params)
+    return detect_foci_3d(raw, nuc, params)
+
+
+def subtract_background(arr, bgcfg) -> np.ndarray:
+    """Subtract per-channel background (camera offset + diffuse) and clip at 0."""
+    if bgcfg.mode == "none":
+        return arr
+    bg = bgcfg.value if bgcfg.mode == "constant" else np.percentile(arr, bgcfg.percentile)
+    out = arr - bg
+    np.clip(out, 0, None, out=out)
+    return out
 
 
 # ----------------------------------------------------------------- nucleus masks
@@ -148,7 +209,7 @@ def _process_nucleus(payload):
     Receives only the small crop (not the whole FOV), so inter-process transfer
     is cheap. Returns the spot table with local spot labels (renumbered globally
     by the parent)."""
-    lab = detect_foci_3d(payload["subraw"], payload["subnuc"], payload["params"])
+    lab = detect_foci(payload["subraw"], payload["subnuc"], payload["params"])
     if int(lab.max()) == 0:
         return None
     return _spots_from_labels(
@@ -224,6 +285,7 @@ def foci_fov(cfg: Config, fov: int, markers=None, save_labels: bool = False,
     summary = {}
     for marker in markers:
         raw_full = read_channel(cfg, fov, marker, trim=True).astype(np.float32)
+        raw_full = subtract_background(raw_full, cfg.foci.background)
         params = cfg.foci_params(marker)
 
         # save_labels (QC) keeps the serial path so it can paint the label volume.
@@ -236,7 +298,7 @@ def foci_fov(cfg: Config, fov: int, markers=None, save_labels: bool = False,
                 if not subnuc.any():
                     continue
                 subraw = np.ascontiguousarray(raw_full[sl])
-                lab = detect_foci_3d(subraw, subnuc, params)
+                lab = detect_foci(subraw, subnuc, params)
                 if int(lab.max()) == 0:
                     continue
                 origin = (sl[0].start, sl[1].start, sl[2].start)
