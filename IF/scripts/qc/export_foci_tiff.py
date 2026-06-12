@@ -4,87 +4,128 @@ inspect calling in 3D without touching OME-Zarr. Writes one TIFF per marker with
 channels = [raw (bg-subtracted), foci labels, (optional) nuclei], calibrated in
 microns (xy from pixel_size_um, z spacing from z_um) so the z:xy aspect is correct.
 
+Two label sources:
+  - default: the SAVED per-channel label volume from `eporca foci` (production config).
+  - --spec PATH: apply an autofoci *proposed spec* (from a search's proposed_spec_*.json)
+    over every nucleus in the FOV, so you can eyeball what the agnostic search's winner
+    actually produces. (Reads the marker from the spec file.)
+
     python IF/scripts/qc/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35
-    python IF/scripts/qc/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35,Brd4 --with-nuclei
+    python IF/scripts/qc/export_foci_tiff.py --config IF/config/config.yaml --with-nuclei \
+        --spec agents/runs/autofoci/<ts>_Sc35/proposed_spec_Sc35.json
 
 In Fiji:
   - File > Open the .tif (opens as a composite hyperstack: C channels x Z slices).
   - For the labels channel, Image > Lookup Tables > glasbey (or "3-3-2 RGB") to see
     each focus in its own color; the raw channel keeps a Grays LUT.
-  - 3D view: Image > Stacks > 3D Project (quick), or Plugins > 3D Viewer (add the
-    labels channel as a surface over the raw volume). Calibration is read from the
-    TIFF, so proportions are right.
+  - 3D view: Image > Stacks > 3D Project (quick), or Plugins > 3D Viewer. Calibration
+    is read from the TIFF, so proportions are right.
 """
 
 from __future__ import annotations
 
+import json
 import argparse
 from pathlib import Path
 
 import numpy as np
+import scipy.ndimage as ndi
 import zarr
 import tifffile
 
 from eporca.config import Config
 from eporca.io_zarr import read_channel
-from eporca.foci import load_nuclear_labels_3d, subtract_background
+from eporca.foci import load_nuclear_labels_3d, subtract_background, _expand_slices
+
+
+def _labels_from_spec(cfg, fov, marker, raw_float, spec) -> np.ndarray:
+    """Apply an autofoci spec to every nucleus in the FOV; assemble a full label
+    volume with globally-unique ids (same per-nucleus crop + renumber as eporca.foci)."""
+    from eporca.autofoci.spec import detect_core
+    nuc = load_nuclear_labels_3d(cfg, fov, raw_float.shape)
+    slices = ndi.find_objects(nuc)
+    full = np.zeros(raw_float.shape, np.uint32)
+    base = 0
+    for L in [i + 1 for i, s in enumerate(slices) if s is not None]:
+        sl = _expand_slices(slices[L - 1], raw_float.shape, (1, 8, 8))
+        subnuc = nuc[sl] == L
+        if not subnuc.any():
+            continue
+        lab = detect_core(spec, np.ascontiguousarray(raw_float[sl]), subnuc)
+        m = lab > 0
+        if m.any():
+            full[sl][m] = lab[m].astype(np.uint32) + base
+            base += int(lab.max())
+    return full
+
+
+def _to_uint16(lab: np.ndarray):
+    """ImageJ composite channels share a dtype (uint16). Dense markers can exceed the
+    uint16 ceiling -> remap nonzero ids into [1, 65535] so none overflow to 0 (vanish).
+    Returns (uint16 labels, true n_foci, remapped?)."""
+    n = int(lab.max())
+    if n > 65535:
+        nz = lab > 0
+        disp = np.zeros(lab.shape, dtype=np.uint16)
+        disp[nz] = ((lab[nz].astype(np.uint64) - 1) % 65535 + 1).astype(np.uint16)
+        return disp, n, True
+    return lab.astype(np.uint16), n, False
+
+
+def _export(cfg, fov, marker, lab, with_nuclei, out_dir, tag) -> None:
+    px, zum = cfg.acquisition.pixel_size_um, cfg.acquisition.z_um
+    raw = np.clip(subtract_background(
+        read_channel(cfg, fov, marker, trim=True).astype(np.float32), cfg.foci.background),
+        0, 65535).astype(np.uint16)
+    lab16, n_foci, remapped = _to_uint16(lab)
+    chans, names = [raw, lab16], ["raw", "foci_labels"]
+    if with_nuclei:
+        chans.append(load_nuclear_labels_3d(cfg, fov, raw.shape).astype(np.uint16))
+        names.append("nuclei")
+    stack = np.stack(chans, axis=1)                                   # (Z, C, Y, X)
+    out = out_dir / f"{tag}_fiji_fov{fov:03d}_{marker}.tif"
+    tifffile.imwrite(str(out), stack, imagej=True, resolution=(1.0 / px, 1.0 / px),
+                     metadata={"spacing": zum, "unit": "um", "axes": "ZCYX", "Labels": names})
+    print(f"wrote {out}  (Z,C,Y,X)={stack.shape}  channels={names}  foci={n_foci}"
+          + ("  [labels remapped for display: ids cycle 1..65535]" if remapped else ""))
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Export foci calls as a Fiji hyperstack TIFF")
     ap.add_argument("--config", default="IF/config/config.yaml")
     ap.add_argument("--fov", type=int, default=0)
-    ap.add_argument("--marker", default="Sc35", help="comma-separated markers (e.g. Sc35,Brd4)")
+    ap.add_argument("--marker", default="Sc35", help="comma-separated markers (saved-label mode)")
+    ap.add_argument("--spec", default=None,
+                    help="apply an autofoci proposed_spec_*.json over the FOV instead of "
+                         "reading the saved labels (marker taken from the spec file)")
     ap.add_argument("--out", default=None, help="output dir (default: <data>/figures)")
     ap.add_argument("--with-nuclei", action="store_true", help="add a nucleus-mask channel")
     args = ap.parse_args()
 
     cfg = Config.load(args.config)
-    px, zum = cfg.acquisition.pixel_size_um, cfg.acquisition.z_um
     out_dir = Path(args.out) if args.out else cfg.figures_dir()
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    for marker in [m.strip() for m in args.marker.split(",") if m.strip()]:
-        raw = read_channel(cfg, args.fov, marker, trim=True).astype(np.float32)
-        raw = subtract_background(raw, cfg.foci.background)
-        raw = np.clip(raw, 0, 65535).astype(np.uint16)                # (z, y, x)
+    if args.spec:
+        from eporca.autofoci.spec import Spec
+        meta = json.loads(Path(args.spec).read_text())
+        marker = meta["marker"]
+        spec = Spec(**meta["spec"])
+        raw_float = subtract_background(
+            read_channel(cfg, args.fov, marker, trim=True).astype(np.float32), cfg.foci.background)
+        lab = _labels_from_spec(cfg, args.fov, marker, raw_float, spec)
+        print(f"[autofoci spec] {marker}: family={spec.family} -> {int(lab.max())} foci in FOV {args.fov}")
+        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="autofoci")
+        return
 
+    for marker in [m.strip() for m in args.marker.split(",") if m.strip()]:
         path = cfg.foci_label_path(args.fov, marker)
         try:
             lab = np.asarray(zarr.open_group(path, mode="r")["0"])
         except Exception as e:                                        # noqa: BLE001
             raise SystemExit(f"No saved foci labels for {marker} at {path}; run "
                              f"`eporca foci --config {args.config} --fov {args.fov}` first. [{e}]")
-
-        # ImageJ composite channels must share a dtype (uint16 here). Dense markers
-        # (Brd4) can exceed the uint16 ceiling -> remap nonzero ids into [1, 65535]
-        # so no focus overflows to 0 (vanishes). This makes the labels channel
-        # display-only (ids cycle, no longer 1:1 with the per_spot CSV) for those.
-        n_foci = int(lab.max())
-        remapped = n_foci > 65535
-        if remapped:
-            nz = lab > 0
-            disp = np.zeros(lab.shape, dtype=np.uint16)
-            disp[nz] = ((lab[nz].astype(np.uint64) - 1) % 65535 + 1).astype(np.uint16)
-            lab = disp
-        else:
-            lab = lab.astype(np.uint16)
-
-        chans, names = [raw, lab], ["raw", "foci_labels"]
-        if args.with_nuclei:
-            chans.append(load_nuclear_labels_3d(cfg, args.fov, raw.shape).astype(np.uint16))
-            names.append("nuclei")
-
-        stack = np.stack(chans, axis=1)                               # (Z, C, Y, X) ImageJ order
-        out = out_dir / f"foci_fiji_fov{args.fov:03d}_{marker}.tif"
-        tifffile.imwrite(
-            str(out), stack, imagej=True,
-            resolution=(1.0 / px, 1.0 / px),
-            metadata={"spacing": zum, "unit": "um", "axes": "ZCYX", "Labels": names},
-        )
-        print(f"wrote {out}  (Z,C,Y,X)={stack.shape}  channels={names}  "
-              f"foci={n_foci}" + ("  [labels remapped for display: ids cycle 1..65535]"
-                                  if remapped else ""))
+        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="foci")
 
 
 if __name__ == "__main__":
