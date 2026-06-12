@@ -72,12 +72,36 @@ def _to_uint16(lab: np.ndarray):
     return lab.astype(np.uint16), n, False
 
 
-def _export(cfg, fov, marker, lab, with_nuclei, out_dir, tag) -> None:
+def _randomize(lab: np.ndarray):
+    """Display-only: shuffle label ids so spatially-adjacent foci (which get consecutive
+    ids from the per-nucleus numbering) no longer map to adjacent glasbey colors. Each
+    focus gets a distinct value spread across 1..65535 in random order, so neighbours get
+    well-separated colours. Returns (uint16 labels, true n_foci). NOTE: shuffled ids no
+    longer join the per_spot CSV. Deterministic (seeded)."""
+    present = np.unique(lab)
+    present = present[present > 0]
+    n = int(present.size)
+    out = np.zeros(lab.shape, dtype=np.uint16)
+    if n:
+        order = np.random.default_rng(0).permutation(n)
+        spread = (order.astype(np.uint64) * 65534 // max(1, n - 1) + 1).astype(np.uint16)
+        lut = np.zeros(int(lab.max()) + 1, dtype=np.uint16)
+        lut[present] = spread
+        out = lut[lab]
+    return out, n
+
+
+def _export(cfg, fov, marker, lab, with_nuclei, out_dir, tag, randomize=True) -> None:
     px, zum = cfg.acquisition.pixel_size_um, cfg.acquisition.z_um
     raw = np.clip(subtract_background(
         read_channel(cfg, fov, marker, trim=True).astype(np.float32), cfg.foci.background),
         0, 65535).astype(np.uint16)
-    lab16, n_foci, remapped = _to_uint16(lab)
+    if randomize:
+        lab16, n_foci = _randomize(lab)
+        note = "  [labels shuffled for display (glasbey-friendly); not CSV-joinable]"
+    else:
+        lab16, n_foci, remapped = _to_uint16(lab)
+        note = "  [labels remapped: ids cycle 1..65535]" if remapped else ""
     chans, names = [raw, lab16], ["raw", "foci_labels"]
     if with_nuclei:
         chans.append(load_nuclear_labels_3d(cfg, fov, raw.shape).astype(np.uint16))
@@ -86,8 +110,7 @@ def _export(cfg, fov, marker, lab, with_nuclei, out_dir, tag) -> None:
     out = out_dir / f"{tag}_fiji_fov{fov:03d}_{marker}.tif"
     tifffile.imwrite(str(out), stack, imagej=True, resolution=(1.0 / px, 1.0 / px),
                      metadata={"spacing": zum, "unit": "um", "axes": "ZCYX", "Labels": names})
-    print(f"wrote {out}  (Z,C,Y,X)={stack.shape}  channels={names}  foci={n_foci}"
-          + ("  [labels remapped for display: ids cycle 1..65535]" if remapped else ""))
+    print(f"wrote {out}  (Z,C,Y,X)={stack.shape}  channels={names}  foci={n_foci}" + note)
 
 
 def main() -> None:
@@ -100,6 +123,9 @@ def main() -> None:
                          "reading the saved labels (marker taken from the spec file)")
     ap.add_argument("--out", default=None, help="output dir (default: <data>/figures)")
     ap.add_argument("--with-nuclei", action="store_true", help="add a nucleus-mask channel")
+    ap.add_argument("--keep-ids", action="store_true",
+                    help="keep true label ids (CSV-joinable) instead of shuffling them for "
+                         "glasbey display (default: shuffle, since this is a QC viewer)")
     args = ap.parse_args()
 
     cfg = Config.load(args.config)
@@ -115,7 +141,8 @@ def main() -> None:
             read_channel(cfg, args.fov, marker, trim=True).astype(np.float32), cfg.foci.background)
         lab = _labels_from_spec(cfg, args.fov, marker, raw_float, spec)
         print(f"[autofoci spec] {marker}: family={spec.family} -> {int(lab.max())} foci in FOV {args.fov}")
-        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="autofoci")
+        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="autofoci",
+                randomize=not args.keep_ids)
         return
 
     for marker in [m.strip() for m in args.marker.split(",") if m.strip()]:
@@ -125,7 +152,8 @@ def main() -> None:
         except Exception as e:                                        # noqa: BLE001
             raise SystemExit(f"No saved foci labels for {marker} at {path}; run "
                              f"`eporca foci --config {args.config} --fov {args.fov}` first. [{e}]")
-        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="foci")
+        _export(cfg, args.fov, marker, lab, args.with_nuclei, out_dir, tag="foci",
+                randomize=not args.keep_ids)
 
 
 if __name__ == "__main__":
