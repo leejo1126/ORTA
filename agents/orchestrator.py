@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tools  # noqa: E402
+import wiki  # noqa: E402
 from schemas import QCVerdict, ParamProposal  # noqa: E402
 
 # Windows consoles default to cp1252; LLM rationales/notes routinely contain
@@ -158,6 +159,14 @@ def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5)
     print(f"[PI] tuning {marker} toward: {target}  (run {run_ts}; start params: "
           f"{ {k: base[k] for k in ('threshold','min_size','max_size','noise_k') if k in base} })")
 
+    # ground the agents in accrued biology/method knowledge for this marker
+    cards = wiki.relevant_for(marker)
+    wiki_ctx = ("Background knowledge from the lab wiki (use it to judge what these foci "
+                "should look like and which way to move params):\n"
+                + wiki.render_for_prompt(cards))
+    if cards:
+        print(f"        wiki: grounding on {[c.name for c in cards]}")
+
     for it in range(1, max_iters + 1):
         # timestamped montage per iteration so the visual record is never overwritten
         montage = str(fig_dir / f"agent_tune_{marker}_{run_ts}_iter{it}.png")
@@ -170,7 +179,7 @@ def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5)
             verdict = _stub_biologist(marker, stats)
         else:
             verdict = _llm_json(_persona("cell_biologist"),
-                                f"Marker {marker}. Target: {target}. Stats: "
+                                f"{wiki_ctx}\n\nMarker {marker}. Target: {target}. Stats: "
                                 f"median={stats['per_cell_median']}, IQR={stats['per_cell_iqr']}, "
                                 f"cells={stats['cells']}. Judge the montage.",
                                 QCVerdict, image_path=stats["montage_path"])
@@ -185,8 +194,9 @@ def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5)
             proposal = _stub_analyst(marker, verdict, cur)
         else:
             proposal = _llm_json(_persona("image_analyst"),
-                                 f"Current params for {marker}: {cur}. Biologist verdict: "
-                                 f"{verdict.model_dump()}. Propose the next ParamProposal.",
+                                 f"{wiki_ctx}\n\nCurrent params for {marker}: {cur}. "
+                                 f"Biologist verdict: {verdict.model_dump()}. "
+                                 f"Propose the next ParamProposal.",
                                  ParamProposal)
         _append_history(run_ts, marker, it, target, stats, verdict, proposal)
         overrides.update(proposal.params)

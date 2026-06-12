@@ -47,3 +47,15 @@ class PIDecision(BaseModel):
     priorities: list[str] = []
     open_questions: list[str] = []
     risks: list[str] = []
+
+
+class WikiNote(BaseModel):
+    """A knowledge card an agent contributes to the wiki (see agents/wiki.py).
+    `type` is biology | method | finding | reference; findings are appended over time."""
+    name: str                          # short kebab-case slug / title
+    description: str                   # one-line summary (used for retrieval + index)
+    type: str = "finding"
+    tags: list[str] = []               # e.g. ["Sc35", "mean_fold", "threshold"]
+    sources: list[str] = []            # citations / URLs for literature-derived notes
+    links: list[str] = []              # related card names ([[name]] style)
+    body: str = ""                     # the note itself (markdown)
