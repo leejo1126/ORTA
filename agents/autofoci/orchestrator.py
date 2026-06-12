@@ -75,6 +75,20 @@ def _write_leaderboard(path: Path, marker: str, history: list[dict], finalists: 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def _best_in_band(history, anchor, lo=0.5, hi=2.0):
+    """Best-scoring trial whose per-cell median stays within [lo,hi]*anchor -- guards the
+    proxy against drifting to over/under-detection the judge would have rejected."""
+    band = [h for h in history if anchor * lo <= h["metrics"]["median_count"] <= anchor * hi]
+    return max(band, key=lambda h: h["score"]) if band else None
+
+
+def _winshape(family, h):
+    """Shape a trial-history item like an optimize_arm `best` record."""
+    return {"family": family, "best_score": h["score"],
+            "best_spec": Spec(family=family, params=h["params"]).validated().model_dump(),
+            "best_params": h["params"], "best_metrics": h["metrics"]}
+
+
 # --------------------------------------------------------------------- the loop
 def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int = 3,
                  trials: int = 20, n_cells: int = 5, refine_trials: int = 80):
@@ -180,14 +194,21 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     best_score = win["best_score"]
 
     # ---- final deterministic refinement: deep-fit the winner's params (no LLM) ----
+    # COUNT-GUARDED: the proxy alone can be Goodharted (e.g. low-SNR Pol2, where many
+    # small "foci" score high but are over-detection the judge would reject). So we only
+    # accept a refined config whose per-cell count stays near the judged-plausible value.
     refined = False
     if refine_trials and refine_trials > 0:
+        anchor = win["best_metrics"]["median_count"]
         rf = A.optimize_arm(panel, winner, n_trials=refine_trials, seed=999,
                             seed_params=win["best_params"])
-        if rf["best_score"] >= best_score:
-            win, best_score, refined = rf, rf["best_score"], True
-        print(f"  refine {winner}: {refine_trials} trials -> best_score {best_score:.3f}"
-              f"{'  (improved)' if refined else '  (no improvement; kept search best)'}")
+        cand = _best_in_band(rf["history"], anchor)
+        if cand and cand["score"] >= best_score:
+            win = _winshape(winner, cand)
+            best_score, refined = cand["score"], True
+        print(f"  refine {winner}: {refine_trials} trials, count-guarded ~{anchor:.0f}/cell -> "
+              f"score {best_score:.3f} (median {win['best_metrics']['median_count']:.0f})"
+              f"{'  (improved)' if refined else '  (kept search best)'}")
         for h in rf["history"]:
             (outdir / "trials.jsonl").open("a", encoding="utf-8").write(
                 json.dumps({"round": "refine", "family": winner, "score": h["score"],
@@ -222,22 +243,28 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     return proposed
 
 
-def refine_spec(spec_path: str, trials: int = 120, cells: int = 5):
+def refine_spec(spec_path: str, trials: int = 120, cells: int = 5, anchor: float | None = None):
     """Deep-fit (more Optuna trials, no LLM) the params of an already-chosen winner from
-    a proposed_spec_*.json; write proposed_spec_<marker>_refined.json next to it."""
+    a proposed_spec_*.json, count-guarded so it can't drift to over/under-detection.
+    `anchor` overrides the target per-cell count (else the spec's median). Writes
+    proposed_spec_<marker>_refined.json next to it."""
     meta = json.loads(Path(spec_path).read_text())
     marker, fam = meta["marker"], meta["winner_family"]
+    anchor = float(anchor) if anchor is not None else float(meta["metrics"]["median_count"])
     cfg = Config.load(CONFIG)
     panel = build_panel(cfg, marker, meta.get("fov", 0), cells)
     before = float(meta.get("best_score", -1))
     rf = A.optimize_arm(panel, fam, n_trials=trials, seed=999, seed_params=meta["params"])
+    cand = _best_in_band(rf["history"], anchor) or max(rf["history"], key=lambda h: h["score"])
+    win = _winshape(fam, cand)
     out = Path(spec_path).with_name(f"proposed_spec_{marker}_refined.json")
-    out.write_text(json.dumps({**meta, "spec": rf["best_spec"], "params": rf["best_params"],
-                               "best_score": rf["best_score"], "metrics": rf["best_metrics"],
-                               "refined_from": before, "refine_trials": trials}, indent=2),
-                   encoding="utf-8")
-    print(f"[refine] {marker}/{fam}: {before:.3f} -> {rf['best_score']:.3f} "
-          f"(median {rf['best_metrics']['median_count']:.0f}/cell)  wrote {out.name}")
+    out.write_text(json.dumps({**meta, "spec": win["best_spec"], "params": win["best_params"],
+                               "best_score": win["best_score"], "metrics": win["best_metrics"],
+                               "refined_from": before, "refine_trials": trials,
+                               "count_anchor": anchor}, indent=2), encoding="utf-8")
+    print(f"[refine] {marker}/{fam}: {before:.3f} -> {win['best_score']:.3f} "
+          f"(median {win['best_metrics']['median_count']:.0f}/cell, guarded ~{anchor:.0f})  wrote {out.name}")
+    return str(out)
     return str(out)
 
 
@@ -257,12 +284,14 @@ def main():
     rp.add_argument("--spec", required=True, help="a proposed_spec_*.json to deep-fit")
     rp.add_argument("--trials", type=int, default=120)
     rp.add_argument("--cells", type=int, default=5)
+    rp.add_argument("--anchor", type=float, default=None,
+                    help="target per-cell count to guard around (default: the spec's median)")
     args = ap.parse_args()
     if args.cmd == "search":
         run_autofoci(args.marker, args.fov, args.dry_run, args.rounds, args.trials,
                      args.cells, args.refine_trials)
     elif args.cmd == "refine":
-        refine_spec(args.spec, args.trials, args.cells)
+        refine_spec(args.spec, args.trials, args.cells, args.anchor)
 
 
 if __name__ == "__main__":
