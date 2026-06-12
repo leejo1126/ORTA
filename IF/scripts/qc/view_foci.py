@@ -4,8 +4,8 @@ SAVED foci label volume, and the nucleus masks into napari with correct anisotro
 voxel scaling (z step vs xy pixel), so you can visually confirm calling in 3D
 without working with OME-Zarr directly.
 
-    python IF/scripts/view_foci.py --config IF/config/config.yaml --fov 0 --marker Sc35
-    python IF/scripts/view_foci.py --config IF/config/config.yaml --fov 0 --marker Sc35,Brd4
+    python IF/scripts/qc/view_foci.py --config IF/config/config.yaml --fov 0 --marker Sc35
+    python IF/scripts/qc/view_foci.py --config IF/config/config.yaml --fov 0 --marker Sc35,Brd4
 
 In napari:
   - it opens in 3D; drag to rotate, or use the 2D/3D toggle (bottom-left) to flip.

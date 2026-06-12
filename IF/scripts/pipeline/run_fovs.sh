@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Drive the full pipeline over a list of FOVs (serial), then build AnnData + analyze.
-# Usage:  bash IF/scripts/run_fovs.sh 0 1 2 3 4 65 66 67 68 69
+# Usage:  bash IF/scripts/pipeline/run_fovs.sh 0 1 2 3 4 65 66 67 68 69
 ANALYSIS="S:/cluade code/EP-ORCA/.venv/Scripts/python.exe"
 CELLPOSE="C:/ProgramData/Anaconda3/envs/cellpose-gpu/python.exe"
 CFG="IF/config/config.yaml"

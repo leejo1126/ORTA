@@ -4,8 +4,8 @@ inspect calling in 3D without touching OME-Zarr. Writes one TIFF per marker with
 channels = [raw (bg-subtracted), foci labels, (optional) nuclei], calibrated in
 microns (xy from pixel_size_um, z spacing from z_um) so the z:xy aspect is correct.
 
-    python IF/scripts/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35
-    python IF/scripts/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35,Brd4 --with-nuclei
+    python IF/scripts/qc/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35
+    python IF/scripts/qc/export_foci_tiff.py --config IF/config/config.yaml --fov 0 --marker Sc35,Brd4 --with-nuclei
 
 In Fiji:
   - File > Open the .tif (opens as a composite hyperstack: C channels x Z slices).

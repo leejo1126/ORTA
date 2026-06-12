@@ -3,8 +3,8 @@ QC montage of foci calls for a few nuclei, all channels, at the nucleus mid-z.
 Each focus is filled with a random colour over the contrast-stretched raw, so you
 can eyeball detection quality and iterate on per-marker parameters in config.yaml.
 
-    python scripts/qc_foci_overlay.py --config config/config.yaml --fov 0
-    python scripts/qc_foci_overlay.py --config config/config.yaml --fov 0 --cells 5,12,40 --mag 5
+    python IF/scripts/qc/qc_foci_overlay.py --config IF/config/config.yaml --fov 0
+    python IF/scripts/qc/qc_foci_overlay.py --config IF/config/config.yaml --fov 0 --cells 5,12,40 --mag 5
 
 Re-detects per nucleus from the saved mask + raw OME-Zarr (does not need the
 foci CSVs), so it always reflects the current config parameters.

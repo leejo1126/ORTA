@@ -20,8 +20,8 @@ is in [`config/conditions.yaml`](config/conditions.yaml).
 
 ## Environments
 
-Two interpreters (see [`environment-cellpose.md`](environment-cellpose.md) and
-[`environment-analysis.yml`](environment-analysis.yml)):
+Two interpreters (see [`env/environment-cellpose.md`](env/environment-cellpose.md) and
+[`env/environment-analysis.yml`](env/environment-analysis.yml)):
 - **analysis venv** — `S:/cluade code/EP-ORCA/.venv` (py3.13): everything except segmentation.
 - **cellpose-gpu** — `C:/ProgramData/Anaconda3/envs/cellpose-gpu` (py3.10): step 1 only.
 
@@ -54,14 +54,14 @@ nucleus masks on the same trimmed `(z,y,x)` grid, with correct z:xy voxel scalin
 - **napari** (interactive, recommended) — raw image + a colored labels layer per
   marker; opens in 3D. Needs a desktop session (Qt window, not headless):
   ```
-  python scripts/view_foci.py --config config/config.yaml --fov 0 --marker Sc35
-  python scripts/view_foci.py --config config/config.yaml --fov 0 --marker Sc35,Brd4
+  python scripts/qc/view_foci.py --config config/config.yaml --fov 0 --marker Sc35
+  python scripts/qc/view_foci.py --config config/config.yaml --fov 0 --marker Sc35,Brd4
   ```
 - **Fiji/ImageJ** — exports a calibrated ImageJ hyperstack TIFF (channels: raw,
   foci labels, optional nuclei) you open directly; use a glasbey LUT on the labels
   channel and the 3D Viewer / 3D Project for volume rendering:
   ```
-  python scripts/export_foci_tiff.py --config config/config.yaml --fov 0 --marker Sc35 --with-nuclei
+  python scripts/qc/export_foci_tiff.py --config config/config.yaml --fov 0 --marker Sc35 --with-nuclei
   ```
 
 Both read the per-channel label zarrs written by `eporca foci` (`save_labels`), so

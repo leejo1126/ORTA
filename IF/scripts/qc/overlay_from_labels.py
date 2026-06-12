@@ -4,8 +4,8 @@ verifies the on-disk per-focus geometry. For a few nuclei, shows each marker's r
 (background-subtracted) with every focus filled in its own random color at the
 nucleus mid-z.
 
-    python IF/scripts/overlay_from_labels.py --config IF/config/config.yaml --fov 0
-    python IF/scripts/overlay_from_labels.py --config IF/config/config.yaml --fov 0 --cells 17,44 --mag 5
+    python IF/scripts/qc/overlay_from_labels.py --config IF/config/config.yaml --fov 0
+    python IF/scripts/qc/overlay_from_labels.py --config IF/config/config.yaml --fov 0 --cells 17,44 --mag 5
 """
 
 from __future__ import annotations
