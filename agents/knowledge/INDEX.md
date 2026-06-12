@@ -21,6 +21,7 @@ Knowledge cards the agents consult and grow. One line per card: **title** (type)
 
 ## finding
 
+- [autofoci-sc35-20260612](autofoci-sc35-20260612.md) — Agnostic autofoci search picked mean_fold for Sc35 (proxy 0.962, median 19/cell) `Sc35, mean_fold, autofoci`
 - [pol2-meanfold-cliff](pol2-meanfold-cliff.md) — FINDING — mean_fold thresholding is cliff-like on Pol2; our tuning loop oscillated 6→75→2→56→0.5 and never converged `Pol2, mean_fold, threshold, convergence, finding`
 
 ## reference
