@@ -77,7 +77,7 @@ def _write_leaderboard(path: Path, marker: str, history: list[dict], finalists: 
 
 # --------------------------------------------------------------------- the loop
 def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int = 3,
-                 trials: int = 20, n_cells: int = 5):
+                 trials: int = 20, n_cells: int = 5, refine_trials: int = 80):
     run_ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     outdir = RUNS / f"{run_ts}_{marker}"
     mont_dir = outdir / "montages"
@@ -178,6 +178,21 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     winner = max(pool, key=lambda f: arms[f]["best"]["best_score"])
     win = arms[winner]["best"]
     best_score = win["best_score"]
+
+    # ---- final deterministic refinement: deep-fit the winner's params (no LLM) ----
+    refined = False
+    if refine_trials and refine_trials > 0:
+        rf = A.optimize_arm(panel, winner, n_trials=refine_trials, seed=999,
+                            seed_params=win["best_params"])
+        if rf["best_score"] >= best_score:
+            win, best_score, refined = rf, rf["best_score"], True
+        print(f"  refine {winner}: {refine_trials} trials -> best_score {best_score:.3f}"
+              f"{'  (improved)' if refined else '  (no improvement; kept search best)'}")
+        for h in rf["history"]:
+            (outdir / "trials.jsonl").open("a", encoding="utf-8").write(
+                json.dumps({"round": "refine", "family": winner, "score": h["score"],
+                            **h["metrics"]}) + "\n")
+
     note = "PROPOSED — not applied to config.yaml"
     if winner not in plausible:
         note += " | WARNING: no surviving arm was judged plausible; winner is best-by-proxy among survivors"
@@ -207,6 +222,25 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     return proposed
 
 
+def refine_spec(spec_path: str, trials: int = 120, cells: int = 5):
+    """Deep-fit (more Optuna trials, no LLM) the params of an already-chosen winner from
+    a proposed_spec_*.json; write proposed_spec_<marker>_refined.json next to it."""
+    meta = json.loads(Path(spec_path).read_text())
+    marker, fam = meta["marker"], meta["winner_family"]
+    cfg = Config.load(CONFIG)
+    panel = build_panel(cfg, marker, meta.get("fov", 0), cells)
+    before = float(meta.get("best_score", -1))
+    rf = A.optimize_arm(panel, fam, n_trials=trials, seed=999, seed_params=meta["params"])
+    out = Path(spec_path).with_name(f"proposed_spec_{marker}_refined.json")
+    out.write_text(json.dumps({**meta, "spec": rf["best_spec"], "params": rf["best_params"],
+                               "best_score": rf["best_score"], "metrics": rf["best_metrics"],
+                               "refined_from": before, "refine_trials": trials}, indent=2),
+                   encoding="utf-8")
+    print(f"[refine] {marker}/{fam}: {before:.3f} -> {rf['best_score']:.3f} "
+          f"(median {rf['best_metrics']['median_count']:.0f}/cell)  wrote {out.name}")
+    return str(out)
+
+
 def main():
     ap = argparse.ArgumentParser(prog="autofoci")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -217,9 +251,18 @@ def main():
     sp.add_argument("--rounds", type=int, default=3)
     sp.add_argument("--trials", type=int, default=20)
     sp.add_argument("--cells", type=int, default=5)
+    sp.add_argument("--refine-trials", type=int, default=80,
+                    help="final deterministic deep-fit of the winner's params (0 to skip)")
+    rp = sub.add_parser("refine")
+    rp.add_argument("--spec", required=True, help="a proposed_spec_*.json to deep-fit")
+    rp.add_argument("--trials", type=int, default=120)
+    rp.add_argument("--cells", type=int, default=5)
     args = ap.parse_args()
     if args.cmd == "search":
-        run_autofoci(args.marker, args.fov, args.dry_run, args.rounds, args.trials, args.cells)
+        run_autofoci(args.marker, args.fov, args.dry_run, args.rounds, args.trials,
+                     args.cells, args.refine_trials)
+    elif args.cmd == "refine":
+        refine_spec(args.spec, args.trials, args.cells)
 
 
 if __name__ == "__main__":
