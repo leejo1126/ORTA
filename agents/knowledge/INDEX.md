@@ -21,6 +21,9 @@ Knowledge cards the agents consult and grow. One line per card: **title** (type)
 
 ## finding
 
+- [autofoci-brd4-20260612](autofoci-brd4-20260612.md) — Agnostic autofoci search picked h_dome for Brd4 (proxy 0.902, median 324/cell) `Brd4, h_dome, autofoci`
+- [autofoci-dapi-20260612](autofoci-dapi-20260612.md) — Agnostic autofoci search picked wavelet for DAPI (proxy 0.825, median 21/cell) `DAPI, wavelet, autofoci`
+- [autofoci-pol2-20260612](autofoci-pol2-20260612.md) — Agnostic autofoci search picked wavelet for Pol2 (proxy 0.719, median 338/cell) `Pol2, wavelet, autofoci`
 - [autofoci-sc35-20260612](autofoci-sc35-20260612.md) — Agnostic autofoci search picked mean_fold for Sc35 (proxy 0.962, median 19/cell) `Sc35, mean_fold, autofoci`
 - [pol2-meanfold-cliff](pol2-meanfold-cliff.md) — FINDING — mean_fold thresholding is cliff-like on Pol2; our tuning loop oscillated 6→75→2→56→0.5 and never converged `Pol2, mean_fold, threshold, convergence, finding`
 

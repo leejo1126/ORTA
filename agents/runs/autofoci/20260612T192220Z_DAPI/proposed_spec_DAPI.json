@@ -1,0 +1,52 @@
+{
+  "marker": "DAPI",
+  "fov": 0,
+  "run": "20260612T192220Z",
+  "winner_family": "wavelet",
+  "best_score": 0.8253,
+  "finalists": [
+    "wavelet"
+  ],
+  "spec": {
+    "family": "wavelet",
+    "params": {
+      "levels": "1-3",
+      "k": 2.738651785312352,
+      "watershed": true,
+      "min_size": 107
+    }
+  },
+  "params": {
+    "levels": "1-3",
+    "k": 2.738651785312352,
+    "watershed": true,
+    "min_size": 107
+  },
+  "metrics": {
+    "score": 0.8253,
+    "valid": true,
+    "median_count": 21.0,
+    "count_cv": 0.036,
+    "median_fill": 0.0103,
+    "median_contrast": 3.75,
+    "median_vol": 165.5,
+    "frac_tiny": 0.0,
+    "frac_huge": 0.0,
+    "image_snr": 4.21,
+    "family": "wavelet",
+    "params": {
+      "levels": "1-3",
+      "k": 2.738651785312352,
+      "watershed": true,
+      "min_size": 107
+    },
+    "per_cell_counts": [
+      21,
+      21,
+      20,
+      22,
+      20
+    ]
+  },
+  "note": "PROPOSED \u2014 not applied to config.yaml"
+}

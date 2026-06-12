@@ -1,0 +1,58 @@
+{
+  "marker": "Brd4",
+  "fov": 0,
+  "run": "20260612T184009Z",
+  "winner_family": "h_dome",
+  "best_score": 0.9024,
+  "finalists": [
+    "h_dome"
+  ],
+  "spec": {
+    "family": "h_dome",
+    "params": {
+      "h": 0.4914829072149813,
+      "min_distance": 1,
+      "fg_floor_pct": 73.15950774545517,
+      "watershed": true,
+      "min_size": 4
+    }
+  },
+  "params": {
+    "h": 0.4914829072149813,
+    "min_distance": 1,
+    "fg_floor_pct": 73.15950774545517,
+    "watershed": true,
+    "min_size": 4
+  },
+  "metrics": {
+    "score": 0.9024,
+    "valid": true,
+    "median_count": 324.0,
+    "count_cv": 0.089,
+    "median_fill": 0.2618,
+    "median_contrast": 6.14,
+    "median_vol": 62.0,
+    "frac_tiny": 0.0,
+    "frac_huge": 0.0,
+    "image_snr": 6.65,
+    "family": "h_dome",
+    "params": {
+      "h": 0.4914829072149813,
+      "min_distance": 1,
+      "fg_floor_pct": 73.15950774545517,
+      "watershed": true,
+      "min_size": 4
+    },
+    "per_cell_counts": [
+      384,
+      352,
+      302,
+      311,
+      324
+    ]
+  },
+  "note": "PROPOSED \u2014 not applied to config.yaml",
+  "refined_from": 0.9024,
+  "refine_trials": 100,
+  "count_anchor": 324.0
+}
