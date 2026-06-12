@@ -46,6 +46,27 @@ Whole dataset (Snakemake, resumable, parallel):
 snakemake -s workflow/Snakefile --configfile config/config.yaml -j 8 --resources gpu=3
 ```
 
+## Inspecting the foci/condensate calls in 3D
+
+Both helpers load a FOV's raw channel, the **saved** foci label volume, and the
+nucleus masks on the same trimmed `(z,y,x)` grid, with correct z:xy voxel scaling.
+
+- **napari** (interactive, recommended) — raw image + a colored labels layer per
+  marker; opens in 3D. Needs a desktop session (Qt window, not headless):
+  ```
+  python scripts/view_foci.py --config config/config.yaml --fov 0 --marker Sc35
+  python scripts/view_foci.py --config config/config.yaml --fov 0 --marker Sc35,Brd4
+  ```
+- **Fiji/ImageJ** — exports a calibrated ImageJ hyperstack TIFF (channels: raw,
+  foci labels, optional nuclei) you open directly; use a glasbey LUT on the labels
+  channel and the 3D Viewer / 3D Project for volume rendering:
+  ```
+  python scripts/export_foci_tiff.py --config config/config.yaml --fov 0 --marker Sc35 --with-nuclei
+  ```
+
+Both read the per-channel label zarrs written by `eporca foci` (`save_labels`), so
+voxel IDs join the `*_per_spot.csv` by `spot_label`.
+
 ## Conditions
 
 control · auxin (Rad21 depletion) · JQ1 · SGC-CBP30 · DRB · triptolide · EED226 · TSA.
