@@ -167,16 +167,26 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
 
     trials_fh.close()
 
-    # ---- winner = best overall arm by proxy score (valid) ----
-    scored = [(arms[f]["best"]["best_score"], f) for f in FAMILIES if arms[f]["best"]]
-    best_score, winner = max(scored)
+    # ---- winner = best of the FINAL SURVIVORS, preferring judge-plausible arms ----
+    # NOT the global argmax over all families: an arm pruned as biologically implausible
+    # can still have the highest raw proxy score (e.g. a clean but under-detecting
+    # detector), so crowning by proxy alone ignores both the pruning and the judge.
+    last = history[-1]["arms"] if history else {}
+    survivors = [f for f in alive if arms[f]["best"]] or [f for f in FAMILIES if arms[f]["best"]]
+    plausible = [f for f in survivors if last.get(f, {}).get("verdict", {}).get("plausible")]
+    pool = plausible or survivors
+    winner = max(pool, key=lambda f: arms[f]["best"]["best_score"])
     win = arms[winner]["best"]
+    best_score = win["best_score"]
+    note = "PROPOSED — not applied to config.yaml"
+    if winner not in plausible:
+        note += " | WARNING: no surviving arm was judged plausible; winner is best-by-proxy among survivors"
     proposed = {"marker": marker, "fov": fov, "run": run_ts, "winner_family": winner,
-                "best_score": best_score, "spec": win["best_spec"], "params": win["best_params"],
-                "metrics": win["best_metrics"], "note": "PROPOSED — not applied to config.yaml"}
+                "best_score": best_score, "finalists": survivors, "spec": win["best_spec"],
+                "params": win["best_params"], "metrics": win["best_metrics"], "note": note}
     (outdir / f"proposed_spec_{marker}.json").write_text(json.dumps(proposed, indent=2),
                                                          encoding="utf-8")
-    _write_leaderboard(outdir / "leaderboard.md", marker, history, [winner])
+    _write_leaderboard(outdir / "leaderboard.md", marker, history, survivors)
 
     # ---- distill a finding card back into the wiki ----
     wiki.write(WikiNote(
