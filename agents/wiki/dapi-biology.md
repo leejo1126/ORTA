@@ -12,6 +12,7 @@ sources: []
 links:
 - otsu-adaptive-method
 - mean-fold-method
+- lit-chromocenters
 ---
 
 **What it is.** DAPI binds dsDNA and stains the **entire nucleus**. The biologically

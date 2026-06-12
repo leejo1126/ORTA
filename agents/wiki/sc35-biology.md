@@ -12,6 +12,7 @@ sources: []
 links:
 - mean-fold-method
 - h-dome-localmax-method
+- lit-nuclear-speckles
 ---
 
 **What it is.** Sc35 (SRSF2) is a serine/arginine-rich splicing factor and the canonical

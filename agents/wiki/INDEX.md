@@ -17,3 +17,17 @@ Knowledge cards the agents consult and grow. One line per card: **title** (type)
 - [mad-tophat-method](mad-tophat-method.md) — Per-slice white top-hat + MAD-relative threshold + h-maxima seeds + watershed (dense puncta) `mad, tophat, watershed, algorithm`
 - [mean-fold-method](mean-fold-method.md) — Threshold at k×(in-nucleus mean) + size gating + optional intensity watershed (MATLAB findDensities port) `mean_fold, threshold, watershed, algorithm`
 - [otsu-adaptive-method](otsu-adaptive-method.md) — Global Otsu or local/adaptive thresholding → connected components / watershed → size gate `otsu, adaptive, threshold, algorithm`
+- [wavelet-spot-method](wavelet-spot-method.md) — À-trous wavelet multiscale-product spot detection — robust at low SNR, threshold on detail coefficients (Olivo-Marin 2002) `wavelet, a-trous, multiscale, SNR, algorithm`
+
+## finding
+
+- [pol2-meanfold-cliff](pol2-meanfold-cliff.md) — FINDING — mean_fold thresholding is cliff-like on Pol2; our tuning loop oscillated 6→75→2→56→0.5 and never converged `Pol2, mean_fold, threshold, convergence, finding`
+
+## reference
+
+- [lit-chromocenters](lit-chromocenters.md) — Chromocenters — DAPI-dense pericentromeric heterochromatin, cell-type-specific count (~7–18 in mouse), ~6× brighter than surroundings `DAPI, heterochromatin, chromocenter, reference`
+- [lit-condensate-transcription](lit-condensate-transcription.md) — Brd4/Mediator/Pol II form liquid-like condensates at super-enhancers (Sabari 2018; Cho 2018) `Brd4, Pol2, condensate, phase-separation, reference`
+- [lit-nuclear-speckles](lit-nuclear-speckles.md) — Nuclear speckles — 20–50 per nucleus, irregular µm-scale IGCs; SC35 = SRSF2 (Spector & Lamond 2011) `Sc35, SRSF2, speckle, reference`
+- [lit-pol2-clusters](lit-pol2-clusters.md) — Pol II clusters are ~100 nm, transient (~8 s), often single molecules — the per-nucleus "count" is intrinsically fuzzy (Cho 2016; Cisse 2013) `Pol2, transcription, cluster, SNR, reference`
+- [lit-spot-detection-benchmark](lit-spot-detection-benchmark.md) — Spot-detector performance is strongly SNR-dependent; wavelet-multiscale & supervised methods best at low SNR (Smal 2010) `spot-detection, benchmark, SNR, wavelet, method, reference`
+- [lit-spot-detection-tools](lit-spot-detection-tools.md) — Modern spot tools — big-fish/TrackMate use LoG+threshold; deepBlink/Piscis/Spotiflow are DL but 2D-only (relevant to our 3D data) `spot-detection, software, LoG, deepBlink, reference`

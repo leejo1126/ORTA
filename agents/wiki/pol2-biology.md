@@ -10,8 +10,10 @@ tags:
 sources: []
 links:
 - h-dome-localmax-method
+- wavelet-spot-method
 - log-dog-blob-method
 - pol2-meanfold-cliff
+- lit-pol2-clusters
 ---
 
 **What it is.** RNA Polymerase II forms transient transcription "factories" / clusters
