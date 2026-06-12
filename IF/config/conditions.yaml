@@ -1,12 +1,12 @@
 # FOV -> condition mapping (inclusive ranges).
-# Gap FOVs between blocks (42, 64, 86, 108, 130, 152, 174) are NOT listed and are
-# treated as unassigned/excluded. Edit ranges here if the layout differs.
+# Two gap/boundary FOVs between blocks (42,43, 64,65, 86,87, 108,109, 130,131,
+# 152,153, 174,175) are NOT listed and are treated as unassigned/excluded.
 conditions:
   control:     {fov_start: 0,   fov_end: 41,  label: "Control",                  drug_target: "none"}
-  auxin:       {fov_start: 43,  fov_end: 63,  label: "Auxin (Rad21-AID)",        drug_target: "cohesin (Rad21 depletion)"}
-  jq1:         {fov_start: 65,  fov_end: 85,  label: "JQ1",                      drug_target: "BET bromodomain (Brd4)"}
-  sgc_cbp30:   {fov_start: 87,  fov_end: 107, label: "SGC-CBP30",                drug_target: "CBP/p300 bromodomain"}
-  drb:         {fov_start: 109, fov_end: 129, label: "DRB",                      drug_target: "CDK9 / Pol2 pause-release"}
-  triptolide:  {fov_start: 131, fov_end: 151, label: "Triptolide",              drug_target: "XPB/TFIIH (transcription initiation)"}
-  eed226:      {fov_start: 153, fov_end: 173, label: "EED226",                   drug_target: "PRC2 / EED (H3K27me3)"}
-  tsa:         {fov_start: 175, fov_end: 197, label: "TSA",                      drug_target: "HDAC (histone deacetylation)"}
+  auxin:       {fov_start: 44,  fov_end: 63,  label: "Auxin (Rad21-AID)",        drug_target: "cohesin (Rad21 depletion)"}
+  jq1:         {fov_start: 66,  fov_end: 85,  label: "JQ1",                      drug_target: "BET bromodomain (Brd4)"}
+  sgc_cbp30:   {fov_start: 88,  fov_end: 107, label: "SGC-CBP30",                drug_target: "CBP/p300 bromodomain"}
+  drb:         {fov_start: 110, fov_end: 129, label: "DRB",                      drug_target: "CDK9 / Pol2 pause-release"}
+  triptolide:  {fov_start: 132, fov_end: 151, label: "Triptolide",              drug_target: "XPB/TFIIH (transcription initiation)"}
+  eed226:      {fov_start: 154, fov_end: 173, label: "EED226",                   drug_target: "PRC2 / EED (H3K27me3)"}
+  tsa:         {fov_start: 176, fov_end: 197, label: "TSA",                      drug_target: "HDAC (histone deacetylation)"}

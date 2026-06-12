@@ -170,7 +170,15 @@ def _nucleus_table(cfg: Config, fov: int, spots: pd.DataFrame) -> pd.DataFrame:
 
 
 def features_fov(cfg: Config, fov: int) -> dict:
-    """Build and save per-nucleus and per-foci feature tables for one FOV."""
+    """Build and save per-nucleus and per-foci feature tables for one FOV. A FOV
+    with no kept nuclei (e.g. a bad/out-of-focus FOV rejected by the QC filters) is
+    written as empty tables instead of crashing, so the batch continues."""
+    metrics = pd.read_csv(cfg.mask_metrics_path(fov))
+    if "kept" not in metrics or int((metrics["kept"] == 1).sum()) == 0:
+        pd.DataFrame({"fov": []}).to_parquet(cfg.features_nuclei_path(fov), index=False)
+        pd.DataFrame({"fov": []}).to_parquet(cfg.features_foci_path(fov), index=False)
+        return {"fov": fov, "n_nuclei": 0, "n_foci": 0, "status": "no_nuclei"}
+
     spots = _load_spots(cfg, fov)
     spots = _add_local_dapi(cfg, fov, spots)
     spots = _add_coloc_nn(cfg, spots)

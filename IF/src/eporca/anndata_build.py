@@ -38,7 +38,12 @@ def build_nuclei_anndata(cfg: Config) -> str:
     if df.empty:
         raise RuntimeError("no per-nucleus feature parquet files found")
 
-    # drug_target from condition map
+    # Re-derive condition from the CURRENT config (robust to parquet written under
+    # an older mapping) and drop unassigned/gap FOVs.
+    df["condition"] = df["fov"].map(lambda f: cfg.condition_for_fov(int(f)))
+    df = df[df["condition"].notna()].reset_index(drop=True)
+    if df.empty:
+        raise RuntimeError("no nuclei in assigned-condition FOVs")
     tmap = {k: v.drug_target for k, v in cfg.conditions.items()}
     df["drug_target"] = df["condition"].map(tmap).fillna("none")
 
