@@ -59,3 +59,31 @@ class WikiNote(BaseModel):
     sources: list[str] = []            # citations / URLs for literature-derived notes
     links: list[str] = []              # related card names ([[name]] style)
     body: str = ""                     # the note itself (markdown)
+
+
+# --- autofoci (agnostic algorithm search) contracts ---------------------------
+class SpecProposal(BaseModel):
+    """Algorithm scout's next detector spec to try for one arm (seeds the next
+    Optuna round). Params are validated/clipped against autofoci PARAM_SPACE."""
+    family: str                        # one of the autofoci FAMILIES
+    params: dict = {}                  # starting params for the next round
+    rationale: str = ""
+    structural_change: bool = False    # true if switching family / qualitative approach
+
+
+class ArmVerdict(BaseModel):
+    """Foci judge's agnostic verdict on an arm's current best result (from montage+metrics)."""
+    family: str
+    plausible: bool
+    confidence: float = 0.5
+    issues: list[str] = []             # fires_on_background, fills_nucleus, over_split, ...
+    suggested_direction: dict[str, str] = {}   # e.g. {"sensitivity":"lower"}
+    notes: str = ""
+
+
+class AllocationDecision(BaseModel):
+    """PI's per-round budget decision over the arms (which to keep / drop / promote)."""
+    keep: list[str] = []
+    drop: list[str] = []
+    finalists: list[str] = []
+    rationale: str = ""

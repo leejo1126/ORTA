@@ -163,8 +163,10 @@ def write(card: Card | dict, *, append_body: bool = False) -> Path:
     """Create or update a card on disk and refresh INDEX.md. If ``append_body`` and the
     card exists, the new body is appended (dated) rather than replacing -- used for
     growing ``finding`` cards across runs."""
-    if isinstance(card, dict):
-        card = Card(**{k: v for k, v in card.items() if k in Card.__dataclass_fields__})
+    if not isinstance(card, Card):
+        data = card if isinstance(card, dict) else (
+            card.model_dump() if hasattr(card, "model_dump") else dict(card))
+        card = Card(**{k: v for k, v in data.items() if k in Card.__dataclass_fields__})
     if card.type not in VALID_TYPES:
         raise ValueError(f"card type {card.type!r} not in {VALID_TYPES}")
     WIKI_DIR.mkdir(parents=True, exist_ok=True)
