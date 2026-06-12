@@ -51,10 +51,24 @@ def main() -> None:
 
         path = cfg.foci_label_path(args.fov, marker)
         try:
-            lab = np.asarray(zarr.open_group(path, mode="r")["0"]).astype(np.uint16)
+            lab = np.asarray(zarr.open_group(path, mode="r")["0"])
         except Exception as e:                                        # noqa: BLE001
             raise SystemExit(f"No saved foci labels for {marker} at {path}; run "
                              f"`eporca foci --config {args.config} --fov {args.fov}` first. [{e}]")
+
+        # ImageJ composite channels must share a dtype (uint16 here). Dense markers
+        # (Brd4) can exceed the uint16 ceiling -> remap nonzero ids into [1, 65535]
+        # so no focus overflows to 0 (vanishes). This makes the labels channel
+        # display-only (ids cycle, no longer 1:1 with the per_spot CSV) for those.
+        n_foci = int(lab.max())
+        remapped = n_foci > 65535
+        if remapped:
+            nz = lab > 0
+            disp = np.zeros(lab.shape, dtype=np.uint16)
+            disp[nz] = ((lab[nz].astype(np.uint64) - 1) % 65535 + 1).astype(np.uint16)
+            lab = disp
+        else:
+            lab = lab.astype(np.uint16)
 
         chans, names = [raw, lab], ["raw", "foci_labels"]
         if args.with_nuclei:
@@ -69,7 +83,8 @@ def main() -> None:
             metadata={"spacing": zum, "unit": "um", "axes": "ZCYX", "Labels": names},
         )
         print(f"wrote {out}  (Z,C,Y,X)={stack.shape}  channels={names}  "
-              f"foci={int(lab.max())}")
+              f"foci={n_foci}" + ("  [labels remapped for display: ids cycle 1..65535]"
+                                  if remapped else ""))
 
 
 if __name__ == "__main__":
