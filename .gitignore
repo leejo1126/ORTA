@@ -22,11 +22,19 @@ venv/
 # Snakemake
 .snakemake/
 
+# Secrets (never commit API keys)
+.env
+*.key
+.secrets/
+agents/.anthropic_key
+
 # OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# agent lab notebook reports (keep dir, ignore bulk)
-agents/lab_notebook/*.json
+# agent lab notebook: keep the structured text record (stats/verdict JSON,
+# HISTORY.md, history.jsonl) under version control as the tuning audit trail.
+# Montages stay out of git (large, regenerable) — they live in IF/data/figures/
+# and are referenced by path from the notebook records.

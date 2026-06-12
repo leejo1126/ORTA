@@ -1,0 +1,8 @@
+{
+  "marker": "Sc35",
+  "verdict": "pass",
+  "issues": [],
+  "suggested_direction": {},
+  "confidence": 0.82,
+  "notes": "Detected foci appear as compact, discrete speckles distributed throughout the nucleoplasm, consistent with canonical SC35/SRSF2 nuclear speckle morphology. The median 3D count of ~36.5 (IQR 34\u201340) aligns well with the expected 'few tens per nucleus'; the per-slice visible counts in the montage (~10\u201315 colored outlines per nucleus) are reasonable for a mid-z section sampling a fraction of the full 3D complement. No obvious over-splitting of large speckles into fragments, no gross under-detection of bright bodies, and the calls do not fill the nucleus indiscriminately."
+}

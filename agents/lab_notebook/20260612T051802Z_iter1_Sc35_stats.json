@@ -1,0 +1,38 @@
+{
+  "marker": "Sc35",
+  "params": {
+    "mode": "mean_fold",
+    "min_size": 25,
+    "max_size": 10000,
+    "blur_sigma": 1.0,
+    "tophat_radius": 5,
+    "noise_k": 3.0,
+    "seed_h_k": 0.5,
+    "threshold": 2.0,
+    "abs_floor": 0.0,
+    "watershed": true,
+    "marker_h": 2.0
+  },
+  "cells": [
+    17,
+    183,
+    44,
+    137,
+    87,
+    202
+  ],
+  "per_cell_counts": [
+    59,
+    34,
+    38,
+    30,
+    35,
+    41
+  ],
+  "per_cell_median": 36.5,
+  "per_cell_iqr": [
+    34.25,
+    40.25
+  ],
+  "montage_path": "S:\\cluade code\\ep-orca-if\\IF\\data\\figures\\agent_tune_Sc35_20260612T051740Z_iter1.png"
+}

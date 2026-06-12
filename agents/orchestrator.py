@@ -48,6 +48,55 @@ def _log(kind: str, payload: dict) -> None:
     (NOTEBOOK / f"{ts}_{kind}.json").write_text(json.dumps(payload, indent=2))
 
 
+HISTORY_MD = NOTEBOOK / "HISTORY.md"
+HISTORY_JSONL = NOTEBOOK / "history.jsonl"
+_KEY_PARAMS = ("mode", "threshold", "min_size", "max_size", "marker_h", "blur_sigma")
+
+
+def _append_history(run_ts: str, marker: str, it: int, target: str, stats: dict,
+                    verdict: QCVerdict, proposal: "ParamProposal | None") -> None:
+    """Append one iteration to the git-tracked tuning record: a machine-readable
+    JSONL line + a human-readable HISTORY.md row. This is the "how it improved"
+    trail — params, counts, the biologist's verdict, and the next proposed move."""
+    NOTEBOOK.mkdir(parents=True, exist_ok=True)
+    p = stats["params"]
+    kp = {k: p[k] for k in _KEY_PARAMS if k in p}
+    rec = {
+        "run": run_ts, "iter": it, "marker": marker, "target": target,
+        "params": p, "key_params": kp,
+        "per_cell_median": stats["per_cell_median"],
+        "per_cell_iqr": stats["per_cell_iqr"],
+        "per_cell_counts": stats["per_cell_counts"],
+        "verdict": verdict.verdict, "confidence": verdict.confidence,
+        "issues": verdict.issues, "suggested_direction": verdict.suggested_direction,
+        "next_params": proposal.params if proposal else {},
+        "montage": stats["montage_path"], "notes": verdict.notes,
+    }
+    with HISTORY_JSONL.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(rec) + "\n")
+
+    if not HISTORY_MD.exists():
+        HISTORY_MD.write_text(
+            "# ORTA foci-tuning history\n\n"
+            "One row per tuning iteration (newest appended at the bottom). "
+            "`run` is the UTC start of a tuning run; montages referenced here live "
+            "in `IF/data/figures/` (regenerable, not git-tracked).\n\n"
+            "| run | iter | marker | key params | median | IQR | verdict | conf | note |\n"
+            "|-----|------|--------|------------|--------|-----|---------|------|------|\n",
+            encoding="utf-8")
+    note = " ".join((verdict.notes or "").split())
+    if len(note) > 100:
+        note = note[:99] + "…"
+    note = note.replace("|", "│")
+    kp_str = ", ".join(f"{k}={v}" for k, v in kp.items()).replace("|", "│")
+    iqr = stats["per_cell_iqr"]
+    row = (f"| {run_ts} | {it} | {marker} | {kp_str} | "
+           f"{stats['per_cell_median']:.1f} | [{iqr[0]:.0f}, {iqr[1]:.0f}] | "
+           f"{verdict.verdict} | {verdict.confidence:.2f} | {note} |\n")
+    with HISTORY_MD.open("a", encoding="utf-8") as f:
+        f.write(row)
+
+
 # --------------------------------------------------------------------- LLM call
 def _llm_json(system: str, user_text: str, schema, image_path: str | None = None):
     """One structured agent turn via the Anthropic SDK; returns a `schema` object."""
@@ -92,13 +141,17 @@ def _stub_analyst(marker, verdict, params) -> ParamProposal:
 # --------------------------------------------------------------------- the loop
 def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5):
     from eporca.config import Config
+    run_ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    fig_dir = Config.load(CONFIG).figures_dir()
     overrides: dict = {}
     base = Config.load(CONFIG).foci_params(marker).model_dump()
-    print(f"[PI] tuning {marker} toward: {target}  (start params: "
+    print(f"[PI] tuning {marker} toward: {target}  (run {run_ts}; start params: "
           f"{ {k: base[k] for k in ('threshold','min_size','max_size','noise_k') if k in base} })")
 
     for it in range(1, max_iters + 1):
-        stats = tools.sample_and_qc(CONFIG, marker, overrides)
+        # timestamped montage per iteration so the visual record is never overwritten
+        montage = str(fig_dir / f"agent_tune_{marker}_{run_ts}_iter{it}.png")
+        stats = tools.sample_and_qc(CONFIG, marker, overrides, out_png=montage)
         print(f"  iter {it}: median={stats['per_cell_median']:.0f} "
               f"IQR={stats['per_cell_iqr']}  montage={stats['montage_path']}")
         _log(f"iter{it}_{marker}_stats", stats)
@@ -114,6 +167,7 @@ def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5)
         _log(f"iter{it}_{marker}_verdict", verdict.model_dump())
         print(f"        biologist: {verdict.verdict}  {verdict.issues}  {verdict.notes}")
         if verdict.verdict == "pass":
+            _append_history(run_ts, marker, it, target, stats, verdict, None)
             break
 
         cur = Config.load(CONFIG).foci_params(marker).model_copy(update=overrides).model_dump()
@@ -124,6 +178,7 @@ def run_tuning_loop(marker: str, target: str, dry_run: bool, max_iters: int = 5)
                                  f"Current params for {marker}: {cur}. Biologist verdict: "
                                  f"{verdict.model_dump()}. Propose the next ParamProposal.",
                                  ParamProposal)
+        _append_history(run_ts, marker, it, target, stats, verdict, proposal)
         overrides.update(proposal.params)
         print(f"        analyst proposes: {proposal.params}  ({proposal.rationale})")
 
