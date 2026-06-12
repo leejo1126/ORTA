@@ -28,6 +28,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tools  # noqa: E402
 from schemas import QCVerdict, ParamProposal  # noqa: E402
 
+# Windows consoles default to cp1252; LLM rationales/notes routinely contain
+# characters it can't encode (arrows "->", en-dashes), which would crash a print
+# mid-run. Make stdout/stderr lossy-UTF-8 so logging an agent's text never aborts
+# the tuning loop.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 ROOT = Path(__file__).resolve().parent.parent          # ORTA repo root
 CONFIG = str(ROOT / "IF" / "config" / "config.yaml")
 PERSONAS = Path(__file__).resolve().parent / "personas"

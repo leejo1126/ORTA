@@ -1,0 +1,14 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "under_detect",
+    "dim_missed"
+  ],
+  "suggested_direction": {
+    "threshold": "down",
+    "min_size": "down"
+  },
+  "confidence": 0.72,
+  "notes": "The montage shows nuclei with broadly distributed Pol2 signal and only a handful of colored overlay marks visible per cell (consistent with the reported median of 6, below the expected ~10 discrete foci). Given that this is a single z-slice, the 3D total should comfortably exceed 6, suggesting the threshold is set too high and dimmer but genuine foci are being missed. Lowering the detection threshold and minimum size cutoff should recover the moderately bright puncta that appear present but uncalled in the nucleoplasm."
+}

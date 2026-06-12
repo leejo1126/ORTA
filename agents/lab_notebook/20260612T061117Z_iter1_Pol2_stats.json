@@ -1,0 +1,38 @@
+{
+  "marker": "Pol2",
+  "params": {
+    "mode": "mean_fold",
+    "min_size": 8,
+    "max_size": 2000,
+    "blur_sigma": 1.0,
+    "tophat_radius": 5,
+    "noise_k": 3.0,
+    "seed_h_k": 0.5,
+    "threshold": 1.7,
+    "abs_floor": 0.0,
+    "watershed": true,
+    "marker_h": 2.0
+  },
+  "cells": [
+    17,
+    183,
+    44,
+    137,
+    87,
+    202
+  ],
+  "per_cell_counts": [
+    3,
+    7,
+    6,
+    5,
+    17,
+    6
+  ],
+  "per_cell_median": 6.0,
+  "per_cell_iqr": [
+    5.25,
+    6.75
+  ],
+  "montage_path": "S:\\cluade code\\ep-orca-if\\IF\\data\\figures\\agent_tune_Pol2_20260612T061052Z_iter1.png"
+}

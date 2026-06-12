@@ -1,0 +1,8 @@
+{
+  "marker": "DAPI",
+  "verdict": "pass",
+  "issues": [],
+  "suggested_direction": {},
+  "confidence": 0.72,
+  "notes": "Detected foci are compact, discrete bodies occupying a small fraction of the nucleoplasm, consistent with pericentromeric heterochromatin/chromocenters. Median of 15.5 per nucleus (IQR 12.5\u201318.5) aligns well with the expected 'few tens' target; the visible per-slice counts in the montage (a handful of colored objects per nucleus) are consistent with that 3D total. No obvious over-splitting of large chromocenters or spurious noise picks are apparent, though the high-count outlier cells (183, 202) warrant a spot-check to rule out noise detection in those nuclei."
+}

@@ -1,0 +1,14 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "under_detect",
+    "dim_missed"
+  ],
+  "suggested_direction": {
+    "threshold": "down",
+    "min_size": "down"
+  },
+  "confidence": 0.85,
+  "notes": "The montage shows nuclei with clearly visible bright Pol2 puncta distributed across the nucleoplasm, yet the reported median foci count is only 0.5 (IQR 0\u20131), indicating nearly all foci are being missed. The detection threshold appears far too high, causing most genuine discrete puncta \u2014 including moderately bright ones visible by eye \u2014 to fall below the calling threshold; lowering the intensity threshold and minimum size will recover the expected ~10 sparse discrete foci per nucleus without risk of filling the nucleus with diffuse signal."
+}

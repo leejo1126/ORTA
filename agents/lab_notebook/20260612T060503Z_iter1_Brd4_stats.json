@@ -1,0 +1,38 @@
+{
+  "marker": "Brd4",
+  "params": {
+    "mode": "mad",
+    "min_size": 10,
+    "max_size": null,
+    "blur_sigma": 0.3,
+    "tophat_radius": 5,
+    "noise_k": 3.0,
+    "seed_h_k": 0.5,
+    "threshold": 2.0,
+    "abs_floor": 0.0,
+    "watershed": true,
+    "marker_h": 2.0
+  },
+  "cells": [
+    17,
+    183,
+    44,
+    137,
+    87,
+    202
+  ],
+  "per_cell_counts": [
+    1442,
+    977,
+    999,
+    1066,
+    916,
+    1034
+  ],
+  "per_cell_median": 1016.5,
+  "per_cell_iqr": [
+    982.5,
+    1058.0
+  ],
+  "montage_path": "S:\\cluade code\\ep-orca-if\\IF\\data\\figures\\agent_tune_Brd4_20260612T060428Z_iter1.png"
+}

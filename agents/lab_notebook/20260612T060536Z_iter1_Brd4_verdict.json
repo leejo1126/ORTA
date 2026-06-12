@@ -1,0 +1,14 @@
+{
+  "marker": "Brd4",
+  "verdict": "pass",
+  "issues": [
+    "merged",
+    "over_split"
+  ],
+  "suggested_direction": {
+    "min_size": "up",
+    "threshold": "up"
+  },
+  "confidence": 0.72,
+  "notes": "Median ~1017 foci/nucleus is biologically plausible for Brd4 and the montage shows dense, nucleoplasm-filling puncta with good spatial coverage excluding the nucleolus, consistent with expectation. However, several detected objects appear oversized/irregular (blobs spanning multiple true puncta, suggesting some merging), while a minority of very small fragments may represent noise-level over-splitting; a modest increase in threshold and minimum object size would consolidate merged blobs and suppress noise without substantially reducing the true count."
+}

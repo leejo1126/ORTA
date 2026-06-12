@@ -1,0 +1,14 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "under_detect",
+    "dim_missed"
+  ],
+  "suggested_direction": {
+    "threshold": "down",
+    "min_size": "down"
+  },
+  "confidence": 0.75,
+  "notes": "The montage shows nuclei with broadly granular Pol2 signal but virtually no colored foci overlays are visible (only 1-2 faint outlines per nucleus at most), consistent with the very low median of 6 foci/cell \u2014 well below the expected ~10 discrete foci per nucleus in 3D. The detector threshold appears too stringent, causing most genuine Pol2 clusters to be missed; lowering the intensity threshold and minimum size cutoff should recover the sparse but real discrete foci without substantially over-detecting diffuse nucleoplasmic background."
+}

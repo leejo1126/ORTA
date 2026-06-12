@@ -1,0 +1,15 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "over_detect",
+    "noise"
+  ],
+  "suggested_direction": {
+    "threshold": "up",
+    "min_size": "up",
+    "min_intensity": "up"
+  },
+  "confidence": 0.88,
+  "notes": "The median per-cell count of 75 (IQR 48\u2013102) is ~7\u201310\u00d7 higher than the expected ~10 discrete Pol2 foci per nucleus; the montage confirms that the detector is picking up small, dim, noise-like puncta scattered throughout the nucleoplasm rather than a small number of bright, discrete clusters. Raising the intensity threshold and minimum object size should suppress diffuse/noisy signal and recover the expected sparse, bright foci pattern."
+}

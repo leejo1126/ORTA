@@ -1,0 +1,15 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "over_detect",
+    "noise"
+  ],
+  "suggested_direction": {
+    "threshold": "up",
+    "min_size": "up",
+    "min_intensity": "up"
+  },
+  "confidence": 0.85,
+  "notes": "The reported median of 56.5 foci/cell is ~5-6x above the expected ~10 discrete Pol2 transcription foci; visually the detected foci (colored overlays) appear scattered across diffuse nucleoplasmic signal rather than confined to a handful of bright discrete clusters, indicating the detector is picking up background/noise fluctuations throughout the nucleus. Raising the intensity threshold and minimum foci size should suppress spurious detections in the dim nucleoplasmic haze and bring counts closer to the expected sparse discrete pattern."
+}

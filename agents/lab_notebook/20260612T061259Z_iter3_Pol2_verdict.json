@@ -1,0 +1,14 @@
+{
+  "marker": "Pol2",
+  "verdict": "fail",
+  "issues": [
+    "under_detect",
+    "dim_missed"
+  ],
+  "suggested_direction": {
+    "threshold": "down",
+    "min_size": "down"
+  },
+  "confidence": 0.82,
+  "notes": "The per-cell foci counts are extremely low (median 1.5, IQR 0.25\u20132.0) relative to the expected ~10 discrete Pol2 foci per nucleus; the montage shows numerous bright puncta scattered throughout the nucleoplasm that are clearly not being called. The detection threshold appears too high, causing the algorithm to miss the majority of genuine Pol2 foci while only capturing the very brightest spots \u2014 lowering the intensity threshold and reducing the minimum size filter should recover the expected sparse-but-real foci population without filling the nucleus."
+}
