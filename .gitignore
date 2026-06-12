@@ -34,7 +34,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# agent lab notebook: keep the structured text record (stats/verdict JSON,
-# HISTORY.md, history.jsonl) under version control as the tuning audit trail.
-# Montages stay out of git (large, regenerable) — they live in IF/data/figures/
-# and are referenced by path from the notebook records.
+# agent run records (agents/runs/{tuning,autofoci}/): keep the structured text trail
+# (stats/verdict JSON, HISTORY.md, history.jsonl, trials.jsonl, leaderboard.md, proposed
+# specs) under version control as the audit trail. Montages are *.png (ignored above),
+# regenerable, and referenced by path from the records.

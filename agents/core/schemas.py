@@ -50,7 +50,7 @@ class PIDecision(BaseModel):
 
 
 class WikiNote(BaseModel):
-    """A knowledge card an agent contributes to the wiki (see agents/wiki.py).
+    """A knowledge card an agent contributes to the wiki (see agents/core/wiki.py).
     `type` is biology | method | finding | reference; findings are appended over time."""
     name: str                          # short kebab-case slug / title
     description: str                   # one-line summary (used for retrieval + index)

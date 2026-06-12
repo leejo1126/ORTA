@@ -3,7 +3,7 @@ The ORTA agents' knowledge layer -- a small, git-tracked "LLM wiki" the agents
 consult (and grow) so they reason from accrued biology + image-analysis knowledge
 rather than from a blank slate or from our current parameters.
 
-Storage: one markdown *card* per concept in ``agents/wiki/`` with YAML frontmatter
+Storage: one markdown *card* per concept in ``agents/knowledge/`` with YAML frontmatter
 (name / description / type / tags / sources / links) + a free-text body. ``INDEX.md``
 lists every card. Retrieval is keyword/tag matching over the frontmatter + headings
 (no embeddings); the orchestrators call ``relevant_for(...)`` and inject the matched
@@ -22,7 +22,7 @@ from pathlib import Path
 
 import yaml
 
-WIKI_DIR = Path(__file__).resolve().parent / "wiki"
+WIKI_DIR = Path(__file__).resolve().parents[1] / "knowledge"
 INDEX = WIKI_DIR / "INDEX.md"
 VALID_TYPES = ("biology", "method", "finding", "reference")
 

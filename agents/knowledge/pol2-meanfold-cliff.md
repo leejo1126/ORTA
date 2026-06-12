@@ -9,7 +9,7 @@ tags:
 - convergence
 - finding
 sources:
-- "ORTA agents lab_notebook, run 20260612T061052Z (Pol2 tuning, 5 iterations)"
+- "ORTA agents runs/tuning, run 20260612T061052Z (Pol2 tuning, 5 iterations)"
 links:
 - pol2-biology
 - lit-pol2-clusters

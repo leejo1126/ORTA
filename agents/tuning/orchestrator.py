@@ -10,47 +10,27 @@ cells + renders a montage -> cell_biologist looks at it and returns a verdict ->
 repeat until pass or budget. The final diff is printed for HUMAN approval (never
 auto-applied to the canonical config).
 
-    python agents/orchestrator.py tune --marker Sc35 --dry-run
-    python agents/orchestrator.py tune --marker Sc35     # needs ANTHROPIC_API_KEY
+    python -m agents.tuning.orchestrator tune --marker Sc35 --dry-run
+    python -m agents.tuning.orchestrator tune --marker Sc35   # needs ANTHROPIC_API_KEY
 """
 
 from __future__ import annotations
 
-import os
-import sys
 import json
-import base64
 import argparse
 from pathlib import Path
 from datetime import datetime, timezone
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import tools  # noqa: E402
-import wiki  # noqa: E402
-from schemas import QCVerdict, ParamProposal  # noqa: E402
+from agents.core import tools, wiki
+from agents.core.schemas import QCVerdict, ParamProposal
+from agents.core.llm import _llm_json, _persona
 
-# Windows consoles default to cp1252; LLM rationales/notes routinely contain
-# characters it can't encode (arrows "->", en-dashes), which would crash a print
-# mid-run. Make stdout/stderr lossy-UTF-8 so logging an agent's text never aborts
-# the tuning loop.
-for _stream in (sys.stdout, sys.stderr):
-    try:
-        _stream.reconfigure(encoding="utf-8", errors="replace")
-    except (AttributeError, ValueError):
-        pass
-
-ROOT = Path(__file__).resolve().parent.parent          # ORTA repo root
+ROOT = Path(__file__).resolve().parents[2]             # ORTA repo root
 CONFIG = str(ROOT / "IF" / "config" / "config.yaml")
-PERSONAS = Path(__file__).resolve().parent / "personas"
-NOTEBOOK = Path(__file__).resolve().parent / "lab_notebook"
-MODEL = os.environ.get("ORTA_AGENT_MODEL", "claude-sonnet-4-6")
+NOTEBOOK = Path(__file__).resolve().parents[1] / "runs" / "tuning"
 
 # rough control-cell targets, used only by the dry-run stub biologist
 DRY_TARGETS = {"Brd4": (300, 1200), "Pol2": (5, 15), "Sc35": (15, 45), "DAPI": (8, 40)}
-
-
-def _persona(name: str) -> str:
-    return (PERSONAS / f"{name}.md").read_text()
 
 
 def _log(kind: str, payload: dict) -> None:
@@ -106,24 +86,6 @@ def _append_history(run_ts: str, marker: str, it: int, target: str, stats: dict,
            f"{verdict.verdict} | {verdict.confidence:.2f} | {note} |\n")
     with HISTORY_MD.open("a", encoding="utf-8") as f:
         f.write(row)
-
-
-# --------------------------------------------------------------------- LLM call
-def _llm_json(system: str, user_text: str, schema, image_path: str | None = None):
-    """One structured agent turn via the Anthropic SDK; returns a `schema` object."""
-    import anthropic
-    client = anthropic.Anthropic()
-    content = [{"type": "text", "text": user_text +
-                f"\n\nReturn ONLY JSON matching this schema:\n{json.dumps(schema.model_json_schema())}"}]
-    if image_path:
-        b64 = base64.standard_b64encode(Path(image_path).read_bytes()).decode()
-        content.append({"type": "image",
-                        "source": {"type": "base64", "media_type": "image/png", "data": b64}})
-    msg = client.messages.create(model=MODEL, max_tokens=1024, system=system,
-                                 messages=[{"role": "user", "content": content}])
-    text = "".join(b.text for b in msg.content if b.type == "text")
-    start, end = text.find("{"), text.rfind("}")
-    return schema.model_validate_json(text[start:end + 1])
 
 
 # --------------------------------------------------------------- dry-run stubs

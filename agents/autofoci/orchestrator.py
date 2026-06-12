@@ -8,36 +8,34 @@ next starting spec. A deterministic prune (proxy score + convergence + judge con
 optionally ratified by the **principal_investigator**, drops non-converging arms and
 reallocates budget (successive halving) until 1–2 finalists remain.
 
-Outputs go to a SEPARATE dir (`agents/autofoci_runs/<ts>_<marker>/`): per-round montages,
+Outputs go to a SEPARATE dir (`agents/runs/autofoci/<ts>_<marker>/`): per-round montages,
 `trials.jsonl`, `leaderboard.md`, and a **proposed** winning spec — never applied to
 `config.yaml`. The agents are grounded in the lab wiki (`wiki.relevant_for`). A `--dry-run`
 stub exercises the whole loop with no API calls.
 
-    python agents/autofoci_orchestrator.py search --marker Sc35 --dry-run
-    python agents/autofoci_orchestrator.py search --marker Sc35 --rounds 3 --trials 20
+    python -m agents.autofoci.orchestrator search --marker Sc35 --dry-run
+    python -m agents.autofoci.orchestrator search --marker Sc35 --rounds 3 --trials 20
 """
 
 from __future__ import annotations
 
-import sys
 import json
 import argparse
 from pathlib import Path
 from datetime import datetime, timezone
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import wiki  # noqa: E402
-from schemas import SpecProposal, ArmVerdict, AllocationDecision, WikiNote  # noqa: E402
-from orchestrator import _llm_json, _persona  # noqa: E402  (reuse SDK helper + persona loader)
+from agents.core import wiki
+from agents.core.schemas import SpecProposal, ArmVerdict, AllocationDecision, WikiNote
+from agents.core.llm import _llm_json, _persona
 
-from eporca.config import Config  # noqa: E402
-from eporca.autofoci.spec import Spec, FAMILIES  # noqa: E402
-from eporca.autofoci.run import build_panel, run_spec  # noqa: E402
-from eporca.autofoci import search as A  # noqa: E402
+from eporca.config import Config
+from eporca.autofoci.spec import Spec, FAMILIES
+from eporca.autofoci.run import build_panel, run_spec
+from eporca.autofoci import search as A
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 CONFIG = str(ROOT / "IF" / "config" / "config.yaml")
-RUNS = Path(__file__).resolve().parent / "autofoci_runs"
+RUNS = Path(__file__).resolve().parents[1] / "runs" / "autofoci"
 KEEP_SCHEDULE = (6, 3, 2, 1)            # arms kept after each round (successive halving)
 
 
@@ -191,7 +189,7 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
               f"(proxy score {best_score:.3f}; median {win['best_metrics']['median_count']:.0f} "
               f"foci/cell, contrast {win['best_metrics']['median_contrast']}, fill "
               f"{win['best_metrics']['median_fill']}). Params: {win['best_params']}. "
-              f"Proposed spec in agents/autofoci_runs/{run_ts}_{marker}/ — NOT applied to config.")),
+              f"Proposed spec in agents/runs/autofoci/{run_ts}_{marker}/ — NOT applied to config.")),
         append_body=True)
 
     print(f"\n[autofoci] winner: {winner} (proxy {best_score:.3f}). Proposed spec + leaderboard "
