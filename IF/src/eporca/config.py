@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Optional
 
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 
 
 # --- section models -----------------------------------------------------------
@@ -169,15 +169,28 @@ class Config(BaseModel):
     analysis: AnalysisCfg
     conditions: dict[str, ConditionCfg] = {}
 
+    # directory of the config file; relative paths in `paths` resolve against it so
+    # the repo can move without editing config.yaml. Set in `load`.
+    _config_dir: Optional[Path] = PrivateAttr(default=None)
+
     # ------------------------------------------------------------------ loaders
     @classmethod
     def load(cls, config_path, conditions_path: Optional[str] = None) -> "Config":
-        config_path = Path(config_path)
+        config_path = Path(config_path).resolve()
         data = yaml.safe_load(config_path.read_text())
         cp = Path(conditions_path) if conditions_path else config_path.parent / "conditions.yaml"
         if cp.exists():
             data["conditions"] = (yaml.safe_load(cp.read_text()) or {}).get("conditions", {})
-        return cls(**data)
+        obj = cls(**data)
+        obj._config_dir = config_path.parent
+        return obj
+
+    def _resolve(self, p: str) -> Path:
+        """Absolute paths used as-is; relative ones anchored at the config file's dir."""
+        pp = Path(p)
+        if pp.is_absolute():
+            return pp
+        return ((self._config_dir or Path.cwd()) / pp).resolve()
 
     # ------------------------------------------------------------ channel helpers
     @property
@@ -223,7 +236,7 @@ class Config(BaseModel):
     # --------------------------------------------------------------- path helpers
     @property
     def data_dir(self) -> Path:
-        return Path(self.paths.data_dir)
+        return self._resolve(self.paths.data_dir)
 
     def interleaved_path(self, fov: int) -> str:
         return str(Path(self.paths.dax_dir)

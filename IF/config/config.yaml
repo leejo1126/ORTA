@@ -6,9 +6,10 @@
 
 # --- Paths (absolute; Windows paths use forward slashes) -----------------------
 paths:
-  dax_dir: "Z:/EPORCA/2026-04-16_IF"          # source .dax + .inf files
-  data_dir: "S:/cluade code/ep-orca-if/IF/data"  # all outputs go here
+  dax_dir: "Z:/EPORCA/2026-04-16_IF"          # source .dax + .inf files (external; absolute)
+  data_dir: "../data"                          # all outputs; relative to this config file -> IF/data
   # subfolders created under data_dir: zarr/ masks/ foci/ features/ anndata/ figures/
+  # NOTE: paths.data_dir may be relative (resolved against this file's dir) or absolute.
 
 # --- Python interpreters per step (used by the Snakemake workflow) ------------
 interpreters:
