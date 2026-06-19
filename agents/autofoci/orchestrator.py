@@ -100,8 +100,9 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     cfg = Config.load(CONFIG)
     panel = build_panel(cfg, marker, fov, n_cells)
     bio_ctx = wiki.render_for_prompt(wiki.relevant_for(marker))
+    expect = wiki.expectations(marker)          # literature ranges anchor the proxy score
     print(f"[autofoci] {marker} fov{fov}: panel {panel.cells}  SNR={panel.image_snr:.1f}  "
-          f"(run {run_ts}, dry_run={dry_run})")
+          f"expect={expect}  (run {run_ts}, dry_run={dry_run})")
 
     arms = {f: {"seed": Spec(family=f).with_defaults(), "scores": [], "best": None} for f in FAMILIES}
     alive = list(FAMILIES)
@@ -110,7 +111,8 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     for rnd in range(1, rounds + 1):
         round_arms = {}
         for fam in alive:
-            res = A.optimize_arm(panel, fam, n_trials=trials, seed=rnd, seed_params=arms[fam]["seed"])
+            res = A.optimize_arm(panel, fam, n_trials=trials, seed=rnd,
+                                 seed_params=arms[fam]["seed"], expect=expect)
             arms[fam]["scores"].append(res["best_score"])
             if not arms[fam]["best"] or res["best_score"] > arms[fam]["best"]["best_score"]:
                 arms[fam]["best"] = res
@@ -119,7 +121,7 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
                                             **h["metrics"]}) + "\n")
 
             mp = str(mont_dir / f"r{rnd}_{fam}.png")
-            m = run_spec(panel, Spec(**res["best_spec"]), out_png=mp)
+            m = run_spec(panel, Spec(**res["best_spec"]), out_png=mp, expect=expect)
             method_ctx = wiki.render_for_prompt(wiki.relevant_for(marker, fam))
 
             if dry_run:
@@ -201,7 +203,7 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
     if refine_trials and refine_trials > 0:
         anchor = win["best_metrics"]["median_count"]
         rf = A.optimize_arm(panel, winner, n_trials=refine_trials, seed=999,
-                            seed_params=win["best_params"])
+                            seed_params=win["best_params"], expect=expect)
         cand = _best_in_band(rf["history"], anchor)
         if cand and cand["score"] >= best_score:
             win = _winshape(winner, cand)
@@ -253,8 +255,10 @@ def refine_spec(spec_path: str, trials: int = 120, cells: int = 5, anchor: float
     anchor = float(anchor) if anchor is not None else float(meta["metrics"]["median_count"])
     cfg = Config.load(CONFIG)
     panel = build_panel(cfg, marker, meta.get("fov", 0), cells)
+    expect = wiki.expectations(marker)
     before = float(meta.get("best_score", -1))
-    rf = A.optimize_arm(panel, fam, n_trials=trials, seed=999, seed_params=meta["params"])
+    rf = A.optimize_arm(panel, fam, n_trials=trials, seed=999, seed_params=meta["params"],
+                        expect=expect)
     cand = _best_in_band(rf["history"], anchor) or max(rf["history"], key=lambda h: h["score"])
     win = _winshape(fam, cand)
     out = Path(spec_path).with_name(f"proposed_spec_{marker}_refined.json")

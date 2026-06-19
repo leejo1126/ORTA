@@ -13,6 +13,10 @@ links:
 - otsu-adaptive-method
 - mean-fold-method
 - lit-chromocenters
+expectations:
+  count: [5, 40]              # a few tens of chromocenters; cell-type dependent
+  eq_diam_um: [0.3, 1.2]      # compact, bright dense bodies
+  coverage: [0.01, 0.20]      # densest sub-regions only; must not call the whole nucleus
 ---
 
 **What it is.** DAPI binds dsDNA and stains the **entire nucleus**. The biologically

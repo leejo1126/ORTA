@@ -13,6 +13,10 @@ links:
 - mean-fold-method
 - h-dome-localmax-method
 - lit-nuclear-speckles
+expectations:
+  count: [20, 60]             # 20-50 speckles per nucleus (Spector & Lamond 2011)
+  eq_diam_um: [0.3, 1.5]      # larger, irregular interchromatin granule clusters
+  coverage: [0.01, 0.15]      # modest nuclear fraction; excludes nucleoli
 ---
 
 **What it is.** Sc35 (SRSF2) is a serine/arginine-rich splicing factor and the canonical

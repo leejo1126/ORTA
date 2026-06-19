@@ -40,15 +40,16 @@ def _sample_random(space: dict, rng) -> dict:
 
 
 def optimize_arm(panel: Panel, family: str, n_trials: int = 25, seed: int = 0,
-                 seed_params: dict | None = None) -> dict:
-    """Search ``family``'s param space on ``panel``; maximize the proxy score.
-    Returns best spec/score/params + per-trial history (for the leaderboard + pruning)."""
+                 seed_params: dict | None = None, expect: dict | None = None) -> dict:
+    """Search ``family``'s param space on ``panel``; maximize the proxy score (anchored
+    to ``expect`` count/shape/coverage when provided). Returns best spec/score/params +
+    per-trial history (for the leaderboard + pruning)."""
     space = PARAM_SPACE[family]
     history: list[dict] = []
 
     def evaluate(params: dict) -> float:
         spec = Spec(family=family, params=params)
-        m = run_spec(panel, spec)
+        m = run_spec(panel, spec, expect=expect)
         history.append({"params": m["params"], "score": m["score"], "metrics": m})
         return m["score"]
 

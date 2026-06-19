@@ -12,6 +12,11 @@ links:
 - mad-tophat-method
 - log-dog-blob-method
 - lit-condensate-transcription
+# literature-derived soft expectations (per nucleus, 3D), used by the autofoci score
+expectations:
+  count: [300, 1500]          # hundreds to ~1000+ dense puncta (Sabari 2018)
+  eq_diam_um: [0.15, 0.7]     # near-diffraction puncta; a few larger SE condensates
+  coverage: [0.02, 0.40]      # dense but excludes the nucleolus; not space-filling
 ---
 
 **What it is.** Brd4 is a BET-family bromodomain protein that reads acetylated histones

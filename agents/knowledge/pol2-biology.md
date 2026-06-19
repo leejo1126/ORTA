@@ -14,6 +14,10 @@ links:
 - log-dog-blob-method
 - pol2-meanfold-cliff
 - lit-pol2-clusters
+expectations:
+  count: [5, 30]              # ~10 discrete clusters; transient/fuzzy so a wide range
+  eq_diam_um: [0.1, 0.5]      # ~100 nm clusters (Cho 2016), small
+  coverage: [0.001, 0.05]     # sparse; must NOT fill the diffuse nucleoplasm
 ---
 
 **What it is.** RNA Polymerase II forms transient transcription "factories" / clusters

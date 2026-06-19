@@ -96,6 +96,18 @@ def read(name: str) -> Card | None:
     return _parse(p) if p.exists() else None
 
 
+def expectations(marker: str) -> dict | None:
+    """Literature-derived soft expectations for a marker (count / eq_diam_um / coverage),
+    read from the `<marker>-biology` card's `expectations:` frontmatter. Used by the
+    autofoci score to anchor count/shape/coverage. None if the card has no expectations."""
+    p = WIKI_DIR / f"{_slug(marker)}-biology.md"
+    if not p.exists():
+        return None
+    m = _FRONTMATTER.match(p.read_text(encoding="utf-8"))
+    fm = (yaml.safe_load(m.group(1)) or {}) if m else {}
+    return fm.get("expectations")
+
+
 # --------------------------------------------------------------------- retrieval
 def search(query: str = "", tags: list[str] | None = None, type: str | None = None,
            limit: int = 6) -> list[Card]:
