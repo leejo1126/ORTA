@@ -78,13 +78,14 @@ foci:
     seed_h_k: 0.5
     min_size: 10
     blur_sigma: 0.3
-  # Brd4 keeps the tuned mad detector (validated this dataset). The sparse markers
-  # use the mean_fold recipe ported from MATLAB findDensities (threshold x mean +
-  # size gating + intensity watershed); thresholds/sizes are the lab's calibration.
+  # Brd4/Pol2/DAPI keep the hand-tuned detectors (Brd4 mad; Pol2/DAPI mean_fold, the
+  # MATLAB findDensities recipe -- the lab's calibration, preferred over autofoci).
+  # Sc35 adopted from the agnostic autofoci search (run 20260620T021146Z, mean_fold,
+  # literature-anchored to ~20-60 speckles; median ~43/cell on FOV 0).
   per_marker:
     Brd4:   {mode: "mad", tophat_radius: 5, noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
     Pol2:   {mode: "mean_fold", threshold: 1.7, min_size: 8,   max_size: 2000,  blur_sigma: 1.0, watershed: true,  marker_h: 2.0}
-    Sc35:   {mode: "mean_fold", threshold: 2.0, min_size: 25,  max_size: 10000, blur_sigma: 1.0, watershed: true,  marker_h: 2.0}
+    Sc35:   {mode: "mean_fold", threshold: 1.789, abs_floor: 37.96, min_size: 14, max_size: 33956, blur_sigma: 1.436, watershed: true, marker_h: 3.745}  # autofoci 20260620T021146Z
     DAPI:   {mode: "mean_fold", threshold: 1.3, min_size: 100, max_size: 30000, blur_sigma: 1.0, watershed: false, marker_h: 2.0}
 
 # --- Chromatic correction -----------------------------------------------------
