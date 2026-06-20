@@ -69,6 +69,7 @@ class SegmentationCfg(BaseModel):
     batch_size: int
     use_bf16: bool
     gpu_index: int
+    use_gpu: bool = True          # set false to run cellpose on CPU (e.g. GPU-less HPC node)
     exclude_edge: bool
     min_volume_um3: Optional[float] = None
     max_volume_um3: Optional[float] = None

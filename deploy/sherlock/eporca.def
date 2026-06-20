@@ -1,0 +1,42 @@
+Bootstrap: docker
+From: condaforge/miniforge3:latest
+
+# ORTA / eporca pipeline image for Sherlock (CPU-only; self-contained -> zero
+# interference with the lab's shared conda/modules). Two conda envs inside the image,
+# matching the pipeline's two-interpreter design:
+#   /opt/envs/analysis  -> every step except segmentation (eporca[analysis] + snakemake)
+#   /opt/envs/cellpose  -> segmentation only (cellpose + CPU torch); the segment.py
+#                          old-torch shims auto-skip on torch>=2, so CPU "just works".
+#
+# Build on Sherlock (unprivileged):
+#   cd <repo root> && apptainer build --fakeroot deploy/sherlock/eporca.sif deploy/sherlock/eporca.def
+# (If --fakeroot is unavailable, build on a machine with Docker/root, or use a remote builder.)
+
+%files
+    IF /opt/eporca/IF
+
+%post
+    set -eux
+    export MAMBA_NO_BANNER=1
+    conda config --set always_yes true
+
+    # --- analysis env (all steps except segmentation) ---
+    mamba env create -p /opt/envs/analysis -f /opt/eporca/IF/env/environment-analysis.yml
+    /opt/envs/analysis/bin/pip install -e /opt/eporca/IF[analysis]
+    /opt/envs/analysis/bin/pip install optuna
+
+    # --- cellpose env (segmentation, CPU) ---
+    mamba create -p /opt/envs/cellpose python=3.10
+    /opt/envs/cellpose/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu
+    /opt/envs/cellpose/bin/pip install "cellpose>=4,<5" "zarr<3" numcodecs
+    /opt/envs/cellpose/bin/pip install -e /opt/eporca/IF --no-deps
+
+    conda clean -afy
+
+%environment
+    export PATH=/opt/envs/analysis/bin:$PATH
+    export MPLBACKEND=Agg            # headless matplotlib
+    export OMP_NUM_THREADS=4         # keep per-process threads modest (tune in sbatch)
+
+%runscript
+    exec "$@"

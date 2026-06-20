@@ -128,7 +128,8 @@ def _save_metrics_csv(path, metrics):
 def segment_fov(cfg: Config, fov: int) -> dict:
     """Segment nuclei for one FOV; write mask zarr + metrics CSV; return summary."""
     seg = cfg.segmentation
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(seg.gpu_index)
+    if seg.use_gpu:
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(seg.gpu_index)
 
     from cellpose import models  # imported after CUDA_VISIBLE_DEVICES is set
     _patch_get_masks_torch_for_old_torch()
@@ -149,7 +150,7 @@ def segment_fov(cfg: Config, fov: int) -> dict:
         img_scaled = scipy.ndimage.gaussian_filter(
             img_scaled, (0, seg.blur_factor, seg.blur_factor))
 
-    model = models.CellposeModel(gpu=True, use_bfloat16=seg.use_bf16)
+    model = models.CellposeModel(gpu=seg.use_gpu, use_bfloat16=seg.use_bf16 and seg.use_gpu)
     masks, _flows, _styles = model.eval(
         img_scaled, diameter=seg.cellpose_diam_px, do_3D=True,
         anisotropy=anisotropy, flow_threshold=seg.flow_threshold,
