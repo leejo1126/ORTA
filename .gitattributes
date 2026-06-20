@@ -1,0 +1,4 @@
+# Force LF for scripts that run on Linux/HPC (CRLF would break bash on Sherlock).
+*.sh      text eol=lf
+*.sbatch  text eol=lf
+*.def     text eol=lf
