@@ -1,0 +1,63 @@
+{
+  "marker": "Brd4",
+  "fov": 0,
+  "run": "20260620T023228Z",
+  "winner_family": "otsu_adaptive",
+  "best_score": 0.9832,
+  "finalists": [
+    "otsu_adaptive"
+  ],
+  "spec": {
+    "family": "otsu_adaptive",
+    "params": {
+      "method": "local",
+      "block_size": 31,
+      "offset_k": 2.2,
+      "watershed": true,
+      "marker_h": 3.0,
+      "min_size": 4
+    }
+  },
+  "params": {
+    "method": "local",
+    "block_size": 31,
+    "offset_k": 2.2,
+    "watershed": true,
+    "marker_h": 3.0,
+    "min_size": 4
+  },
+  "metrics": {
+    "valid": true,
+    "median_count": 383.0,
+    "count_cv": 0.123,
+    "median_fill": 0.0201,
+    "median_contrast": 7.0,
+    "median_vol": 14.0,
+    "median_eq_diam_um": 0.427,
+    "frac_tiny": 0.0,
+    "frac_huge": 0.0,
+    "image_snr": 6.65,
+    "count_score": 1.0,
+    "shape_score": 1.0,
+    "coverage_score": 1.0,
+    "anchored": true,
+    "score": 0.9832,
+    "family": "otsu_adaptive",
+    "params": {
+      "method": "local",
+      "block_size": 31,
+      "offset_k": 2.2,
+      "watershed": true,
+      "marker_h": 3.0,
+      "min_size": 4
+    },
+    "per_cell_counts": [
+      470,
+      419,
+      322,
+      383,
+      382
+    ]
+  },
+  "note": "PROPOSED \u2014 not applied to config.yaml"
+}

@@ -1,0 +1,57 @@
+{
+  "marker": "Pol2",
+  "fov": 0,
+  "run": "20260620T025917Z",
+  "winner_family": "wavelet",
+  "best_score": 0.9103,
+  "finalists": [
+    "wavelet"
+  ],
+  "spec": {
+    "family": "wavelet",
+    "params": {
+      "levels": "1-3",
+      "k": 4.701880817960106,
+      "watershed": true,
+      "min_size": 37
+    }
+  },
+  "params": {
+    "levels": "1-3",
+    "k": 4.701880817960106,
+    "watershed": true,
+    "min_size": 37
+  },
+  "metrics": {
+    "valid": true,
+    "median_count": 25.0,
+    "count_cv": 0.166,
+    "median_fill": 0.0038,
+    "median_contrast": 2.14,
+    "median_vol": 48.0,
+    "median_eq_diam_um": 0.644,
+    "frac_tiny": 0.0,
+    "frac_huge": 0.0,
+    "image_snr": 3.13,
+    "count_score": 1.0,
+    "shape_score": 0.866,
+    "coverage_score": 1.0,
+    "anchored": true,
+    "score": 0.9103,
+    "family": "wavelet",
+    "params": {
+      "levels": "1-3",
+      "k": 4.701880817960106,
+      "watershed": true,
+      "min_size": 37
+    },
+    "per_cell_counts": [
+      26,
+      24,
+      16,
+      27,
+      25
+    ]
+  },
+  "note": "PROPOSED \u2014 not applied to config.yaml"
+}

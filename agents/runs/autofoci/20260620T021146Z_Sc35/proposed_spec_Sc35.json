@@ -1,0 +1,66 @@
+{
+  "marker": "Sc35",
+  "fov": 0,
+  "run": "20260620T021146Z",
+  "winner_family": "mean_fold",
+  "best_score": 0.9836,
+  "finalists": [
+    "mean_fold"
+  ],
+  "spec": {
+    "family": "mean_fold",
+    "params": {
+      "threshold": 1.7890748036220478,
+      "abs_floor": 37.95988715847694,
+      "blur_sigma": 1.4363503198093548,
+      "marker_h": 3.7450130567434097,
+      "watershed": true,
+      "min_size": 14,
+      "max_size": 33956
+    }
+  },
+  "params": {
+    "threshold": 1.7890748036220478,
+    "abs_floor": 37.95988715847694,
+    "blur_sigma": 1.4363503198093548,
+    "marker_h": 3.7450130567434097,
+    "watershed": true,
+    "min_size": 14,
+    "max_size": 33956
+  },
+  "metrics": {
+    "valid": true,
+    "median_count": 43.0,
+    "count_cv": 0.176,
+    "median_fill": 0.015,
+    "median_contrast": 8.32,
+    "median_vol": 95.0,
+    "median_eq_diam_um": 0.809,
+    "frac_tiny": 0.0,
+    "frac_huge": 0.0,
+    "image_snr": 7.2,
+    "count_score": 1.0,
+    "shape_score": 1.0,
+    "coverage_score": 1.0,
+    "anchored": true,
+    "score": 0.9836,
+    "family": "mean_fold",
+    "params": {
+      "threshold": 1.7890748036220478,
+      "abs_floor": 37.95988715847694,
+      "blur_sigma": 1.4363503198093548,
+      "marker_h": 3.7450130567434097,
+      "watershed": true,
+      "min_size": 14,
+      "max_size": 33956
+    },
+    "per_cell_counts": [
+      59,
+      44,
+      43,
+      35,
+      42
+    ]
+  },
+  "note": "PROPOSED \u2014 not applied to config.yaml"
+}
