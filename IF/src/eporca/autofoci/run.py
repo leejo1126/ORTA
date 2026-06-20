@@ -204,11 +204,13 @@ def run_spec(panel: Panel, spec: Spec, out_png: str | None = None, mag: int = 4,
         lab = detect_core(spec, subraw, subnuc)
         per_cell.append(_cell_metrics(lab, subraw, subnuc))
         if out_png:
-            zs = np.where(subnuc.any(axis=(1, 2)))[0]
-            zmid = int(zs[len(zs) // 2]) if len(zs) else subnuc.shape[0] // 2
-            ov = _colorize(_stretch(subraw[zmid]), lab[zmid], rng)
+            # max-intensity projection over z so the judge sees ALL foci + true coverage,
+            # not a single mid-z slice (mid-z under-represents count and morphology).
+            raw_mip = np.where(subnuc.any(axis=0), subraw.max(axis=0), 0.0)
+            lab_mip = lab.max(axis=0)
+            ov = _colorize(_stretch(raw_mip), lab_mip, rng)
             im = Image.fromarray(ov).resize((ov.shape[1] * mag, ov.shape[0] * mag), Image.NEAREST)
-            ImageDraw.Draw(im).text((4, 4), f"{spec.family} c{L} n={int(lab.max())}",
+            ImageDraw.Draw(im).text((4, 4), f"{spec.family} c{L} n3D={int(lab.max())} (MIP)",
                                     fill=(255, 255, 0))
             panels.append(im)
 

@@ -71,6 +71,14 @@ def _write_leaderboard(path: Path, marker: str, history: list[dict], finalists: 
             lines.append(f"| {f} | {r['score']:.3f} | {m['valid']} | {m['median_count']:.0f} | "
                          f"{m['count_cv']} | {m['median_fill']} | {m['median_contrast']} | "
                          f"{'ok' if v['plausible'] else 'no'} | {v['confidence']:.2f} |")
+        lines.append("\n_Judgment:_")           # persist the agents' reasoning, not just verdicts
+        for f, r in sorted(rnd["arms"].items(), key=lambda kv: -kv[1]["score"]):
+            v, p = r["verdict"], r.get("proposal", {})
+            note = " ".join((v.get("notes") or "").split())
+            rat = " ".join((p.get("rationale") or "").split())
+            lines.append(f"- **{f}** — judge: {v.get('issues') or 'ok'} — {note}")
+            if rat:
+                lines.append(f"    - scout: {rat}")
     lines.append(f"\n## Finalist(s): {', '.join(finalists)}\n")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -183,6 +191,15 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
 
     trials_fh.close()
 
+    # persist full per-round judgment (verdict notes/issues + scout rationale) for audit
+    with (outdir / "rounds.jsonl").open("w", encoding="utf-8") as fh:
+        for rnd in history:
+            for fam, r in rnd["arms"].items():
+                fh.write(json.dumps({"round": rnd["round"], "family": fam, "score": r["score"],
+                                     "metrics": r["metrics"], "verdict": r["verdict"],
+                                     "proposal": r["proposal"],
+                                     "kept": fam in rnd["kept"]}) + "\n")
+
     # ---- winner = best of the FINAL SURVIVORS, preferring judge-plausible arms ----
     # NOT the global argmax over all families: an arm pruned as biologically implausible
     # can still have the highest raw proxy score (e.g. a clean but under-detecting
@@ -206,8 +223,22 @@ def run_autofoci(marker: str, fov: int = 0, dry_run: bool = False, rounds: int =
                             seed_params=win["best_params"], expect=expect)
         cand = _best_in_band(rf["history"], anchor)
         if cand and cand["score"] >= best_score:
-            win = _winshape(winner, cand)
-            best_score, refined = cand["score"], True
+            # re-judge the refined montage (the count guard isn't a full substitute for the
+            # judge); only accept the refined config if the judge still finds it plausible.
+            cw = _winshape(winner, cand)
+            mp = str(mont_dir / f"refine_{winner}.png")
+            rm = run_spec(panel, Spec(**cw["best_spec"]), out_png=mp, expect=expect)
+            if dry_run:
+                rv = _stub_judge(winner, rm)
+            else:
+                rv = _llm_json(_persona("foci_judge"),
+                               f"{bio_ctx}\n\nMarker {marker}, family {winner} (refined). "
+                               f"Proxy metrics: {rm}. Judge the montage — agnostic, no target "
+                               f"count.", ArmVerdict, image_path=mp)
+            if rv.plausible:
+                win, best_score, refined = cw, cand["score"], True
+            else:
+                print(f"  refine rejected by judge ({rv.issues}); kept search best")
         print(f"  refine {winner}: {refine_trials} trials, count-guarded ~{anchor:.0f}/cell -> "
               f"score {best_score:.3f} (median {win['best_metrics']['median_count']:.0f})"
               f"{'  (improved)' if refined else '  (kept search best)'}")
