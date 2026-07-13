@@ -58,6 +58,11 @@ def cmd_chromatic_calibrate(args):
     print(json.dumps(calibrate(_cfg(args)), indent=2))
 
 
+def cmd_package(args):
+    from .package_ngff import package_fov
+    print(package_fov(_cfg(args), args.fov))
+
+
 def cmd_anndata(args):
     from .anndata_build import build_all
     print(build_all(_cfg(args), embed=not args.no_embed))
@@ -98,6 +103,7 @@ def main(argv=None):
 
     add_fov(sub.add_parser("features")).set_defaults(func=cmd_features)
     add_fov(sub.add_parser("register")).set_defaults(func=cmd_register)
+    add_fov(sub.add_parser("package")).set_defaults(func=cmd_package)
 
     sp = sub.add_parser("chromatic-calibrate"); sp.add_argument("--config", required=True)
     sp.set_defaults(func=cmd_chromatic_calibrate)
