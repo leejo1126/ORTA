@@ -1,0 +1,1321 @@
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_088.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_146.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_080.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_180.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_016.zarr
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_192.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_168.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_173.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_102.zarr
+{'fov': 88, 'n_total': 1127, 'n_kept': 0, 'n_excluded': 1127, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_041.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_011.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_031.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_053.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_190.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_075.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_141.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_036.zarr
+{'fov': 66, 'n_foci': {'Brd4': 158809, 'Sc35': 7731, 'DAPI': 2837, 'Pol2': 2113}}
+{'fov': 98, 'n_total': 229, 'n_kept': 175, 'n_excluded': 54, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_163.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_195.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_129.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_063.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_188.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_021.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_184.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_182.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_169.zarr
+{'fov': 192, 'n_total': 297, 'n_kept': 222, 'n_excluded': 75, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_025.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_107.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_151.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_055.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_078.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_194.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_097.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_119.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_185.zarr
+{'fov': 184, 'n_total': 211, 'n_kept': 162, 'n_excluded': 49, 'scaled_shape': (41, 498, 498)}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_162.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_140.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_096.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_118.zarr
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 1, 'n_foci': {'Brd4': 114219, 'Sc35': 5289, 'DAPI': 1879, 'Pol2': 1140}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_158.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_136.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_006.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_026.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_070.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_048.zarr
+{'fov': 88, 'n_foci': {'Brd4': 0, 'Sc35': 0, 'DAPI': 0, 'Pol2': 0}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_009.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_114.zarr
+{'fov': 163, 'n_total': 248, 'n_kept': 176, 'n_excluded': 72, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_027.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_101.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_085.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_147.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_103.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_007.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_137.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_017.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_037.zarr
+{'fov': 119, 'n_total': 226, 'n_kept': 197, 'n_excluded': 29, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_062.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_020.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_052.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_030.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_010.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_040.zarr
+{'fov': 163, 'n_foci': {'Brd4': 123995, 'Sc35': 5419, 'DAPI': 2115, 'Pol2': 1202}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_084.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_150.zarr
+{'fov': 141, 'n_total': 178, 'n_kept': 124, 'n_excluded': 54, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_106.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_128.zarr
+{'fov': 2, 'n_foci': {'Brd4': 143627, 'Sc35': 6494, 'DAPI': 2598, 'Pol2': 1619}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_074.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_172.zarr
+{'fov': 75, 'n_total': 315, 'n_kept': 229, 'n_excluded': 86, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_183.zarr
+{'fov': 184, 'n_foci': {'Brd4': 108611, 'Sc35': 5588, 'DAPI': 1827, 'Pol2': 931}}
+{'fov': 0, 'n_foci': {'Brd4': 114479, 'Sc35': 5614, 'DAPI': 2005, 'Pol2': 1438}}
+{'fov': 97, 'n_total': 288, 'n_kept': 214, 'n_excluded': 74, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_125.zarr
+{'fov': 119, 'n_foci': {'Brd4': 147913, 'Sc35': 4346, 'DAPI': 2569, 'Pol2': 3320}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_191.zarr
+{'fov': 141, 'n_foci': {'Brd4': 91798, 'Sc35': 1782, 'DAPI': 1663, 'Pol2': 430}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_167.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_061.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_139.zarr
+{'fov': 185, 'n_total': 264, 'n_kept': 217, 'n_excluded': 47, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_095.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_029.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_161.zarr
+{'fov': 75, 'n_foci': {'Brd4': 165428, 'Sc35': 8084, 'DAPI': 3058, 'Pol2': 2354}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_073.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_105.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_051.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_144.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_039.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_171.zarr
+{'fov': 195, 'n_total': 225, 'n_kept': 174, 'n_excluded': 51, 'scaled_shape': (41, 498, 498)}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_127.zarr
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_149.zarr
+{'fov': 97, 'n_foci': {'Brd4': 149855, 'Sc35': 6665, 'DAPI': 2710, 'Pol2': 1514}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_117.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_083.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_019.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_193.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_014.zarr
+{'fov': 151, 'n_total': 238, 'n_kept': 180, 'n_excluded': 58, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 141, 'n_nuclei': 124, 'n_foci': 95673}
+{'fov': 75, 'n_nuclei': 229, 'n_foci': 178924}
+{'fov': 2, 'n_nuclei': 194, 'n_foci': 154338}
+{'fov': 21, 'n_total': 208, 'n_kept': 158, 'n_excluded': 50, 'scaled_shape': (41, 498, 498)}
+{'fov': 195, 'n_foci': {'Brd4': 108974, 'Sc35': 5574, 'DAPI': 1846, 'Pol2': 825}}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 66, 'n_nuclei': 229, 'n_foci': 171490}
+{'fov': 98, 'n_foci': {'Brd4': 129399, 'Sc35': 5679, 'DAPI': 2188, 'Pol2': 1024}}
+{'fov': 185, 'n_foci': {'Brd4': 148204, 'Sc35': 7239, 'DAPI': 2492, 'Pol2': 1313}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_044.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_022.zarr
+{'fov': 98, 'n_nuclei': 175, 'n_foci': 138290}
+{'fov': 55, 'n_total': 288, 'n_kept': 205, 'n_excluded': 83, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_012.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_054.zarr
+{'fov': 163, 'n_nuclei': 176, 'n_foci': 132731}
+{'fov': 151, 'n_foci': {'Brd4': 132187, 'Sc35': 2532, 'DAPI': 2282, 'Pol2': 869}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_164.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_076.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_186.zarr
+{'fov': 21, 'n_foci': {'Brd4': 109882, 'Sc35': 5250, 'DAPI': 1850, 'Pol2': 1083}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_099.zarr
+{'fov': 151, 'n_nuclei': 180, 'n_foci': 137870}
+{'fov': 125, 'n_total': 257, 'n_kept': 201, 'n_excluded': 56, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 185, 'n_nuclei': 217, 'n_foci': 159248}
+{'fov': 97, 'n_nuclei': 214, 'n_foci': 160744}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_059.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_045.zarr
+{'fov': 1, 'n_nuclei': 158, 'n_foci': 122527}
+{'fov': 195, 'n_nuclei': 174, 'n_foci': 117219}
+{'fov': 37, 'n_total': 293, 'n_kept': 239, 'n_excluded': 54, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_133.zarr
+{'fov': 21, 'n_nuclei': 158, 'n_foci': 118065}
+{'fov': 67, 'n_foci': {'Brd4': 117278, 'Sc35': 5330, 'DAPI': 1945, 'Pol2': 1197}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_028.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_197.zarr
+{'fov': 3, 'n_foci': {'Brd4': 135323, 'Sc35': 6267, 'DAPI': 2200, 'Pol2': 1133}}
+{'fov': 17, 'n_total': 228, 'n_kept': 180, 'n_excluded': 48, 'scaled_shape': (41, 498, 498)}
+{'fov': 55, 'n_foci': {'Brd4': 151676, 'Sc35': 6775, 'DAPI': 2491, 'Pol2': 1624}}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_023.zarr
+{'fov': 67, 'n_nuclei': 159, 'n_foci': 125750}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_050.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_072.zarr
+{'fov': 3, 'n_nuclei': 191, 'n_foci': 144923}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_138.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_116.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_160.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_148.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_126.zarr
+{'fov': 32, 'n_total': 223, 'n_kept': 185, 'n_excluded': 38, 'scaled_shape': (41, 498, 498)}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_038.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_060.zarr
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_170.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_082.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_018.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_094.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_008.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_090.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_104.zarr
+{'fov': 0, 'n_nuclei': 160, 'n_foci': 123536}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_179.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_047.zarr
+{'fov': 120, 'n_total': 285, 'n_kept': 232, 'n_excluded': 53, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_111.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_177.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_155.zarr
+{'fov': 164, 'n_total': 199, 'n_kept': 157, 'n_excluded': 42, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 17, 'n_foci': {'Brd4': 133542, 'Sc35': 6303, 'DAPI': 2303, 'Pol2': 1313}}
+{'fov': 32, 'n_foci': {'Brd4': 131693, 'Sc35': 5971, 'DAPI': 2150, 'Pol2': 1213}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_089.zarr
+{'fov': 132, 'n_total': 252, 'n_kept': 183, 'n_excluded': 69, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 32, 'n_nuclei': 185, 'n_foci': 141027}
+{'fov': 192, 'n_foci': {'Brd4': 141226, 'Sc35': 7244, 'DAPI': 2299, 'Pol2': 1254}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_121.zarr
+{'fov': 120, 'n_foci': {'Brd4': 175550, 'Sc35': 5134, 'DAPI': 3048, 'Pol2': 3661}}
+{'fov': 37, 'n_foci': {'Brd4': 170133, 'Sc35': 7911, 'DAPI': 2955, 'Pol2': 1774}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_143.zarr
+{'fov': 136, 'n_total': 238, 'n_kept': 177, 'n_excluded': 61, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_077.zarr
+{'fov': 37, 'n_nuclei': 239, 'n_foci': 182773}
+{'fov': 164, 'n_foci': {'Brd4': 113923, 'Sc35': 4984, 'DAPI': 2125, 'Pol2': 1064}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_165.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_033.zarr
+{'fov': 192, 'n_nuclei': 222, 'n_foci': 152023}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_049.zarr
+{'fov': 164, 'n_nuclei': 157, 'n_foci': 122096}
+{'fov': 55, 'n_nuclei': 205, 'n_foci': 162566}
+{'fov': 60, 'n_total': 278, 'n_kept': 217, 'n_excluded': 61, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_115.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_113.zarr
+{'fov': 17, 'n_nuclei': 180, 'n_foci': 143461}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_015.zarr
+{'fov': 119, 'n_nuclei': 197, 'n_foci': 158148}
+{'fov': 132, 'n_foci': {'Brd4': 136985, 'Sc35': 2728, 'DAPI': 2281, 'Pol2': 770}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_123.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_145.zarr
+{'fov': 90, 'n_total': 201, 'n_kept': 156, 'n_excluded': 45, 'scaled_shape': (41, 498, 498)}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_157.zarr
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_135.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_091.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_035.zarr
+{'fov': 184, 'n_nuclei': 162, 'n_foci': 116957}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_187.zarr
+{'fov': 125, 'n_foci': {'Brd4': 151428, 'Sc35': 4636, 'DAPI': 2703, 'Pol2': 3001}}
+{'fov': 44, 'n_total': 116, 'n_kept': 84, 'n_excluded': 32, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_013.zarr
+{'fov': 4, 'n_foci': {'Brd4': 112987, 'Sc35': 4977, 'DAPI': 1835, 'Pol2': 969}}
+{'fov': 170, 'n_total': 245, 'n_kept': 185, 'n_excluded': 60, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 90, 'n_foci': {'Brd4': 114656, 'Sc35': 4639, 'DAPI': 1953, 'Pol2': 840}}
+{'fov': 44, 'n_foci': {'Brd4': 60520, 'Sc35': 2951, 'DAPI': 1057, 'Pol2': 710}}
+{'fov': 4, 'n_nuclei': 156, 'n_foci': 120768}
+{'fov': 44, 'n_nuclei': 84, 'n_foci': 65238}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_159.zarr
+{'fov': 68, 'n_foci': {'Brd4': 183606, 'Sc35': 8972, 'DAPI': 3396, 'Pol2': 3016}}
+{'fov': 78, 'n_total': 235, 'n_kept': 201, 'n_excluded': 34, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_093.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_181.zarr
+{'fov': 68, 'n_nuclei': 255, 'n_foci': 198990}
+{'fov': 60, 'n_foci': {'Brd4': 157445, 'Sc35': 7819, 'DAPI': 2796, 'Pol2': 2598}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_071.zarr
+{'fov': 125, 'n_nuclei': 201, 'n_foci': 161768}
+{'fov': 60, 'n_nuclei': 217, 'n_foci': 170658}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_081.zarr
+{'fov': 14, 'n_total': 264, 'n_kept': 195, 'n_excluded': 69, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 170, 'n_foci': {'Brd4': 127630, 'Sc35': 5659, 'DAPI': 2417, 'Pol2': 1348}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_178.zarr
+{'fov': 120, 'n_nuclei': 232, 'n_foci': 187393}
+{'fov': 88, 'n_nuclei': 0, 'n_foci': 0, 'status': 'no_nuclei'}
+{'fov': 170, 'n_nuclei': 185, 'n_foci': 137054}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_189.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_057.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_079.zarr
+{'fov': 144, 'n_total': 240, 'n_kept': 194, 'n_excluded': 46, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 78, 'n_foci': {'Brd4': 150684, 'Sc35': 7423, 'DAPI': 2662, 'Pol2': 2136}}
+{'fov': 132, 'n_nuclei': 183, 'n_foci': 142764}
+{'fov': 136, 'n_foci': {'Brd4': 129914, 'Sc35': 2385, 'DAPI': 2265, 'Pol2': 653}}
+{'fov': 78, 'n_nuclei': 201, 'n_foci': 162905}
+{'fov': 81, 'n_total': 264, 'n_kept': 219, 'n_excluded': 45, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 136, 'n_nuclei': 177, 'n_foci': 135217}
+{'fov': 14, 'n_foci': {'Brd4': 142447, 'Sc35': 6450, 'DAPI': 2177, 'Pol2': 1559}}
+{'fov': 14, 'n_nuclei': 195, 'n_foci': 152633}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_134.zarr
+{'fov': 188, 'n_total': 178, 'n_kept': 148, 'n_excluded': 30, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 5, 'n_foci': {'Brd4': 145136, 'Sc35': 6866, 'DAPI': 2375, 'Pol2': 1727}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_024.zarr
+{'fov': 144, 'n_foci': {'Brd4': 141566, 'Sc35': 2609, 'DAPI': 2320, 'Pol2': 690}}
+{'fov': 5, 'n_nuclei': 197, 'n_foci': 156104}
+{'fov': 144, 'n_nuclei': 194, 'n_foci': 147185}
+{'fov': 178, 'n_total': 249, 'n_kept': 207, 'n_excluded': 42, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_156.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_100.zarr
+{'fov': 69, 'n_foci': {'Brd4': 155241, 'Sc35': 7302, 'DAPI': 2578, 'Pol2': 1756}}
+{'fov': 81, 'n_foci': {'Brd4': 153845, 'Sc35': 7563, 'DAPI': 2885, 'Pol2': 2327}}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_034.zarr
+{'fov': 69, 'n_nuclei': 216, 'n_foci': 166877}
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_056.zarr
+{'fov': 188, 'n_foci': {'Brd4': 99645, 'Sc35': 4908, 'DAPI': 1617, 'Pol2': 817}}
+{'fov': 24, 'n_total': 223, 'n_kept': 159, 'n_excluded': 64, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_166.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_122.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_112.zarr
+\\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\zarr\fov_046.zarr
+{'fov': 81, 'n_nuclei': 219, 'n_foci': 166620}
+{'fov': 90, 'n_nuclei': 156, 'n_foci': 122088}
+{'fov': 188, 'n_nuclei': 148, 'n_foci': 106987}
+{'fov': 134, 'n_total': 286, 'n_kept': 203, 'n_excluded': 83, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 178, 'n_foci': {'Brd4': 139698, 'Sc35': 7380, 'DAPI': 2538, 'Pol2': 1349}}
+{'fov': 178, 'n_nuclei': 207, 'n_foci': 150965}
+{'fov': 24, 'n_foci': {'Brd4': 115653, 'Sc35': 5133, 'DAPI': 1755, 'Pol2': 980}}
+{'fov': 157, 'n_total': 294, 'n_kept': 219, 'n_excluded': 75, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 24, 'n_nuclei': 159, 'n_foci': 123521}
+{'fov': 70, 'n_total': 241, 'n_kept': 176, 'n_excluded': 65, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 134, 'n_foci': {'Brd4': 148748, 'Sc35': 2780, 'DAPI': 2505, 'Pol2': 748}}
+{'fov': 134, 'n_nuclei': 203, 'n_foci': 154781}
+{'fov': 45, 'n_total': 144, 'n_kept': 110, 'n_excluded': 34, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 157, 'n_foci': {'Brd4': 159841, 'Sc35': 7330, 'DAPI': 2723, 'Pol2': 1743}}
+{'fov': 157, 'n_nuclei': 219, 'n_foci': 171637}
+{'fov': 70, 'n_foci': {'Brd4': 118709, 'Sc35': 5445, 'DAPI': 2156, 'Pol2': 1358}}
+{'fov': 155, 'n_total': 155, 'n_kept': 126, 'n_excluded': 29, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 70, 'n_nuclei': 176, 'n_foci': 127668}
+{'fov': 45, 'n_foci': {'Brd4': 85297, 'Sc35': 4159, 'DAPI': 1355, 'Pol2': 887}}
+{'fov': 45, 'n_nuclei': 110, 'n_foci': 91698}
+{'fov': 133, 'n_total': 198, 'n_kept': 154, 'n_excluded': 44, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 155, 'n_foci': {'Brd4': 93192, 'Sc35': 4285, 'DAPI': 1535, 'Pol2': 1131}}
+{'fov': 155, 'n_nuclei': 126, 'n_foci': 100143}
+{'fov': 197, 'n_total': 174, 'n_kept': 147, 'n_excluded': 27, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 133, 'n_foci': {'Brd4': 112706, 'Sc35': 2188, 'DAPI': 1953, 'Pol2': 608}}
+{'fov': 111, 'n_total': 270, 'n_kept': 197, 'n_excluded': 73, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 133, 'n_nuclei': 154, 'n_foci': 117455}
+{'fov': 197, 'n_foci': {'Brd4': 97148, 'Sc35': 4995, 'DAPI': 1641, 'Pol2': 789}}
+{'fov': 197, 'n_nuclei': 147, 'n_foci': 104573}
+{'fov': 77, 'n_total': 238, 'n_kept': 177, 'n_excluded': 61, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 165, 'n_total': 224, 'n_kept': 157, 'n_excluded': 67, 'scaled_shape': (41, 498, 498)}
+{'fov': 111, 'n_foci': {'Brd4': 142549, 'Sc35': 3832, 'DAPI': 2376, 'Pol2': 2462}}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 111, 'n_nuclei': 197, 'n_foci': 151219}
+{'fov': 77, 'n_foci': {'Brd4': 127794, 'Sc35': 6244, 'DAPI': 2420, 'Pol2': 1714}}
+{'fov': 33, 'n_total': 222, 'n_kept': 173, 'n_excluded': 49, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 77, 'n_nuclei': 177, 'n_foci': 138172}
+{'fov': 165, 'n_foci': {'Brd4': 111051, 'Sc35': 5015, 'DAPI': 2064, 'Pol2': 1147}}
+{'fov': 187, 'n_total': 220, 'n_kept': 173, 'n_excluded': 47, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 165, 'n_nuclei': 157, 'n_foci': 119277}
+{'fov': 33, 'n_foci': {'Brd4': 122142, 'Sc35': 5488, 'DAPI': 2069, 'Pol2': 1209}}
+{'fov': 121, 'n_total': 272, 'n_kept': 213, 'n_excluded': 59, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 33, 'n_nuclei': 173, 'n_foci': 130908}
+{'fov': 187, 'n_foci': {'Brd4': 117518, 'Sc35': 5898, 'DAPI': 1881, 'Pol2': 981}}
+{'fov': 143, 'n_total': 202, 'n_kept': 152, 'n_excluded': 50, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 187, 'n_nuclei': 173, 'n_foci': 126278}
+{'fov': 13, 'n_total': 272, 'n_kept': 208, 'n_excluded': 64, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 121, 'n_foci': {'Brd4': 150495, 'Sc35': 4135, 'DAPI': 2502, 'Pol2': 2553}}
+{'fov': 121, 'n_nuclei': 213, 'n_foci': 159685}
+{'fov': 143, 'n_foci': {'Brd4': 109916, 'Sc35': 1989, 'DAPI': 1864, 'Pol2': 392}}
+{'fov': 99, 'n_total': 195, 'n_kept': 172, 'n_excluded': 23, 'scaled_shape': (41, 498, 498)}
+{'fov': 143, 'n_nuclei': 152, 'n_foci': 114161}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 46, 'n_total': 166, 'n_kept': 141, 'n_excluded': 25, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 13, 'n_foci': {'Brd4': 150438, 'Sc35': 7159, 'DAPI': 2673, 'Pol2': 1617}}
+{'fov': 13, 'n_nuclei': 208, 'n_foci': 161887}
+{'fov': 99, 'n_foci': {'Brd4': 123071, 'Sc35': 5547, 'DAPI': 2468, 'Pol2': 1353}}
+{'fov': 156, 'n_total': 225, 'n_kept': 187, 'n_excluded': 38, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 99, 'n_nuclei': 172, 'n_foci': 132439}
+{'fov': 46, 'n_foci': {'Brd4': 104557, 'Sc35': 5153, 'DAPI': 1858, 'Pol2': 1546}}
+{'fov': 112, 'n_total': 293, 'n_kept': 219, 'n_excluded': 74, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 46, 'n_nuclei': 141, 'n_foci': 113114}
+{'fov': 156, 'n_foci': {'Brd4': 136973, 'Sc35': 6207, 'DAPI': 2302, 'Pol2': 1357}}
+{'fov': 34, 'n_total': 220, 'n_kept': 173, 'n_excluded': 47, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 156, 'n_nuclei': 187, 'n_foci': 146839}
+{'fov': 166, 'n_total': 222, 'n_kept': 164, 'n_excluded': 58, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 112, 'n_foci': {'Brd4': 164618, 'Sc35': 4264, 'DAPI': 2767, 'Pol2': 2664}}
+{'fov': 112, 'n_nuclei': 219, 'n_foci': 174313}
+{'fov': 34, 'n_foci': {'Brd4': 124784, 'Sc35': 5734, 'DAPI': 2074, 'Pol2': 1061}}
+{'fov': 56, 'n_total': 273, 'n_kept': 197, 'n_excluded': 76, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 34, 'n_nuclei': 173, 'n_foci': 133653}
+{'fov': 166, 'n_foci': {'Brd4': 123311, 'Sc35': 5677, 'DAPI': 2264, 'Pol2': 1632}}
+{'fov': 100, 'n_total': 148, 'n_kept': 130, 'n_excluded': 18, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 166, 'n_nuclei': 164, 'n_foci': 132884}
+{'fov': 122, 'n_total': 290, 'n_kept': 221, 'n_excluded': 69, 'scaled_shape': (41, 498, 498)}
+{'fov': 56, 'n_foci': {'Brd4': 144835, 'Sc35': 6569, 'DAPI': 2257, 'Pol2': 1197}}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 56, 'n_nuclei': 197, 'n_foci': 154858}
+{'fov': 100, 'n_foci': {'Brd4': 95931, 'Sc35': 4388, 'DAPI': 1800, 'Pol2': 912}}
+{'fov': 100, 'n_nuclei': 130, 'n_foci': 103031}
+{'fov': 172, 'n_total': 231, 'n_kept': 183, 'n_excluded': 48, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 91, 'n_total': 198, 'n_kept': 150, 'n_excluded': 48, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 122, 'n_foci': {'Brd4': 161861, 'Sc35': 4407, 'DAPI': 2620, 'Pol2': 2873}}
+{'fov': 122, 'n_nuclei': 221, 'n_foci': 171761}
+{'fov': 172, 'n_foci': {'Brd4': 130425, 'Sc35': 5795, 'DAPI': 2327, 'Pol2': 1137}}
+{'fov': 193, 'n_total': 307, 'n_kept': 240, 'n_excluded': 67, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 172, 'n_nuclei': 183, 'n_foci': 139684}
+{'fov': 91, 'n_foci': {'Brd4': 104413, 'Sc35': 4493, 'DAPI': 1867, 'Pol2': 817}}
+{'fov': 91, 'n_nuclei': 150, 'n_foci': 111590}
+{'fov': 180, 'n_total': 313, 'n_kept': 247, 'n_excluded': 66, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 179, 'n_total': 246, 'n_kept': 181, 'n_excluded': 65, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 193, 'n_foci': {'Brd4': 160085, 'Sc35': 8143, 'DAPI': 2686, 'Pol2': 1461}}
+{'fov': 193, 'n_nuclei': 240, 'n_foci': 172375}
+{'fov': 47, 'n_total': 194, 'n_kept': 142, 'n_excluded': 52, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 180, 'n_foci': {'Brd4': 168085, 'Sc35': 7928, 'DAPI': 2826, 'Pol2': 1480}}
+{'fov': 180, 'n_nuclei': 247, 'n_foci': 180319}
+{'fov': 179, 'n_foci': {'Brd4': 120661, 'Sc35': 6165, 'DAPI': 1986, 'Pol2': 1079}}
+{'fov': 35, 'n_total': 215, 'n_kept': 178, 'n_excluded': 37, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 179, 'n_nuclei': 181, 'n_foci': 129891}
+{'fov': 47, 'n_foci': {'Brd4': 98179, 'Sc35': 4647, 'DAPI': 1643, 'Pol2': 866}}
+{'fov': 47, 'n_nuclei': 142, 'n_foci': 105335}
+{'fov': 189, 'n_total': 252, 'n_kept': 176, 'n_excluded': 76, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 35, 'n_foci': {'Brd4': 132977, 'Sc35': 5952, 'DAPI': 2174, 'Pol2': 1254}}
+{'fov': 123, 'n_total': 278, 'n_kept': 209, 'n_excluded': 69, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 35, 'n_nuclei': 178, 'n_foci': 142357}
+{'fov': 189, 'n_foci': {'Brd4': 119934, 'Sc35': 5902, 'DAPI': 1998, 'Pol2': 996}}
+{'fov': 101, 'n_total': 284, 'n_kept': 243, 'n_excluded': 41, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 189, 'n_nuclei': 176, 'n_foci': 128830}
+{'fov': 15, 'n_total': 215, 'n_kept': 168, 'n_excluded': 47, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 123, 'n_foci': {'Brd4': 145505, 'Sc35': 4199, 'DAPI': 2448, 'Pol2': 2753}}
+{'fov': 123, 'n_nuclei': 209, 'n_foci': 154905}
+{'fov': 145, 'n_total': 234, 'n_kept': 195, 'n_excluded': 39, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 101, 'n_foci': {'Brd4': 173384, 'Sc35': 7845, 'DAPI': 3146, 'Pol2': 1950}}
+{'fov': 15, 'n_foci': {'Brd4': 119621, 'Sc35': 5181, 'DAPI': 1822, 'Pol2': 881}}
+{'fov': 101, 'n_nuclei': 243, 'n_foci': 186325}
+{'fov': 57, 'n_total': 206, 'n_kept': 153, 'n_excluded': 53, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 15, 'n_nuclei': 168, 'n_foci': 127505}
+{'fov': 135, 'n_total': 354, 'n_kept': 252, 'n_excluded': 102, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 145, 'n_foci': {'Brd4': 146487, 'Sc35': 2887, 'DAPI': 2564, 'Pol2': 764}}
+{'fov': 145, 'n_nuclei': 195, 'n_foci': 152702}
+{'fov': 57, 'n_foci': {'Brd4': 107506, 'Sc35': 5117, 'DAPI': 1943, 'Pol2': 978}}
+{'fov': 114, 'n_total': 255, 'n_kept': 188, 'n_excluded': 67, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 57, 'n_nuclei': 153, 'n_foci': 115544}
+{'fov': 147, 'n_total': 300, 'n_kept': 242, 'n_excluded': 58, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 135, 'n_foci': {'Brd4': 179994, 'Sc35': 3248, 'DAPI': 3190, 'Pol2': 1093}}
+{'fov': 135, 'n_nuclei': 252, 'n_foci': 187525}
+{'fov': 114, 'n_foci': {'Brd4': 135483, 'Sc35': 3506, 'DAPI': 2222, 'Pol2': 2207}}
+{'fov': 106, 'n_total': 240, 'n_kept': 188, 'n_excluded': 52, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 114, 'n_nuclei': 188, 'n_foci': 143418}
+{'fov': 110, 'n_total': 234, 'n_kept': 178, 'n_excluded': 56, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 147, 'n_foci': {'Brd4': 173441, 'Sc35': 3210, 'DAPI': 2844, 'Pol2': 1129}}
+{'fov': 147, 'n_nuclei': 242, 'n_foci': 180624}
+{'fov': 48, 'n_total': 225, 'n_kept': 167, 'n_excluded': 58, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 106, 'n_foci': {'Brd4': 144242, 'Sc35': 6476, 'DAPI': 2650, 'Pol2': 1522}}
+{'fov': 106, 'n_nuclei': 188, 'n_foci': 154890}
+{'fov': 110, 'n_foci': {'Brd4': 124818, 'Sc35': 3404, 'DAPI': 2166, 'Pol2': 1995}}
+{'fov': 158, 'n_total': 201, 'n_kept': 158, 'n_excluded': 43, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 110, 'n_nuclei': 178, 'n_foci': 132383}
+{'fov': 48, 'n_foci': {'Brd4': 123112, 'Sc35': 6158, 'DAPI': 2171, 'Pol2': 2107}}
+{'fov': 26, 'n_total': 353, 'n_kept': 263, 'n_excluded': 90, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 48, 'n_nuclei': 167, 'n_foci': 133548}
+{'fov': 158, 'n_foci': {'Brd4': 108128, 'Sc35': 4674, 'DAPI': 1908, 'Pol2': 942}}
+{'fov': 6, 'n_total': 202, 'n_kept': 158, 'n_excluded': 44, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 158, 'n_nuclei': 158, 'n_foci': 115652}
+{'fov': 104, 'n_total': 250, 'n_kept': 180, 'n_excluded': 70, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
+{'fov': 26, 'n_foci': {'Brd4': 196200, 'Sc35': 8693, 'DAPI': 3336, 'Pol2': 2236}}
+{'fov': 6, 'n_foci': {'Brd4': 109055, 'Sc35': 4879, 'DAPI': 1845, 'Pol2': 848}}
+{'fov': 19, 'n_total': 297, 'n_kept': 237, 'n_excluded': 60, 'scaled_shape': (41, 498, 498)}
+
+
+Welcome to CellposeSAM, cellpose v
+cellpose version: 	4.0.5 
+platform:       	win32 
+python version: 	3.10.18 
+torch version:  	1.13.1+cu116! The neural network component of
+CPSAM is much larger than in previous versions and CPU excution is slow. 
+We encourage users to use GPU/MPS if available. 
+
+
