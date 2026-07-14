@@ -158,6 +158,19 @@ class ConditionCfg(BaseModel):
     drug_target: str = ""
 
 
+class BeadCfg(BaseModel):
+    # Flag fiducial-bead / bright-artifact foci by extreme per-marker brightness
+    # (condition- and modality-independent). See eporca.qc.beads.
+    enabled: bool = True
+    intensity_col: str = "max_intensity"
+    max_intensity: dict[str, float] = {}     # per-marker threshold; >= is a bead
+    min_eq_diam_um: Optional[float] = None    # optional AND-gate (beads bloom large)
+
+
+class QCCfg(BaseModel):
+    beads: BeadCfg = BeadCfg()
+
+
 # --- top-level config ---------------------------------------------------------
 class Config(BaseModel):
     paths: PathsCfg
@@ -168,6 +181,7 @@ class Config(BaseModel):
     foci: FociCfg
     chromatic: ChromaticCfg
     analysis: AnalysisCfg
+    qc: QCCfg = QCCfg()
     conditions: dict[str, ConditionCfg] = {}
 
     # directory of the config file; relative paths in `paths` resolve against it so

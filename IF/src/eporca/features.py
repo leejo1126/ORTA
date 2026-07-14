@@ -23,6 +23,7 @@ from .config import Config
 from .io_zarr import read_channel
 from .foci import load_nuclear_labels_3d
 from .chromatic import correct_coms_um
+from .qc.beads import flag_beads
 
 
 def _load_spots(cfg: Config, fov: int) -> pd.DataFrame:
@@ -70,14 +71,16 @@ def _add_coloc_nn(cfg: Config, spots: pd.DataFrame) -> pd.DataFrame:
     spots = spots.copy()
     spots[["_cz", "_cy", "_cx"]] = corr
 
+    is_bead = spots["is_bead"] if "is_bead" in spots.columns else pd.Series(False, index=spots.index)
     for nuc, g in spots.groupby("nucleus"):
         if nuc == 0:
             continue
-        by_marker = {m: g[g["marker"] == m] for m in markers}
-        trees = {m: cKDTree(by_marker[m][["_cz", "_cy", "_cx"]].to_numpy())
-                 for m in markers if len(by_marker[m])}
+        greal = g[~is_bead.loc[g.index]]                       # beads are not colocalization partners
+        # trees from real foci only; query ALL foci (beads get NN to real foci)
+        trees = {m: cKDTree(gm[["_cz", "_cy", "_cx"]].to_numpy())
+                 for m in markers if len(gm := greal[greal["marker"] == m])}
         for a in markers:
-            ga = by_marker[a]
+            ga = g[g["marker"] == a]
             if not len(ga):
                 continue
             pa = ga[["_cz", "_cy", "_cx"]].to_numpy()
@@ -112,7 +115,12 @@ def _nucleus_table(cfg: Config, fov: int, spots: pd.DataFrame) -> pd.DataFrame:
         tot = ndi.sum_labels(raw, mask, index=idx)             # per-nucleus total intensity
         tot_by_lab = dict(zip(idx, tot))
 
-        sm = spots[spots["marker"] == marker]
+        bead_col = spots["is_bead"] if "is_bead" in spots.columns else pd.Series(False, index=spots.index)
+        is_m = spots["marker"] == marker
+        sm = spots[is_m & ~bead_col]                 # real foci only (beads excluded)
+        smb = spots[is_m & bead_col]                 # bead / bright-artifact foci
+        bead_int_by = smb.groupby("nucleus")["integrated_intensity"].sum().to_dict()
+        n_beads_by = smb.groupby("nucleus").size().to_dict()
         grp = sm.groupby("nucleus")
         agg = grp.agg(
             n_foci=("spot_label", "size"),
@@ -130,8 +138,9 @@ def _nucleus_table(cfg: Config, fov: int, spots: pd.DataFrame) -> pd.DataFrame:
             n = int(a["n_foci"]) if a is not None else 0
             vol_um3 = row["nucleus_volume_um3"]
             nvox = nuc_vox[lab] if lab <= max_lab else 0
-            total_int = tot_by_lab.get(lab, 0.0)
             foci_int = float(a["foci_int_total"]) if a is not None else 0.0
+            # subtract bead intensity from the whole-nucleus denominator too
+            total_int = max(tot_by_lab.get(lab, 0.0) - bead_int_by.get(lab, 0.0), foci_int)
             foci_vox = (float(a["foci_vol_mean"]) * n / voxel_um3) if a is not None and n else 0.0
             nucleoplasm_vox = max(nvox - foci_vox, 1.0)
             cond_frac = foci_int / total_int if total_int else 0.0
@@ -140,6 +149,7 @@ def _nucleus_table(cfg: Config, fov: int, spots: pd.DataFrame) -> pd.DataFrame:
             partition = cond_mean / nucpl_mean if nucpl_mean else np.nan
             return pd.Series({
                 f"{marker}_n_foci": n,
+                f"{marker}_n_beads": int(n_beads_by.get(lab, 0)),
                 f"{marker}_density_per_um3": n / vol_um3 if vol_um3 else 0.0,
                 f"{marker}_foci_vol_mean_um3": float(a["foci_vol_mean"]) if a is not None else 0.0,
                 f"{marker}_foci_vol_median_um3": float(a["foci_vol_median"]) if a is not None else 0.0,
@@ -153,10 +163,11 @@ def _nucleus_table(cfg: Config, fov: int, spots: pd.DataFrame) -> pd.DataFrame:
 
         nuc = pd.concat([nuc, nuc.apply(per_nuc, axis=1)], axis=1)
 
-    # colocalization summaries per nucleus from the per-foci NN columns
+    # colocalization summaries per nucleus from the per-foci NN columns (beads excluded)
+    bead_all = spots["is_bead"] if "is_bead" in spots.columns else pd.Series(False, index=spots.index)
     for a, b in cfg.analysis.colocalization.pairs:
         col = f"nn_{b}_um"
-        sub = spots[(spots["marker"] == a) & spots[col].notna()]
+        sub = spots[(spots["marker"] == a) & ~bead_all & spots[col].notna()]
         if sub.empty:
             nuc[f"coloc_{a}_{b}_frac"] = np.nan
             nuc[f"coloc_{a}_{b}_nn_um"] = np.nan
@@ -180,6 +191,7 @@ def features_fov(cfg: Config, fov: int) -> dict:
         return {"fov": fov, "n_nuclei": 0, "n_foci": 0, "status": "no_nuclei"}
 
     spots = _load_spots(cfg, fov)
+    spots["is_bead"] = flag_beads(spots, cfg)   # fiducial-bead / bright-artifact QC flag
     spots = _add_local_dapi(cfg, fov, spots)
     spots = _add_coloc_nn(cfg, spots)
     nuclei = _nucleus_table(cfg, fov, spots)

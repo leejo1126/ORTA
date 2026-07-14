@@ -53,14 +53,16 @@ def build_nuclei_anndata(cfg: Config) -> str:
     df["drug_target"] = df["condition"].map(tmap).fillna("none")
 
     feat_cols = [c for c in df.columns
-                 if c not in _NUC_META and pd.api.types.is_numeric_dtype(df[c])]
+                 if c not in _NUC_META and not c.endswith("_n_beads")
+                 and pd.api.types.is_numeric_dtype(df[c])]
     raw = df[feat_cols].to_numpy(dtype=np.float32)
     raw = np.nan_to_num(raw, nan=0.0, posinf=0.0, neginf=0.0)
     mu, sd = raw.mean(0), raw.std(0)
     sd[sd == 0] = 1.0
     X = (raw - mu) / sd
 
-    obs = df[[c for c in _NUC_META if c in df.columns]].copy()
+    beadcols = [c for c in df.columns if c.endswith("_n_beads")]   # QC metadata, kept in obs
+    obs = df[[c for c in _NUC_META if c in df.columns] + beadcols].copy()
     obs.index = [f"fov{int(r.fov):03d}_n{int(r.nucleus)}" for r in df.itertuples()]
     for c in ("condition", "drug_target"):
         obs[c] = obs[c].astype("category")

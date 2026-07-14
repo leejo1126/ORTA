@@ -124,3 +124,18 @@ analysis:
     n_neighbors: 15
     leiden_resolution: 1.0
   random_seed: 0
+
+qc:
+  # Flag fiducial-bead / bright-artifact foci by extreme per-marker brightness and
+  # exclude them from per-nucleus intensity aggregates (they dominate Pol2/Sc35
+  # intensity). Thresholds sit at the biology/bead trough of each marker's
+  # max_intensity distribution. See eporca.qc.beads.
+  beads:
+    enabled: true
+    intensity_col: max_intensity
+    max_intensity:
+      Pol2: 2000       # real Pol2 <= ~1072 (p99); clean bimodal gap
+      DAPI: 1500       # real DAPI <= ~491; clean gap
+      Sc35: 12000      # real speckles bright (~7000); flag only saturating beads
+      Brd4: 20000      # beads barely bleed into Brd4; real Brd4 bright to ~5000
+    min_eq_diam_um: null   # optional AND-gate (beads bloom large); null = brightness only
