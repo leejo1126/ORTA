@@ -29,7 +29,7 @@ SPOTS = [D + "/foci/fov_{fov}_c%d_%s_per_spot.csv" % (CFG.index_of(m), m) for m 
 NUC_PARQUET = D + "/features/fov_{fov}_nuclei.parquet"
 FOCI_PARQUET = D + "/features/fov_{fov}_foci.parquet"
 NUC_H5AD = CFG.anndata_path("nuclei")
-FOCI_H5AD = CFG.anndata_path("foci")
+FOCI_TABLE = CFG.foci_table_path()   # foci are a streamed Parquet table, not an AnnData
 ANALYSIS_DONE = str(CFG.figures_dir() / "_analysis.done")
 
 
@@ -43,7 +43,7 @@ wildcard_constraints:
 
 rule all:
     input:
-        NUC_H5AD, FOCI_H5AD, ANALYSIS_DONE,
+        NUC_H5AD, FOCI_TABLE, ANALYSIS_DONE,
 
 
 rule to_zarr:
@@ -97,7 +97,7 @@ rule anndata:
         foci=expand(FOCI_PARQUET, fov=FOVS),
     output:
         nuclei=NUC_H5AD,
-        foci=FOCI_H5AD,
+        foci=FOCI_TABLE,
     run:
         run_step(ANALYSIS_PY, "anndata", "--config", CONFIG)
 

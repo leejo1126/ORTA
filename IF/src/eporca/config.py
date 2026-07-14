@@ -284,6 +284,11 @@ class Config(BaseModel):
     def anndata_path(self, kind: str) -> str:
         return str(self.data_dir / "anndata" / f"{kind}.h5ad")
 
+    def foci_table_path(self) -> str:
+        # Foci are ~28M point detections: a columnar Parquet table (queried lazily
+        # with DuckDB/Polars), not an AnnData matrix. See anndata_build.build_foci_parquet.
+        return str(self.data_dir / "anndata" / "foci.parquet")
+
     def figures_dir(self) -> Path:
         return self.data_dir / "figures"
 
