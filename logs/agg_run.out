@@ -1,0 +1,3 @@
+{'foci_table': '\\\\171.65.20.231\\JudeData01\\cluade code\\ep-orca-if\\IF\\data\\anndata\\foci.parquet', 'n_foci': 25848251}
+{'nuclei': '\\\\171.65.20.231\\JudeData01\\cluade code\\ep-orca-if\\IF\\data\\anndata\\nuclei.h5ad', 'foci': '\\\\171.65.20.231\\JudeData01\\cluade code\\ep-orca-if\\IF\\data\\anndata\\foci.parquet'}
+analysis figures written to \\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\figures

@@ -1,0 +1,67 @@
+OpenBLAS warning: precompiled NUM_THREADS exceeded, adding auxiliary array for thread metadata.
+To avoid this warning, please rebuild your copy of OpenBLAS with a larger NUM_THREADS setting
+or set the environment variable OPENBLAS_NUM_THREADS to 24 or lower
+=== #2 Pol2 foci 2-component GMM ===
+  comp0 (HLB-like): weight=0.38 mean[log10 integ=4.07(=11622), eq_diam=0.66]
+  comp1 (dim): weight=0.62 mean[log10 integ=3.49(=3083), eq_diam=0.43]
+  HLB-like foci: 89,223 (33.9% of Pol2 foci)
+
+HLB-like foci per nucleus: 23% have 0, 20% have 1, 16% have 2, 41% have >=3   (median 2)
+=> HLB+ cells (>=1): 77%  -- consistent with cell-cycle subset if <100%
+
+=== #1 local_Brd4_enr (Brd4 intensity at Pol2 focus / nuclear bg) by condition x class ===
+cls          HLB   dim  all_Pol2
+condition                       
+auxin       1.91  1.82      1.86
+control     1.87  1.79      1.82
+drb         2.12  2.02      2.06
+eed226      2.01  1.91      1.94
+jq1         1.88  1.78      1.81
+sgc_cbp30   1.90  1.82      1.84
+triptolide  1.63  2.20      2.12
+tsa         1.60  1.56      1.58
+
+(JQ1 hypothesis: bright/HLB Pol2 foci gain Brd4 under JQ1 -> jq1 HLB column > control HLB)
+
+=== HLB+ cell fraction by condition ===
+condition
+auxin         78.7
+control       75.9
+drb           91.2
+eed226        75.8
+jq1           84.9
+sgc_cbp30     70.1
+triptolide    54.8
+tsa           81.4
+
+=== #3 colocalization ENRICHMENT vs control (density null; >1 = above random) ===
+
+--- coloc_Brd4_Pol2_enrich ---
+ condition  median_ctrl  median_cond  cliffs_delta     padj
+     auxin     1.749142     1.766818      0.008181 0.511857
+       jq1     1.749142     1.786599      0.025734 0.026666
+ sgc_cbp30     1.749142     1.689467     -0.044295 0.000361
+       drb     1.749142     2.044730      0.182822 0.000000
+triptolide     1.749142     1.361549     -0.173339 0.000000
+    eed226     1.749142     1.799115      0.031437 0.010545
+       tsa     1.749142     1.659757     -0.043218 0.000117
+
+--- coloc_Pol2_Sc35_enrich ---
+ condition  median_ctrl  median_cond  cliffs_delta         padj
+     auxin          0.0          0.0      0.095564 2.092149e-21
+       jq1          0.0          0.0      0.061252 7.985387e-11
+ sgc_cbp30          0.0          0.0     -0.016627 1.094338e-01
+       drb          0.0          0.0     -0.229613 0.000000e+00
+triptolide          0.0          0.0     -0.258268 0.000000e+00
+    eed226          0.0          0.0     -0.031583 1.220349e-03
+       tsa          0.0          0.0     -0.081912 6.492386e-21
+
+--- coloc_Brd4_Sc35_enrich ---
+ condition  median_ctrl  median_cond  cliffs_delta         padj
+     auxin     1.726175     1.764933      0.053813 9.592062e-06
+       jq1     1.726175     1.785043      0.081362 7.433872e-13
+ sgc_cbp30     1.726175     1.741973      0.025131 5.294770e-02
+       drb     1.726175     1.659811     -0.082337 9.929208e-13
+triptolide     1.726175     1.596299     -0.143155 6.884038e-35
+    eed226     1.726175     1.739445      0.015918 2.162894e-01
+       tsa     1.726175     1.772758      0.067417 1.746491e-09

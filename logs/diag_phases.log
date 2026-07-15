@@ -1,0 +1,8 @@
+>>> START nuclei @ 21:24:02
+>>> DONE nuclei -> \\171.65.20.231\JudeData01\cluade code\ep-orca-if\IF\data\anndata\nuclei.h5ad @ 21:24:25
+>>> START embed (read+compute+write nuclei.h5ad) @ 21:24:25
+S:\cluade code\EP-ORCA\.venv\Lib\site-packages\umap\umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+OpenBLAS warning: precompiled NUM_THREADS exceeded, adding auxiliary array for thread metadata.
+To avoid this warning, please rebuild your copy of OpenBLAS with a larger NUM_THREADS setting
+or set the environment variable OPENBLAS_NUM_THREADS to 24 or lower

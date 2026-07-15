@@ -1,0 +1,105 @@
+=== Pol2 max_intensity fine tail ===
+0.5000      302.0
+0.9000      427.0
+0.9900     1072.0
+0.9950     4950.0
+0.9990    22904.0
+0.9995    38159.0
+0.9999    65433.0
+
+log10(max_intensity) histogram (10^2..10^5):
+      100-    119: # 2711
+      119-    141: ## 3679
+      141-    168: ## 3764
+      168-    200: ##### 8410
+      200-    237: ############### 24611
+      237-    282: ################################### 55899
+      282-    335: ################################################## 78612
+      335-    398: ############################### 49510
+      398-    473: ############ 20028
+      473-    562: ##### 8211
+      562-    668: ## 3392
+      668-    794: # 1727
+      794-    944:  708
+      944-   1122:  331
+     1122-   1334:  194
+     1334-   1585:  150
+     1585-   1884:  127
+     1884-   2239:  124
+     2239-   2661:  109
+     2661-   3162:  144
+     3162-   3758:  143
+     3758-   4467:  156
+     4467-   5309:  192
+     5309-   6310:  178
+     6310-   7499:  143
+     7499-   8913:  120
+     8913-  10593:  114
+    10593-  12589:  119
+    12589-  14962:  114
+    14962-  17783:  88
+    17783-  21135:  82
+    21135-  25119:  70
+    25119-  29854:  42
+    29854-  35481:  34
+    35481-  42170:  40
+    42170-  50119:  26
+    50119-  59566:  21
+    59566-  70795:  64
+    70795-  84140:  0
+    84140- 100000:  0
+
+=== morphology: eq_diam_um of dim vs bright Pol2 foci ===
+  real (<1500)     n=263149  eq_diam med=0.47 p90=0.72
+  bright 1500-5000 n=   984  eq_diam med=0.98 p90=1.32
+  bead? (>5000)    n=  1314  eq_diam med=1.39 p90=1.78
+C:\Users\Jude\AppData\Local\Temp\13\claude\s--cluade-code\2d918d05-37bb-4871-9dd7-eb968e1fab39\scratchpad\beads_A.py:23: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  nucN=pol.groupby("condition",observed=True).apply(lambda d: d.groupby(["fov","nucleus"]).ngroups)
+
+=== T(max_intensity)>= 2000  (total flagged 2,080, 0.78% of Pol2) | beads/nucleus CV across conditions=0.16 ===
+            beads/nucleus  %foci  %intensity
+condition                                   
+auxin               0.070   0.70   33.500000
+control             0.067   0.86   37.000000
+drb                 0.048   0.36   18.100000
+eed226              0.057   0.73   36.599998
+jq1                 0.077   0.78   33.799999
+sgc_cbp30           0.064   0.89   43.900002
+triptolide          0.080   1.79   71.900002
+tsa                 0.060   0.94   36.500000
+
+=== T(max_intensity)>= 3000  (total flagged 1,792, 0.68% of Pol2) | beads/nucleus CV across conditions=0.17 ===
+            beads/nucleus  %foci  %intensity
+condition                                   
+auxin               0.065   0.65   33.299999
+control             0.056   0.71   36.000000
+drb                 0.043   0.32   17.700001
+eed226              0.047   0.61   35.900002
+jq1                 0.067   0.68   33.200001
+sgc_cbp30           0.053   0.75   43.000000
+triptolide          0.068   1.52   69.400002
+tsa                 0.053   0.83   36.099998
+
+=== T(max_intensity)>= 5000  (total flagged 1,314, 0.50% of Pol2) | beads/nucleus CV across conditions=0.17 ===
+            beads/nucleus  %foci  %intensity
+condition                                   
+auxin               0.051   0.51   31.600000
+control             0.040   0.51   33.700001
+drb                 0.031   0.23   16.600000
+eed226              0.035   0.45   34.000000
+jq1                 0.050   0.50   31.500000
+sgc_cbp30           0.039   0.55   40.599998
+triptolide          0.048   1.08   63.900002
+tsa                 0.040   0.62   35.000000
+
+=== T(max_intensity)>= 8000  (total flagged 890, 0.34% of Pol2) | beads/nucleus CV across conditions=0.20 ===
+            beads/nucleus  %foci  %intensity
+condition                                   
+auxin               0.035   0.35   28.299999
+control             0.027   0.35   30.299999
+drb                 0.020   0.15   14.900000
+eed226              0.024   0.31   31.500000
+jq1                 0.037   0.37   29.200001
+sgc_cbp30           0.024   0.34   36.400002
+triptolide          0.029   0.64   54.500000
+tsa                 0.029   0.45   33.000000

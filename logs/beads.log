@@ -1,0 +1,47 @@
+total foci: 25,848,251   per marker:
+marker
+Brd4    24166174
+Sc35     1000439
+DAPI      416191
+Pol2      265447 
+
+=== max_intensity percentiles per marker ===
+             count    mean     std    min     50%     90%     99%    99.9%      max
+marker                                                                             
+Brd4    24166174.0  1222.0   722.0   42.0  1090.0  2158.0  3487.0   4900.0  44882.0
+DAPI      416191.0   225.0    84.0   66.0   217.0   311.0   409.0    491.0  33213.0
+Pol2      265447.0   406.0  1594.0   58.0   302.0   427.0  1072.0  22904.0  65435.0
+Sc35     1000439.0  1678.0   924.0  183.0  1513.0  2699.0  4386.0   7221.0  65413.0 
+
+=== flagged foci per marker ===
+          n_foci  panchromatic  panchro_%  beadlike  beadlike_%
+marker                                                         
+Brd4    24166174          8015       0.03     11670        0.05
+DAPI      416191           196       0.05       809        0.19
+Pol2      265447          6787       2.56       808        0.30
+Sc35     1000439          6480       0.65      3523        0.35 
+
+=== Pol2 contamination ===
+Pol2 foci flagged (bead): 7,546 / 265,447 = 2.84%
+fraction of Pol2 integrated-intensity in flagged foci: 24.0%
+per-nucleus Pol2_n_foci median  all=6  bead-removed=6
+nuclei with >=1 Pol2 bead: 6,038
+
+=== Pol2 bead rate per condition (physical artifact should be ~flat) ===
+             size   sum   pct
+condition                    
+auxin       32458  1308  4.03
+control     58522  2025  3.46
+drb         49036   254  0.52
+eed226      25788   867  3.36
+jq1         38854  1423  3.66
+sgc_cbp30   21814   767  3.52
+triptolide  14502   177  1.22
+tsa         24473   725  2.96
+
+=== known bead check (fov164 n1 Pol2, brightest) ===
+ max_intensity  eq_diam_um  n_coloc  bright  beadlike  panchromatic
+       34466.0      1.5564        1    True      True         False
+        1433.0      0.7163        0    True     False         False
+
+saved figures/bead_quantification.csv
