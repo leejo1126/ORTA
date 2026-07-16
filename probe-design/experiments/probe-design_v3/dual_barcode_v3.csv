@@ -1,0 +1,10 @@
+zone,modality,carrier,partner,partner_action,chr,region_start,region_end,readout_primary,plate_primary,readout_secondary,plate_secondary,description
+overlap,DNA,E_Nanog,P_Nanog,drop,chr6,122702489,122707000,122,2,182,2,"E_Nanog=A+B in overlap; P_Nanog probes in zone dropped; flanks = readout+fiducial"
+overlap,DNA,E1_Pou5f1,P_Pou5f1,drop,chr17,35501018,35505000,104,2,147,2,"E1_Pou5f1=A+B in overlap; P_Pou5f1 probes in zone dropped; flanks = readout+fiducial"
+overlap,DNA,E1_Klf9,P_Klf9,drop,chr19,23136226,23139000,135,2,187,2,"E1_Klf9=A+B in overlap; P_Klf9 probes in zone dropped; flanks = readout+fiducial"
+overlap,DNA,E_mir290,P_mir290,drop,chr7,3213626,3215000,124,2,167,2,"E_mir290=A+B in overlap; P_mir290 probes in zone dropped; flanks = readout+fiducial"
+overlap,DNA,E1_Mcl1,P_Mcl1,drop,chr3,95653788,95655000,108,2,163,2,"E1_Mcl1=A+B in overlap; P_Mcl1 probes in zone dropped; flanks = readout+fiducial"
+staged-Klf4,DNA,E_Klf4,E1_Klf4,none,chr4,55460173,55470173,102,2,289,4,"69kb enh (-70%); E_Klf4 DNA zone: contiguous 102 + sub 289 (plate 4)"
+staged-Klf4,RNA,E_Klf4,E1_Klf4,none,chr4,55460173,55470173,6,1,193,3,"69kb enh (-70%); E_Klf4 RNA zone: contiguous 6 + sub 193 (plate 3)"
+staged-Klf4,DNA,E_Klf4,E2_Klf4,none,chr4,55472053,55482053,102,2,290,4,"55kb enh (-85%); E_Klf4 DNA zone: contiguous 102 + sub 290 (plate 4)"
+staged-Klf4,RNA,E_Klf4,E2_Klf4,none,chr4,55472053,55482053,6,1,194,3,"55kb enh (-85%); E_Klf4 RNA zone: contiguous 6 + sub 194 (plate 3)"
