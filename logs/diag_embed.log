@@ -1,5 +1,0 @@
-OPENBLAS_NUM_THREADS = 8 NUMBA_NUM_THREADS = 8
->>> embed START 21:37:19
-S:\cluade code\EP-ORCA\.venv\Lib\site-packages\umap\umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
-  warn(
->>> embed DONE 21:39:15 obsm: ['spatial', 'X_pca', 'X_umap'] leiden: True

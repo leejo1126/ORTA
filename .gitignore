@@ -36,6 +36,10 @@ venv/
 # Snakemake
 .snakemake/
 
+# transient run logs (HPC/local stdout+stderr)
+logs/
+IF/logs/
+
 # Secrets (never commit API keys)
 .env
 *.key

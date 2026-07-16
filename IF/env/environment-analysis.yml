@@ -1,8 +1,12 @@
 # Analysis environment (everything except cellpose segmentation).
-# We already created this as a venv at S:/cluade code/EP-ORCA/.venv with numpy 2,
-# scipy, scikit-image 0.26, pandas, scikit-learn, tifffile, matplotlib. The extra
-# packages below (zarr, ome-zarr, anndata, snakemake, umap-learn, leidenalg,
-# igraph, pydantic, pyyaml) are installed on top, plus `pip install -e .`.
+#
+# NOTE (reorg): the working venv currently lives at S:/cluade code/EP-ORCA/.venv, which is being
+# retired. Before EP-ORCA/ is deleted (Phase 6), recreate this env at a repo-local location
+# (S:/cluade code/ep-orca-if/.venv) and repoint `interpreters.analysis` in IF/config/config.yaml
+# (and IF/scripts/pipeline/run_fovs.sh) to it. Recreate with:
+#   python -m venv "S:/cluade code/ep-orca-if/.venv"
+#   "S:/cluade code/ep-orca-if/.venv/Scripts/python" -m pip install -r IF/env/requirements.lock  # or the pins below
+#   "S:/cluade code/ep-orca-if/.venv/Scripts/python" -m pip install -e IF
 #
 # This file documents the intended environment for reproducibility / rebuild.
 name: eporca-analysis

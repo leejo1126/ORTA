@@ -15,7 +15,7 @@
 clc; clear; close all;
 
 %% ---- config -----------------------------------------------------------
-projDir   = 'S:\cluade code\EP-ORCA\rebuild\';
+projDir   = 'S:\cluade code\ep-orca-if\probe-design\experiments\probe-design_v3\';
 outDir    = [projDir 'probes\'];  if ~exist(outDir,'dir'); mkdir(outDir); end
 genomeDir = '\\blabserver1\u\GenomeData\GenomeAssemblies\mm10\';
 readoutFa = 'U:\Data\Oligos\CommonOligos\v6_Adapters1_readouts001-384_240212.fasta';
