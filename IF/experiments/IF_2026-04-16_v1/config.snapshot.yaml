@@ -1,0 +1,142 @@
+# =============================================================================
+# CONFIG SNAPSHOT for experiment IF_2026-04-16_v1.
+# Frozen copy of IF/config/config.yaml as used for this run (see MANIFEST.md).
+# Only paths.data_dir was adjusted so it still resolves from this location.
+# For a NEW run, set data_dir: "./data" so the run is fully self-contained.
+# =============================================================================
+
+# --- Paths (absolute; Windows paths use forward slashes) -----------------------
+paths:
+  dax_dir: "Z:/EPORCA/2026-04-16_IF"          # source .dax + .inf files (external; absolute)
+  data_dir: "../../data"                       # this run's outputs live in the legacy IF/data/ (resolves from this file's dir)
+  # subfolders created under data_dir: zarr/ masks/ foci/ features/ anndata/ figures/
+  # NOTE: paths.data_dir may be relative (resolved against this file's dir) or absolute.
+
+# --- Python interpreters per step (used by the Snakemake workflow) ------------
+interpreters:
+  analysis: "S:/cluade code/EP-ORCA/.venv/Scripts/python.exe"          # all steps except segment
+  cellpose: "C:/ProgramData/Anaconda3/envs/cellpose-gpu/python.exe"    # step 1 (segment) only
+
+# --- Acquisition / assay ------------------------------------------------------
+acquisition:
+  interleaved_pattern: "zscan_647_561_488_405_{fov:03d}.dax"
+  n_interleaved_channels: 4   # physical channels in the interleaved .dax (647,561,488,405)
+  n_fovs: 198                 # FOVs 000..197
+  pixel_size_um: 0.108        # xy microns / pixel
+  z_um: 0.25                  # z step (microns)
+  trim_z: 1                   # drop this many dead z-planes from each end
+  # Analysis markers in OME-Zarr channel order. NOTE: Pol2 uses the separate
+  # post-bleach 561 acquisition (zscan_561_*) because the interleaved 561 channel
+  # suffers 647/Brd4 bleed-through. Aligning that acquisition to the interleaved
+  # frame via beads is a separate registration step (workflow TBD).
+  channels:
+    - {marker: "Brd4", wavelength: "647", source: {kind: "interleaved", index: 0}}
+    - {marker: "Sc35", wavelength: "488", source: {kind: "interleaved", index: 2}}
+    - {marker: "DAPI", wavelength: "405", source: {kind: "interleaved", index: 3}}
+    - {marker: "Pol2", wavelength: "561", source: {kind: "file", pattern: "zscan_561_{fov:03d}.dax", index: 0}}
+
+# --- OME-Zarr (step 0) --------------------------------------------------------
+zarr:
+  chunk_zyx: [8, 512, 512]   # chunk size per (z,y,x); channel chunked to 1
+  compressor: "zstd"         # blosc codec
+  clevel: 5
+
+# --- Segmentation (step 1, cellpose-gpu env) ----------------------------------
+segmentation:
+  channel_marker: "DAPI"     # which channel to segment nuclei on
+  diam_um: 15.0              # expected nuclear diameter
+  cellpose_diam_px: 30       # size Cellpose is trained for
+  flow_threshold: 0.4
+  cellprob_threshold: 0.0
+  blur_factor: 1.0           # gaussian sigma (xy) after rescale; 0 disables
+  batch_size: 8
+  use_bf16: false            # torch 1.13 has no bf16 interpolate kernel
+  gpu_index: 1               # RTX 3080 Ti (bf16-capable); set CUDA_VISIBLE_DEVICES
+  exclude_edge: true
+  # mitotic / debris filters (None = disabled). Tuned loosely; refine later.
+  min_volume_um3: 300.0
+  max_volume_um3: null
+  min_circularity: 0.80
+  max_circularity: null
+
+# --- Foci / condensate detection (step 2) -------------------------------------
+# Shared detector: per-slice top-hat -> optional xy gaussian on the DETECTION
+# image only -> h-maxima seeds -> 3D watershed -> min-size filter. Features
+# (COM, intensities) are always measured on the RAW data.
+# Per-channel parameter blocks keyed by marker. Brd4 is tuned; the others start
+# from presets and should be refined with the scan helper (see notebooks/).
+foci:
+  # nucleus-level parallelism within a FOV. Set to 1 when running the Snakemake
+  # batch (which already parallelizes across FOVs); raise for fast single-FOV runs.
+  workers: 1
+  # Background subtracted from each channel before detection (camera offset +
+  # diffuse fluorescence). Makes the mean_fold threshold meaningful.
+  background: {mode: "percentile", percentile: 5.0, value: 109.0}
+  defaults:
+    mode: "mad"
+    tophat_radius: 5
+    noise_k: 3.0
+    seed_h_k: 0.5
+    min_size: 10
+    blur_sigma: 0.3
+  # Brd4/Pol2/DAPI keep the hand-tuned detectors (Brd4 mad; Pol2/DAPI mean_fold, the
+  # MATLAB findDensities recipe -- the lab's calibration, preferred over autofoci).
+  # Sc35 adopted from the agnostic autofoci search (run 20260620T021146Z, mean_fold,
+  # literature-anchored to ~20-60 speckles; median ~43/cell on FOV 0).
+  per_marker:
+    Brd4:   {mode: "mad", tophat_radius: 5, noise_k: 3.0, seed_h_k: 0.5, min_size: 10, blur_sigma: 0.3}
+    Pol2:   {mode: "mean_fold", threshold: 1.7, min_size: 8,   max_size: 2000,  blur_sigma: 1.0, watershed: true,  marker_h: 2.0}
+    Sc35:   {mode: "mean_fold", threshold: 1.789, abs_floor: 37.96, min_size: 14, max_size: 33956, blur_sigma: 1.436, watershed: true, marker_h: 3.745}  # autofoci 20260620T021146Z
+    DAPI:   {mode: "mean_fold", threshold: 1.3, min_size: 100, max_size: 30000, blur_sigma: 1.0, watershed: false, marker_h: 2.0}
+
+# --- Chromatic correction -----------------------------------------------------
+# All-to-all 3D degree-3 polynomial transforms between channels, estimated from a
+# multi-channel bead image. Built/run via `eporca chromatic-calibrate`; applied
+# only when mode == "polynomial". 405 is taken from a separate 405-only bead image
+# (tetraspecks image poorly at 405).
+chromatic:
+  mode: "none"                 # none | polynomial
+  degree: 3
+  calibration_path: "S:/cluade code/ep-orca-if/IF/data/chromatic/calibration.npz"
+  beads:
+    dir: "Z:/EPORCA/calibration/beads"
+    fovs: [3, 4]
+    interleaved_pattern: "beads_{i:04d}.dax"    # 647=idx0, 561=idx1, 488=idx2
+    dapi_pattern: "405_only_{i:04d}.dax"         # 405 re-imaged separately (idx0)
+    n_channels_interleaved: 4
+    wavelengths: ["647", "561", "488", "405"]
+  # constant-offset fallback used by features when mode != polynomial; zeros = none
+  reference_marker: "DAPI"
+  offsets_vox:
+    Brd4: [0.0, 0.0, 0.0]
+    Pol2: [0.0, 0.0, 0.0]
+    Sc35: [0.0, 0.0, 0.0]
+    DAPI: [0.0, 0.0, 0.0]
+
+# --- Analysis (step 4) --------------------------------------------------------
+analysis:
+  control_condition: "control"
+  colocalization:
+    pairs: [["Brd4", "Pol2"], ["Pol2", "Sc35"], ["Brd4", "Sc35"]]
+    coloc_radius_um: 0.4     # COM within this distance = colocalized
+    n_random: 50             # randomized nulls for NN-distance baseline
+  clustering:
+    n_pcs: 20
+    n_neighbors: 15
+    leiden_resolution: 1.0
+  random_seed: 0
+
+qc:
+  # Flag fiducial-bead / bright-artifact foci by extreme per-marker brightness and
+  # exclude them from per-nucleus intensity aggregates (they dominate Pol2/Sc35
+  # intensity). Thresholds sit at the biology/bead trough of each marker's
+  # max_intensity distribution. See eporca.qc.beads.
+  beads:
+    enabled: true
+    intensity_col: max_intensity
+    max_intensity:
+      Pol2: 2000       # real Pol2 <= ~1072 (p99); clean bimodal gap
+      DAPI: 1500       # real DAPI <= ~491; clean gap
+      Sc35: 12000      # real speckles bright (~7000); flag only saturating beads
+      Brd4: 20000      # beads barely bleed into Brd4; real Brd4 bright to ~5000
+    min_eq_diam_um: null   # optional AND-gate (beads bloom large); null = brightness only
