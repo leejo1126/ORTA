@@ -1,0 +1,25 @@
+# Citation metadata (CFF 1.2.0). Fill the TBD fields before making the repo public.
+# Validate: https://citation-file-format.github.io
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+title: "ORTA — Optical Reconstruction of Transcriptional Architecture"
+abstract: >-
+  Multi-modal imaging analysis of the spatial organization of transcription in the nucleus
+  (immunofluorescence foci/condensates, E–P probe design, and cross-modality analysis).
+type: software
+authors:
+  - family-names: TBD
+    given-names: TBD
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+    # affiliation: TBD
+repository-code: "TBD (public GitHub URL at release)"
+license: TBD          # set to the chosen SPDX id (e.g. MIT, BSD-3-Clause) — see release-manifest.md
+version: "0.1.0"
+date-released: "TBD"
+keywords:
+  - imaging
+  - transcription
+  - nuclear organization
+  - ORCA
+  - condensates
+# For an accompanying paper, add a `preferred-citation:` block (type: article) at publication.
