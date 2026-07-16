@@ -16,14 +16,14 @@ data or numbers.
 
 The agnostic **autofoci search** adds two more agents: **algorithm_scout** (proposes detector
 specs across families) and **foci_judge** (an agnostic visual referee — judges plausibility from
-biology + image, never a target count). Both reason from the **wiki** (`core/wiki.py` + the
-`knowledge/` cards).
+biology + image, never a target count). Both reason from the **wiki** (`core/wiki.py` reads the
+unified project `wiki/` — biology/methods/findings cards).
 
 ## How they coordinate
 
 - **Orchestrators** run the loops; the **PI** sets priorities and the human approves changes.
 - **Shared state = the repo**: `IF/config/config.yaml` (the thing being tuned), `IF/data/figures/`
-  (QC images), `agents/knowledge/` (the wiki cards the agents read + grow), and
+  (QC images), the unified `wiki/` (the knowledge cards the agents read + grow), and
   `agents/runs/` (structured run records — the audit trail).
 - **Structured messages**: every agent returns a pydantic object from `core/schemas.py`.
 
@@ -63,5 +63,6 @@ Start with `--dry-run` (no LLM calls) to watch the loop wiring with stub agents.
 - `tuning/orchestrator.py` — the guided tuning loop.
 - `autofoci/orchestrator.py` — the agnostic multi-algorithm search (arm scheduler + pruning).
 - `personas/*.md` — each agent's system prompt (edit to change behavior).
-- `knowledge/*.md` — the wiki cards (biology / method / finding / reference); `INDEX.md` is generated.
+- knowledge cards live in the unified `wiki/` (biology / methods / findings; frontmatter `type`).
+  `core/wiki.py` reads them recursively; `wiki/index-cards.md` is the generated card list.
 - `runs/{tuning,autofoci}/` — where the agents write their records (audit trail).

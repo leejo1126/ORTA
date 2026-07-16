@@ -21,6 +21,14 @@ wet-lab protocols, empirical findings, and decisions — so it compounds instead
   crash fixes, data-layout maps). Link the experiment ID.
 - **decisions/** — cross-source decisions and their rationale (e.g. `panel-status`).
 
+## Page styles
+- **Cards** (biology / methods / findings) carry **YAML frontmatter** (`name, description, type, tags,
+  sources, links`) so `agents/core/wiki.py` can read them; `type` ∈ {biology, method, finding, reference}.
+  A `<marker>-biology` card may add an `expectations:` block (count / eq_diam_um / coverage) that anchors
+  the autofoci score.
+- **Prose pages** (literature / decisions) follow the source/decision templates (no frontmatter); they are
+  human-facing and skipped by the agent loader.
+
 ## Conventions
 - Genome build **mm10 (GRCm38)** is the reference; flag any mm9 coordinate and give the liftover.
 - Link liberally with `[[slug]]`. Update `index.md` on any add/rename; append to `log.md` every operation.

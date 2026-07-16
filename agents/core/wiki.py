@@ -3,9 +3,12 @@ The ORTA agents' knowledge layer -- a small, git-tracked "LLM wiki" the agents
 consult (and grow) so they reason from accrued biology + image-analysis knowledge
 rather than from a blank slate or from our current parameters.
 
-Storage: one markdown *card* per concept in ``agents/knowledge/`` with YAML frontmatter
-(name / description / type / tags / sources / links) + a free-text body. ``INDEX.md``
-lists every card. Retrieval is keyword/tag matching over the frontmatter + headings
+Storage: one markdown *card* per concept in the unified project wiki (``wiki/``, in domain
+subfolders) with YAML frontmatter (name / description / type / tags / sources / links) + a
+free-text body. Cards are found recursively; prose pages without frontmatter (literature/,
+decisions/) are ignored by this loader but are part of the human wiki. The machine-generated
+card list is ``wiki/index-cards.md``; the curated human index is ``wiki/index.md``.
+Retrieval is keyword/tag matching over the frontmatter + headings
 (no embeddings); the orchestrators call ``relevant_for(...)`` and inject the matched
 cards into agent prompts, and agents append new ``finding`` cards via ``write()``.
 
@@ -22,9 +25,13 @@ from pathlib import Path
 
 import yaml
 
-WIKI_DIR = Path(__file__).resolve().parents[1] / "knowledge"
-INDEX = WIKI_DIR / "INDEX.md"
+WIKI_DIR = Path(__file__).resolve().parents[2] / "wiki"
+INDEX = WIKI_DIR / "index-cards.md"   # machine-generated card list; the curated human index is index.md
 VALID_TYPES = ("biology", "method", "finding", "reference")
+# wiki files that are curated docs / generated indexes, not cards
+RESERVED = {"index.md", "index-cards.md", "schema.md", "log.md", "README.md"}
+# subfolder a newly written card of each type is filed under
+_TYPE_DIR = {"biology": "biology", "method": "methods", "finding": "findings", "reference": "findings"}
 
 _FRONTMATTER = re.compile(r"^---\s*\n(.*?)\n---\s*\n?(.*)$", re.DOTALL)
 _TOKEN = re.compile(r"[a-z0-9]+")
@@ -82,26 +89,31 @@ def all_cards() -> list[Card]:
     if not WIKI_DIR.exists():
         return []
     out = []
-    for p in sorted(WIKI_DIR.glob("*.md")):
-        if p.name == "INDEX.md":
+    for p in sorted(WIKI_DIR.rglob("*.md")):
+        if p.name in RESERVED:
             continue
-        c = _parse(p)
+        c = _parse(p)          # prose pages without frontmatter parse to None -> skipped
         if c:
             out.append(c)
     return out
 
 
+def _find(slug: str) -> Path | None:
+    """First markdown file named <slug>.md anywhere under the wiki (cards live in subfolders)."""
+    return next((p for p in sorted(WIKI_DIR.rglob(f"{slug}.md"))), None)
+
+
 def read(name: str) -> Card | None:
-    p = WIKI_DIR / f"{_slug(name)}.md"
-    return _parse(p) if p.exists() else None
+    p = _find(_slug(name))
+    return _parse(p) if p else None
 
 
 def expectations(marker: str) -> dict | None:
     """Literature-derived soft expectations for a marker (count / eq_diam_um / coverage),
     read from the `<marker>-biology` card's `expectations:` frontmatter. Used by the
     autofoci score to anchor count/shape/coverage. None if the card has no expectations."""
-    p = WIKI_DIR / f"{_slug(marker)}-biology.md"
-    if not p.exists():
+    p = _find(f"{_slug(marker)}-biology")
+    if not p:
         return None
     m = _FRONTMATTER.match(p.read_text(encoding="utf-8"))
     fm = (yaml.safe_load(m.group(1)) or {}) if m else {}
@@ -172,7 +184,7 @@ def render_for_prompt(cards: list[Card], max_chars: int = 6000) -> str:
 
 # ------------------------------------------------------------------------- write
 def write(card: Card | dict, *, append_body: bool = False) -> Path:
-    """Create or update a card on disk and refresh INDEX.md. If ``append_body`` and the
+    """Create or update a card on disk and refresh the card index. If ``append_body`` and the
     card exists, the new body is appended (dated) rather than replacing -- used for
     growing ``finding`` cards across runs."""
     if not isinstance(card, Card):
@@ -181,8 +193,10 @@ def write(card: Card | dict, *, append_body: bool = False) -> Path:
         card = Card(**{k: v for k, v in data.items() if k in Card.__dataclass_fields__})
     if card.type not in VALID_TYPES:
         raise ValueError(f"card type {card.type!r} not in {VALID_TYPES}")
-    WIKI_DIR.mkdir(parents=True, exist_ok=True)
-    path = WIKI_DIR / f"{_slug(card.name)}.md"
+    # update an existing card in place; otherwise file a new one under its type's subfolder
+    path = _find(_slug(card.name)) or (
+        WIKI_DIR / _TYPE_DIR.get(card.type, "findings") / f"{_slug(card.name)}.md")
+    path.parent.mkdir(parents=True, exist_ok=True)
     if append_body and path.exists():
         existing = _parse(path)
         if existing:
@@ -198,10 +212,12 @@ def write(card: Card | dict, *, append_body: bool = False) -> Path:
 
 
 def rebuild_index() -> None:
+    """Regenerate wiki/index-cards.md — the machine list of agent-readable cards. Kept separate
+    from the curated human index (wiki/index.md), which this never touches."""
     cards = all_cards()
-    lines = ["# ORTA agent wiki — index\n",
-             "Knowledge cards the agents consult and grow. One line per card: "
-             "**title** (type) — description — `tags`.\n"]
+    lines = ["# ORTA wiki — card index (machine-generated)\n",
+             "Auto-generated list of agent-readable cards (those with frontmatter `type`). "
+             "The curated human index is [index.md](index.md). One line per card.\n"]
     for t in VALID_TYPES:
         group = [c for c in cards if c.type == t]
         if not group:
@@ -209,5 +225,6 @@ def rebuild_index() -> None:
         lines.append(f"\n## {t}\n")
         for c in group:
             tagstr = f" `{', '.join(c.tags)}`" if c.tags else ""
-            lines.append(f"- [{c.name}]({c.path.name}) — {c.description}{tagstr}")
+            rel = c.path.relative_to(WIKI_DIR).as_posix()
+            lines.append(f"- [{c.name}]({rel}) — {c.description}{tagstr}")
     INDEX.write_text("\n".join(lines) + "\n", encoding="utf-8")
