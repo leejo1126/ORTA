@@ -4,16 +4,30 @@ Multi-modal imaging analysis of how transcription is spatially organized in the 
 ORTA brings together complementary readouts of nuclear/transcriptional architecture and the
 cross-analysis between them.
 
+## Start here
+
+| Read | For |
+|---|---|
+| [`OVERVIEW.md`](OVERVIEW.md) | the master map — folder structure, module status, what's active |
+| [`EXPERIMENTS.md`](EXPERIMENTS.md) | every run across all modules |
+| [`lab-notebook/`](lab-notebook/) | day-to-day log (bench + computational) |
+| [`wiki/`](wiki/) | the knowledge base (literature, biology, methods, protocols, findings, decisions) |
+| [`CLAUDE.md`](CLAUDE.md) | conventions for working in this repo |
+
+The project is organized on two axes — **modules** (modalities) × **experiments** (dated runs under
+`<module>/experiments/<ID>/`). Add either by copying a skeleton from [`_templates/`](_templates/).
+
 ## Modules
 
 | dir | modality | status |
 |-----|----------|--------|
 | [`IF/`](IF/) | Immunofluorescence — 3D nuclei + per-marker foci/condensates (Brd4, Pol2, Sc35, DAPI/chromocenters) across drug perturbations, with cross-condition analysis and AnnData export | **active** |
+| [`probe-design/`](probe-design/) | E–P ORCA probe / panel design (coordinates, readout scheme, dual-barcode, MATLAB probe assembly) | **active** |
+| [`agents/`](agents/) | agent "dry lab" that tunes foci parameters and runs the agnostic autofoci search; emits git-tracked proposals only | **active** |
 | `RNA/` | RNA (e.g. nascent transcription / FISH) readouts | planned |
 | `DNA/` | DNA / genome-architecture (ORCA-style) readouts | planned |
 | `cross_modality/` | registration + joint analysis across modalities | planned |
-| `agents/` | multi-agent "lab" (cell-biologist / image-analyst / computational-biologist / PI) that tunes parameters, runs analyses, and interprets results | planned |
-| `docs/` | method notes, AI-engineering workflow | planned |
+| [`docs/`](docs/) | method notes, AI-engineering workflow | active |
 
 ## IF pipeline (current)
 

@@ -8,6 +8,20 @@ data/
 *.npz
 *.npy
 
+# Experiment output tiers (see CLAUDE.md):
+#   data/    -> ignored above (machine-generated, regenerable)
+#   scratch/ -> ignored (throwaway vibe-checks)
+#   results/ -> TRACKED (curated keepers), except heavy binaries which stay out
+scratch/
+!**/results/
+!**/results/**
+**/results/**/*.tif
+**/results/**/*.tiff
+**/results/**/*.h5ad
+**/results/**/*.npz
+**/results/**/*.npy
+**/results/**/*.zarr/
+
 # Python
 __pycache__/
 *.py[cod]
