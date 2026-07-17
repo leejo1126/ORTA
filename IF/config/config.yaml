@@ -13,7 +13,7 @@ paths:
 
 # --- Python interpreters per step (used by the Snakemake workflow) ------------
 interpreters:
-  analysis: "S:/cluade code/EP-ORCA/.venv/Scripts/python.exe"          # all steps except segment
+  analysis: "S:/cluade code/ep-orca-if/.venv/Scripts/python.exe"       # all steps except segment
   cellpose: "C:/ProgramData/Anaconda3/envs/cellpose-gpu/python.exe"    # step 1 (segment) only
 
 # --- Acquisition / assay ------------------------------------------------------

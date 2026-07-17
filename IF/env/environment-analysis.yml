@@ -1,12 +1,12 @@
 # Analysis environment (everything except cellpose segmentation).
 #
-# NOTE (reorg): the working venv currently lives at S:/cluade code/EP-ORCA/.venv, which is being
-# retired. Before EP-ORCA/ is deleted (Phase 6), recreate this env at a repo-local location
-# (S:/cluade code/ep-orca-if/.venv) and repoint `interpreters.analysis` in IF/config/config.yaml
-# (and IF/scripts/pipeline/run_fovs.sh) to it. Recreate with:
+# The analysis venv lives at S:/cluade code/ep-orca-if/.venv (repo-local); `interpreters.analysis`
+# in IF/config/config.yaml + IF/scripts/pipeline/run_fovs.sh point at it. To recreate from scratch:
 #   python -m venv "S:/cluade code/ep-orca-if/.venv"
-#   "S:/cluade code/ep-orca-if/.venv/Scripts/python" -m pip install -r IF/env/requirements.lock  # or the pins below
+#   "S:/cluade code/ep-orca-if/.venv/Scripts/python" -m pip install -r IF/env/requirements.lock
 #   "S:/cluade code/ep-orca-if/.venv/Scripts/python" -m pip install -e IF
+# (requirements.lock is the full pinned record; the core deps below are the minimum the pipeline needs.
+# napari + PyQt6 in the lock are only for the interactive QC viewers under IF/scripts/qc/.)
 #
 # This file documents the intended environment for reproducibility / rebuild.
 name: eporca-analysis
