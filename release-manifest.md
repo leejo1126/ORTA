@@ -22,12 +22,9 @@ built from `public`-flagged content + the `publication/` area. Each experiment's
 | `IF_2026-04-16_v1` | private → public at IF paper submission | data deposited + accessions filled |
 | `probe-design_v3` | public with the DNA/design paper | — |
 
-## Code license (TBD)
-Pick one before public release and set it in `LICENSE` + `CITATION.cff` (`license:`):
-- **MIT** / **BSD-3-Clause** — permissive, common for research code (recommended default).
-- **Apache-2.0** — permissive + explicit patent grant.
-- **GPL-3.0** — copyleft.
-Data gets a separate license (e.g. CC-BY-4.0).
+## Code license — MIT
+Chosen: **MIT** (`LICENSE` + `CITATION.cff`). **Action:** set the copyright holder name in `LICENSE`
+(currently a placeholder). Data gets a separate license at deposition (e.g. CC-BY-4.0).
 
 ## Release steps (at publication)
 1. Fill accessions in `docs/data-availability.md`; deposit raw + `nuclei.h5ad` + tables.

@@ -13,7 +13,7 @@ authors:
     # orcid: "https://orcid.org/0000-0000-0000-0000"
     # affiliation: TBD
 repository-code: "TBD (public GitHub URL at release)"
-license: TBD          # set to the chosen SPDX id (e.g. MIT, BSD-3-Clause) — see release-manifest.md
+license: MIT          # see LICENSE (set the copyright holder name there)
 version: "0.1.0"
 date-released: "TBD"
 keywords:
