@@ -22,7 +22,7 @@ Klf4 three downstream DHS enhancers E1/E2/E3, ~50–70 kb downstream of Klf4 TSS
 - E3 (3C-interaction hub, minimal effect alone) exact coords still in GSE97304 supp; not used.
 
 ## Relevance to EP-ORCA panel
-**ADDED.** In `coordinates_v3` as **E_Klf4** = one contiguous ~22 kb window (chr4:55,460,173–55,482,053) covering both E1 (69 kb) and E2 (55 kb) 10 kb sub-windows. Main panel: E_Klf4 = RNA readout 6 (plate 1) / DNA 102 (plate 2). **Staged E1/E2 resolution** parked on plates 3–4 (E1_Klf4 sub RNA 193 / DNA 289; E2_Klf4 sub RNA 194 / DNA 290) via the fiducial-slot dual-barcode — no extra main-panel probes.
+**ADDED.** In `coordinates_v2` as **E_Klf4** = one contiguous ~22 kb window (chr4:55,460,173–55,482,053) covering both E1 (69 kb) and E2 (55 kb) 10 kb sub-windows. Main panel: E_Klf4 = RNA readout 6 (plate 1) / DNA 102 (plate 2). **Staged E1/E2 resolution** parked on plates 3–4 (E1_Klf4 sub RNA 193 / DNA 289; E2_Klf4 sub RNA 194 / DNA 290) via the fiducial-slot dual-barcode — no extra main-panel probes.
 
 **Notes:** Klf4 TSS chr4:55,532,466 (−); downstream = lower coords. E1↔E2 centers ~11.9 kb apart (~8.6 kb spacer). See [[panel-status]] for plate layout.
 

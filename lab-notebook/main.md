@@ -13,10 +13,22 @@ and experiment IDs. Newest at the bottom of each month. See `README.md` for the 
   future-proof layout that supports re-runs, new modules, and reproducible journal publication.
 - **Links:** branch `reorg/framework` · `OVERVIEW.md`.
 
-## 2026-07-16 — Probe panel v3 finalized
-- **What:** Locked E–P ORCA probe panel v3 — symmetric 95 RNA + 95 DNA; added Klf4 and Car2 (mm10 coords
+## 2026-07-16 — Probe panel v2 finalized
+- **What:** Locked E–P ORCA probe panel v2 — symmetric 95 RNA + 95 DNA; added Klf4 and Car2 (mm10 coords
   resolved from literature, mm9→mm10 liftovers checked); simplified Cd9.
-- **Links:** experiment `probe-design_v3` · [probe-design](probe-design.md) · `[[panel-status]]`.
+- **Links:** experiment `probe-design_v2` · [probe-design](probe-design.md) · `[[panel-status]]`.
+
+## 2026-07-17 — Probe panel v2: framework conformance + validated-pair swap
+- **What:** Brought `probe-design_v2` into the modules×experiments framework (results/data/scratch tiers +
+  CATALOG, `config.snapshot.yaml`, generator committed under `generate/`, reusable `AssembleDualProbes.m`
+  moved to `probe-design/src/`). Swapped **5 functionally-validated Hansen-supp E–P pairs** (Inhbb, Ceacam1,
+  Zbtb10, Prdm14, Sik1) **in for 4 low/no-FISH-signal Novo pairs** (Myb, Senp3/Sox15, Srxn1, Ski) →
+  symmetric **96/96** (both plates full). Fixed Sik1 coords (chr17); split the Inhbb/Tcfcp2l1 BED hub
+  colors; renamed the panel **v3 → v2** (version numbers bump only on probe synthesis, which v2 never had).
+- **Knowledge:** ingested [[prdm14-enhancer-insertions-2025]] (Development 2025) — `E_Prdm14` already covers
+  mEn1+mEn2, so no coord change; Prdm14 evidence upgraded to functional mESC 2i/LIF.
+- **Status:** all in the working tree on `main`, **uncommitted** (pending review/commit).
+- **Links:** experiment `probe-design_v2` · [probe-design](probe-design.md) · `[[panel-status]]` · `[[wiki/log]]`.
 
 ---
 

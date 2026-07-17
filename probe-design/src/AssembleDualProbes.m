@@ -1,7 +1,7 @@
 function probeFasta = AssembleDualProbes(targetRegions, spec, readouts, commonRT, fwdSeq, revSeq, probeLen)
 % AssembleDualProbes  Assemble ready-to-order oligos with a per-probe dual-barcode.
 %
-% This is the GENERALIZED core of the EP-ORCA v3 pipeline. It replaces the
+% This is the GENERALIZED core of the EP-ORCA v2 pipeline. It replaces the
 % single-readout assembly at the tail of FastaToSeqProbes with a position-aware
 % assembler: every probe carries readout1 (the region's primary barcode) and, in
 % the fiducial (commonRT) slot, EITHER a second readout (if the probe falls in a

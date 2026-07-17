@@ -1,0 +1,57 @@
+# =============================================================================
+# CONFIG SNAPSHOT for experiment probe-design_v2.
+# Frozen design parameters for this panel version. Two stages:
+#   (1) generate/build.js            -> results/*.csv + results/ep_orca_v2.bed  (coordinate + readout design)
+#   (2) matlab/EP_ORCA_v2_probes.m   -> data/EP_ORCA_v2_{RNA,DNA}_probe.fasta   (probe assembly)
+# In-repo paths are relative to this file's dir; external resources are absolute (U:/, \\blabserver1).
+# =============================================================================
+
+genome_build: mm10          # GRCm38; mm9 coordinates are lifted (see design.liftovers)
+
+# --- Stage 1: coordinate + readout design (generate/build.js) -----------------
+design:
+  inputs:
+    coordinate_xlsx:  "2026-07-15_e-p_coordinates.xlsx"            # source spreadsheet (92 E/P features)
+    sheet_clean_tsv:  "generate/inputs/sheet_clean.tsv"           # xlsx exported to TSV (Excel COM)
+    promoter_tss_tsv: "generate/inputs/promoter_tss_chosen.tsv"   # chosen TSS/promoter (Ensembl GRCm38.87 GTF)
+    tss_source:       "U:/GenomeData/GenomeAssemblies/mm10/Mus_musculus.GRCm38.87.gtf"
+  dna_promoter_half_window_bp: 5000     # promoter DNA region = TSS +/- 5 kb
+  enhancer_min_window_bp:      10000    # enhancer windows < 10 kb expanded to 10 kb (10-20 kb kept as-is)
+  plate_size:                  96       # readouts/plate. RNA=plate1(1-95), DNA=plate2(97-191), staged subs plates 3/4
+  bad_toehold_last: [P_Hes1, P_Cd9, P_Klf3, P_Neat1]   # pinned to final RNA rounds (P_Neat1 last)
+  liftovers:
+    Klf4_E1_E2: "mm9 -> mm10 offset -12,877 bp (locus-validated at Klf4/Gm12505)"
+  outputs:
+    - results/coordinates_v2.csv
+    - results/readout_scheme_v2.csv
+    - results/dual_barcode_v2.csv
+    - results/dna_overlaps_v2.csv
+    - results/ep_orca_v2.bed
+
+# --- Stage 2: probe assembly (matlab/EP_ORCA_v2_probes.m) ---------------------
+# Uses the shared toolbox (C:\Shared\...\FastaToSeqProbes) for tiling/filtering only; barcode
+# assembly is taken over by probe-design/src/AssembleDualProbes.m (per-probe dual-barcode).
+probes:
+  probe_length_nt:     40
+  common_rt_fiducial:  "catcaacgccacgatcagct"   # P4-405 handle; swapped for a 2nd readout in dual zones
+  readout_fasta:       "U:/Data/Oligos/CommonOligos/v6_Adapters1_readouts001-384_240212.fasta"  # readout N = entry N
+  primers:
+    fwd_fasta: "U:/Data/Oligos/CommonOligos/FwdPrimers.fasta"
+    rev_fasta: "U:/Data/Oligos/CommonOligos/RevPrimers.fasta"
+    RNA: {fwd_index: 2, rev_index: 3}
+    DNA: {fwd_index: 1, rev_index: 4}
+  min_probes_per_region: {RNA: 40, DNA: 80}
+  max_probes_per_region: 400
+  gc_range:          [0.35, 0.65]
+  spec_range:        [0.7, 1.0]
+  spec_match:        16
+  genome_ot_match:   16
+  genome_ot_range:   [-1, 35]
+  repeat_ot_match:   13
+  three_prime_space: 1
+  blast_keep_max_hits: 10
+  genome_fasta: "\\\\blabserver1\\u\\GenomeData\\GenomeAssemblies\\mm10\\mm10.fasta"
+  repeat_fasta:
+    DNA: "U:/GenomeData/Mouse/mouseRepeatsForBLAST.fasta"
+    RNA: "U:/GenomeData/Mouse/RNA/mm_rRNA_and_tRNA.fasta"
+  outputs_dir: "data/"   # gitignored; EP_ORCA_v2_{RNA,DNA}_probe.fasta

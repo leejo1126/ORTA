@@ -53,7 +53,7 @@ RNA/ DNA/ cross_modality/    planned sibling modules (skeleton stubs)
 | Module | Status | What it is |
 |---|---|---|
 | `IF/` | **active** | 3D nuclei + per-marker foci/condensates (Brd4, Pol2, Sc35, DAPI) across drug perturbations → features → AnnData → cross-condition analysis |
-| `probe-design/` | **active** | E–P ORCA probe/panel design (v3): coordinates, readout scheme, dual-barcode, MATLAB probe assembly |
+| `probe-design/` | **active** | E–P ORCA probe/panel design (v2): coordinates, readout scheme, dual-barcode, MATLAB probe assembly |
 | `agents/` | **active** | LLM agents that tune foci parameters / run the agnostic autofoci search; emit git-tracked proposals only |
 | `RNA/` | planned | nascent transcription / FISH readouts |
 | `DNA/` | planned | genome-architecture (ORCA-style) readouts |

@@ -5,7 +5,7 @@
 readouts), their mm10 coordinates, readout/plate assignment, and dual-barcode scheme.
 
 Design decisions are grounded in the literature wiki ([[panel-status]] + the `wiki/literature/` source
-pages). This module's **experiments are panel versions** (`experiments/probe-design_v3/`, …); a new
+pages). This module's **experiments are panel versions** (`experiments/probe-design_v2/`, …); a new
 version is a new experiment folder, not an overwrite.
 
 ## Layout
@@ -13,7 +13,7 @@ version is a new experiment folder, not an overwrite.
 probe-design/
   README.md
   experiments/
-    probe-design_v3/     current panel — coordinates, readout scheme, dual-barcode, .bed, MATLAB, MANIFEST
+    probe-design_v2/     current panel — coordinates, readout scheme, dual-barcode, .bed, MATLAB, MANIFEST
 ```
 
 ## Provenance

@@ -1,11 +1,11 @@
-%% EP-ORCA v3 probe generation -- generalized dual-labeling pipeline
+%% EP-ORCA v2 probe generation -- generalized dual-labeling pipeline
 % Based on S260715_JudeDerek_EP2.m, but generalized so the fiducial slot can
 % hold a SECOND readout per probe (dual-barcode), driven by CSV spec tables.
 % Tiling/filtering still uses the shared toolbox (FastaToSeqProbes); only the
 % barcode assembly is taken over (AssembleDualProbes) so the scheme is data-driven.
 %
-% Reads (from ..\rebuild\):  coordinates_v3.csv, readout_scheme_v3.csv, dual_barcode_v3.csv
-% Writes (to ..\rebuild\probes\): targets/off-target fastas, EP_ORCA_v3_<mod>_probe.fasta
+% Reads (from ../results/):  coordinates_v2.csv, readout_scheme_v2.csv, dual_barcode_v2.csv
+% Writes (to ../data/): targets/off-target fastas, EP_ORCA_v2_<mod>_probe.fasta
 %
 % NOTE: this calls shared, read-only toolbox functions on the MATLAB path
 % (FastaToSeqProbes, BLAST, WriteFasta, fastaread). Nothing in C:\Shared is modified.
@@ -15,8 +15,14 @@
 clc; clear; close all;
 
 %% ---- config -----------------------------------------------------------
-projDir   = 'S:\cluade code\ep-orca-if\probe-design\experiments\probe-design_v3\';
-outDir    = [projDir 'probes\'];  if ~exist(outDir,'dir'); mkdir(outDir); end
+% Location-independent: derive all in-repo paths from this script's own location.
+thisDir  = fileparts(mfilename('fullpath'));         % .../probe-design_v2/matlab
+projDir  = [fileparts(thisDir) filesep];             % .../probe-design_v2/
+srcDir   = fullfile(projDir,'..','..','src');        % probe-design/src (shared code)
+addpath(srcDir);                                     % for AssembleDualProbes
+resDir   = [projDir 'results' filesep];              % curated design inputs (CSVs/BED)
+outDir   = [projDir 'data'    filesep];              % machine-generated probe FASTAs (gitignored)
+if ~exist(outDir,'dir'); mkdir(outDir); end
 genomeDir = '\\blabserver1\u\GenomeData\GenomeAssemblies\mm10\';
 readoutFa = 'U:\Data\Oligos\CommonOligos\v6_Adapters1_readouts001-384_240212.fasta';
 fwdFa     = 'U:\Data\Oligos\CommonOligos\FwdPrimers.fasta';
@@ -42,9 +48,9 @@ if isempty(mm10); fprintf('loading mm10 (slow)...\n'); mm10 = fastaread([genomeD
 readouts = fastaread(readoutFa);
 fwdP = fastaread(fwdFa);
 revP = fastaread(revFa);
-coords = readtable([projDir 'coordinates_v3.csv'],  'TextType','string');
-scheme = readtable([projDir 'readout_scheme_v3.csv'],'TextType','string');
-dualbc = readtable([projDir 'dual_barcode_v3.csv'],  'TextType','string');
+coords = readtable([resDir 'coordinates_v2.csv'],  'TextType','string');
+scheme = readtable([resDir 'readout_scheme_v2.csv'],'TextType','string');
+dualbc = readtable([resDir 'dual_barcode_v2.csv'],  'TextType','string');
 chrNames = string({mm10.Header});
 
 %% ---- per-modality pipeline -------------------------------------------
@@ -113,7 +119,7 @@ for modality = ["RNA","DNA"]
     fprintf('%s: %d oligos after BLAST prune\n', mod, numel(probeFasta));
 
     % write
-    outFa = [outDir sprintf('EP_ORCA_v3_%s_probe.fasta', mod)];
+    outFa = [outDir sprintf('EP_ORCA_v2_%s_probe.fasta', mod)];
     if exist(outFa,'file'); delete(outFa); end
     WriteFasta(outFa, probeFasta, [], 'Append', false);
     fprintf('%s: wrote %s\n', mod, outFa);
@@ -126,7 +132,7 @@ disp('---- probe generation complete ----');
 
 %% ======================= local functions ==============================
 function r = lookupReadout(scheme, featureName)
-% readout_number for a feature (e.g. 'DNA_E_Nanog') from readout_scheme_v3
+% readout_number for a feature (e.g. 'DNA_E_Nanog') from readout_scheme_v2
     idx = find(scheme.feature == string(featureName), 1);
     if isempty(idx)
         error('lookupReadout:missing','no readout for %s in scheme', featureName);
@@ -135,7 +141,7 @@ function r = lookupReadout(scheme, featureName)
 end
 
 function zones = buildZones(dualbc, featName, mod, isDNA) %#ok<INUSD>
-% Build the dual-zone list for one feature+modality from dual_barcode_v3.
+% Build the dual-zone list for one feature+modality from dual_barcode_v2.
 %   carrier rows -> a zone with r2 = readout_secondary (probe gets 2nd readout)
 %   partner rows with partner_action=='drop' -> a zone with r2 = -1 (probe discarded)
     zones = struct('zStart',{},'zEnd',{},'r2',{});

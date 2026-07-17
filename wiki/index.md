@@ -17,6 +17,7 @@ Unified knowledge base. Schema: [[schema]] · History: [[log]] · Machine card l
 | [[gabriele-2022-fbn2]] | mESC | BENCHMARK (looping) |
 | [[tunnermann-2026-synthetic]] | mESC (synthetic) | SYNTHETIC |
 | [[li-2020-imaging]] | mESC | imaging |
+| [[prdm14-enhancer-insertions-2025]] | mESC (2i/LIF) | FUNCTIONAL (deletion + reporter) |
 
 ## biology/ — marker & nuclear-structure biology
 - [[brd4-biology]] — BET reader at active enhancers; dense small puncta, can phase-separate `Brd4, condensate`
